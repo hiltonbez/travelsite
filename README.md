@@ -2,6 +2,8 @@
 
 Website for Paper Plane Travel, a worldwide holiday agency. Plain HTML, CSS and JavaScript, no build step.
 
+**Live site:** https://hiltonbez.github.io/travelsite/ (GitHub Pages, published from `main`; every push updates it within a minute or two)
+
 ## Run it locally
 
 Open `index.html` in a browser, or serve the folder:
@@ -34,4 +36,4 @@ enquiry's summary.
 
 - Replace the sample destinations in `js/main.js` with real trips
 - Swap the placeholder brand name, colours and images
-- Deploy (GitHub Pages, Netlify or Vercel all work with no config)
+- Point a custom domain at the site (repo Settings → Pages → Custom domain)
