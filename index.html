@@ -99,10 +99,19 @@
           <p>Tell us where you'd like to go, when, and who's travelling. We'll come back to you with ideas and a quote in rand.</p>
         </div>
         <form class="contact-form" id="contact-form">
-          <label>Name <input type="text" name="name" required></label>
-          <label>Email <input type="email" name="email" required></label>
-          <label>Where to? <input type="text" name="destination"></label>
+          <label>Name <input type="text" name="name" autocomplete="name" required></label>
+          <div class="form-row">
+            <label>Email <input type="email" name="email" autocomplete="email" required></label>
+            <label>Phone <input type="tel" name="phone" autocomplete="tel"></label>
+          </div>
+          <label>Where to? <input type="text" name="destination" placeholder="e.g. Bali, or not sure yet"></label>
+          <div class="form-row">
+            <label>When? <input type="text" name="travel_dates" placeholder="e.g. March 2027"></label>
+            <label>Travellers <input type="number" name="travellers" min="1" placeholder="2"></label>
+          </div>
           <label>Message <textarea name="message" rows="4"></textarea></label>
+          <!-- Spam trap: hidden from people, bots tend to tick it -->
+          <input type="checkbox" name="botcheck" class="hidden-field" tabindex="-1" autocomplete="off">
           <button type="submit" class="btn">Send enquiry</button>
           <p class="form-status" id="form-status" role="status"></p>
         </form>

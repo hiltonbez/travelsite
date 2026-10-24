@@ -57,12 +57,69 @@ links.addEventListener("click", (e) => {
   if (e.target.tagName === "A") links.classList.remove("open");
 });
 
-// Contact form (front-end only for now; hook up to a backend or form service later)
-document.getElementById("contact-form").addEventListener("submit", (e) => {
+// Contact form: enquiries go straight into TribeTravel as new enquiries for
+// Paper Plane Travel. Paste the agency's "website enquiry" link from TribeTravel's
+// Setup page below; it looks like https://tribetravel.io/api/enquiry/<agency-slug>.
+const TRIBETRAVEL_ENQUIRY_URL = "";
+
+const contactForm = document.getElementById("contact-form");
+const formStatus = document.getElementById("form-status");
+
+function showStatus(message, isError = false) {
+  formStatus.textContent = message;
+  formStatus.classList.toggle("error", isError);
+}
+
+contactForm.addEventListener("submit", async (e) => {
   e.preventDefault();
-  document.getElementById("form-status").textContent =
-    "Thanks! We'll be in touch soon.";
-  e.target.reset();
+
+  if (!TRIBETRAVEL_ENQUIRY_URL) {
+    console.warn("Contact form: set TRIBETRAVEL_ENQUIRY_URL in js/main.js");
+    showStatus("Sorry, enquiries can't be sent yet. Please try again later.", true);
+    return;
+  }
+
+  const data = Object.fromEntries(new FormData(contactForm));
+  // Bots tend to tick the hidden checkbox; pretend it worked and send nothing.
+  if (data.botcheck) {
+    contactForm.reset();
+    showStatus("Thanks! Your enquiry is on its way. We'll be in touch soon.");
+    return;
+  }
+
+  // TribeTravel stores a name, a contact and a summary, so the trip details
+  // go into the summary where the agent will see them.
+  const summary = [
+    data.destination && `Destination: ${data.destination}`,
+    data.travel_dates && `When: ${data.travel_dates}`,
+    data.travellers && `Travellers: ${data.travellers}`,
+    data.phone && `Phone: ${data.phone}`,
+    data.message && `\n${data.message}`,
+  ].filter(Boolean).join("\n");
+
+  const button = contactForm.querySelector("button[type=submit]");
+  button.disabled = true;
+  button.textContent = "Sending…";
+  showStatus("");
+
+  try {
+    const response = await fetch(TRIBETRAVEL_ENQUIRY_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name: data.name, email: data.email, message: summary }),
+    });
+    const result = await response.json().catch(() => ({}));
+    if (!response.ok || !result.ok) throw new Error(result.error || `HTTP ${response.status}`);
+
+    contactForm.reset();
+    showStatus("Thanks! Your enquiry is on its way. We'll be in touch soon.");
+  } catch (err) {
+    console.error("Contact form:", err);
+    showStatus("Sorry, something went wrong sending your enquiry. Please try again.", true);
+  } finally {
+    button.disabled = false;
+    button.textContent = "Send enquiry";
+  }
 });
 
 document.getElementById("year").textContent = new Date().getFullYear();

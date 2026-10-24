@@ -114,7 +114,11 @@ cite { color: var(--color-muted); font-style: normal; font-weight: 600; }
   font: inherit; padding: 0.7rem 0.9rem; border: 1px solid #d1d5db; border-radius: 8px;
 }
 .contact-form input:focus, .contact-form textarea:focus { outline: 2px solid var(--color-primary); border-color: transparent; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+.hidden-field { display: none; }
 .form-status { margin: 0; color: var(--color-primary); font-weight: 600; }
+.form-status.error { color: #b91c1c; }
+.contact-form .btn:disabled { opacity: 0.6; cursor: wait; }
 
 /* Footer */
 .site-footer { background: #0b3b37; color: #cbd5d1; padding: 2rem 0; text-align: center; }
@@ -133,6 +137,6 @@ cite { color: var(--color-muted); font-style: normal; font-weight: 600; }
     border-bottom: 1px solid #e5e7eb;
   }
   .nav-links.open { display: flex; }
-  .contact { grid-template-columns: 1fr; }
+  .contact, .form-row { grid-template-columns: 1fr; }
   .section { padding: 3.5rem 0; }
 }
