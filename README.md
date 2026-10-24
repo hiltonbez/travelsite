@@ -1,39 +1,38 @@
-# Paper Plane Travel
+# Paper Plane Travel & Tours
 
-Website for Paper Plane Travel, a worldwide holiday agency. Plain HTML, CSS and JavaScript, no build step.
+Website for Paper Plane Travel & Tours (Vanessa), replacing paperplanetravel.co.za.
+The design started in Lovable and is now maintained here: edit this repo, not the
+Lovable project.
 
-**Live site:** https://hiltonbez.github.io/travelsite/ (GitHub Pages, published from `main`; every push updates it within a minute or two)
+Built with React, TanStack Start and Tailwind. At build time each page is saved
+as static HTML, and the Docker image serves it with nginx.
 
-## Run it locally
-
-Open `index.html` in a browser, or serve the folder:
+## Develop
 
 ```bash
-npx serve .
+npm install
+npm run dev
 ```
 
-## Structure
+## Build like production
 
-```
-index.html     page markup
-css/styles.css styles (colours and fonts are CSS variables at the top)
-js/main.js     destination data, search filter, mobile menu, contact form
+```bash
+npm run build:static
 ```
 
-## Enquiries
+This builds the site, then `scripts/snapshot.mjs` starts the built server once
+and saves `/` and the 404 page as HTML in `.output/public`. Add new pages to
+`PAGES` in that script.
 
-The contact form sends each enquiry straight into TribeTravel as a new enquiry
-for Paper Plane Travel. To switch it on, sign in to TribeTravel as the agency,
-open **Setup**, copy the website enquiry link
-(`https://tribetravel.io/api/enquiry/<agency-slug>`) and paste it into
-`TRIBETRAVEL_ENQUIRY_URL` near the bottom of `js/main.js`. Until then the form
-tells visitors enquiries can't be sent yet.
+## Deploy (Coolify)
 
-Phone, destination, dates and number of travellers are added to the
-enquiry's summary.
+The `Dockerfile` builds the site and serves `.output/public` with nginx on port 80.
+In Coolify: Dockerfile build pack, port 80, auto-deploy on push to `main`.
 
-## Next steps
+## Content
 
-- Replace the sample destinations in `js/main.js` with real trips
-- Swap the placeholder brand name, colours and images
-- Point a custom domain at the site (repo Settings → Pages → Custom domain)
+- Contact details and the TribeTravel enquiry link: `src/lib/contact.ts`
+- Page sections and destination cards: `src/routes/index.tsx`
+- Enquiry form: `src/components/enquiry-form.tsx`. Submissions go into
+  Paper Plane's TribeTravel Enquiries inbox.
+- Hero video: `public/videos/hero.mp4`; images: `src/assets/`
