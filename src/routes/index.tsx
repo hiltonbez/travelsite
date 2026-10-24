@@ -9,7 +9,8 @@ import { EnquiryForm } from "@/components/enquiry-form";
 import { contact } from "@/lib/contact";
 
 // Served from public/videos (was hosted by Lovable)
-const heroVideo = { url: "/videos/hero.mp4" };
+// ?v= busts the Cloudflare cache when the video changes
+const heroVideo = { url: "/videos/hero.mp4?v=2" };
 
 export const Route = createFileRoute("/")({
   head: () => ({
