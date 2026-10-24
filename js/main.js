@@ -60,7 +60,7 @@ links.addEventListener("click", (e) => {
 // Contact form: enquiries go straight into TribeTravel as new enquiries for
 // Paper Plane Travel. Paste the agency's "website enquiry" link from TribeTravel's
 // Setup page below; it looks like https://tribetravel.io/api/enquiry/<agency-slug>.
-const TRIBETRAVEL_ENQUIRY_URL = "";
+const TRIBETRAVEL_ENQUIRY_URL = "https://tribetravel.io/api/enquiry/paper-plane-travel-tours";
 
 const contactForm = document.getElementById("contact-form");
 const formStatus = document.getElementById("form-status");
