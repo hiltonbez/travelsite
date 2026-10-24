@@ -4,6 +4,11 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm ci --no-audit --no-fund
 COPY . .
+# Which TribeTravel the site reads its content (and chat) from. Set as build variables in Coolify to point a test
+# build at TribeTravel dev; the defaults are production and Paper Plane.
+ARG VITE_TRIBETRAVEL_URL=https://tribetravel.io
+ARG VITE_AGENCY_SLUG=paper-plane-travel-tours
+ENV VITE_TRIBETRAVEL_URL=$VITE_TRIBETRAVEL_URL VITE_AGENCY_SLUG=$VITE_AGENCY_SLUG
 RUN npm run build:static
 
 # Serve: plain nginx, no Node at runtime.
