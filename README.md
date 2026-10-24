@@ -1,6 +1,6 @@
-# Travel Site
+# Paper Plane Travel
 
-A starter travel agency website: plain HTML, CSS and JavaScript, no build step.
+Website for Paper Plane Travel, a worldwide holiday agency. Plain HTML, CSS and JavaScript, no build step.
 
 ## Run it locally
 

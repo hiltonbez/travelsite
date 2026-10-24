@@ -55,7 +55,8 @@ h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); }
   border-bottom: 1px solid #e5e7eb;
 }
 .nav { display: flex; align-items: center; justify-content: space-between; height: 64px; }
-.logo { font-family: var(--font-heading); font-size: 1.5rem; font-weight: 700; color: var(--color-primary); text-decoration: none; }
+.logo { display: flex; align-items: center; gap: 0.45rem; font-family: var(--font-heading); font-size: 1.4rem; font-weight: 700; color: var(--color-primary); text-decoration: none; }
+.logo-icon { width: 1.4em; height: 1.4em; color: var(--color-accent); transform: rotate(-8deg); }
 .nav-links { display: flex; align-items: center; gap: 1.5rem; }
 .nav-links a:not(.btn) { color: var(--color-text); text-decoration: none; font-weight: 500; }
 .nav-links a:not(.btn):hover { color: var(--color-primary); }
@@ -82,7 +83,7 @@ h2 { font-size: clamp(1.8rem, 4vw, 2.4rem); }
 .section-alt { background: var(--color-bg-alt); }
 .section-intro { color: var(--color-muted); margin-bottom: 2.5rem; }
 .grid { display: grid; gap: 1.5rem; }
-.cards { grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+.cards { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
 .features, .testimonials { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); margin-top: 2rem; }
 .no-results { color: var(--color-muted); }
 

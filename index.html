@@ -3,8 +3,9 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Wanderlust Travel</title>
-  <meta name="description" content="Handpicked trips, honest advice and easy booking.">
+  <title>Paper Plane Travel</title>
+  <meta name="description" content="Worldwide holidays, planned for you. Handpicked trips, honest advice and easy booking.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><path fill='%230f766e' d='M2 11 22 2l-7 20-3-8z'/></svg>">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
@@ -13,7 +14,10 @@
 <body>
   <header class="site-header">
     <div class="container nav">
-      <a href="#" class="logo">Wanderlust</a>
+      <a href="#" class="logo">
+        <svg class="logo-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M2 11 22 2l-7 20-3-8z" fill="currentColor"/><path d="M12 14 22 2" stroke="#fff" stroke-width="1.2"/></svg>
+        Paper Plane Travel
+      </a>
       <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
       <nav class="nav-links">
         <a href="#destinations">Destinations</a>
@@ -27,8 +31,8 @@
   <main>
     <section class="hero">
       <div class="container hero-content">
-        <h1>Your next adventure starts here</h1>
-        <p>Handpicked trips, honest advice and easy booking, so you can spend less time planning and more time exploring.</p>
+        <h1>The world is closer than you think</h1>
+        <p>Worldwide holidays planned around you. From island escapes to city breaks, we handle the details so you can just take off.</p>
         <form class="search" id="search-form">
           <input type="text" id="search-input" placeholder="Where do you want to go?" aria-label="Destination">
           <button type="submit" class="btn">Search</button>
@@ -39,7 +43,7 @@
     <section id="destinations" class="section">
       <div class="container">
         <h2>Popular destinations</h2>
-        <p class="section-intro">A few places our travellers keep coming back to.</p>
+        <p class="section-intro">A few favourites to get you dreaming. Sample "from" prices are per person sharing.</p>
         <div class="grid cards" id="destination-grid"></div>
         <p class="no-results" id="no-results" hidden>No destinations match your search yet. Get in touch and we'll plan it for you.</p>
       </div>
@@ -47,7 +51,7 @@
 
     <section id="why" class="section section-alt">
       <div class="container">
-        <h2>Why travel with us</h2>
+        <h2>Why fly with Paper Plane</h2>
         <div class="grid features">
           <div class="feature">
             <div class="feature-icon">&#9992;</div>
@@ -62,7 +66,7 @@
           <div class="feature">
             <div class="feature-icon">&#10003;</div>
             <h3>Best value</h3>
-            <p>We work directly with trusted partners to keep prices fair.</p>
+            <p>We work directly with trusted partners worldwide and quote in rand, so there are no surprises.</p>
           </div>
         </div>
       </div>
@@ -92,7 +96,7 @@
       <div class="container contact">
         <div>
           <h2>Plan your trip</h2>
-          <p>Tell us where you'd like to go and we'll get back to you with ideas.</p>
+          <p>Tell us where you'd like to go, when, and who's travelling. We'll come back to you with ideas and a quote in rand.</p>
         </div>
         <form class="contact-form" id="contact-form">
           <label>Name <input type="text" name="name" required></label>
@@ -108,7 +112,7 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; <span id="year"></span> Wanderlust Travel. All rights reserved.</p>
+      <p>&copy; <span id="year"></span> Paper Plane Travel. All rights reserved.</p>
     </div>
   </footer>
 
