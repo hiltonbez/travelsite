@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Wanderlust Travel</title>
+  <meta name="description" content="Handpicked trips, honest advice and easy booking.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav">
+      <a href="#" class="logo">Wanderlust</a>
+      <button class="nav-toggle" aria-label="Open menu" aria-expanded="false">&#9776;</button>
+      <nav class="nav-links">
+        <a href="#destinations">Destinations</a>
+        <a href="#why">Why us</a>
+        <a href="#testimonials">Reviews</a>
+        <a href="#contact" class="btn btn-small">Plan a trip</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container hero-content">
+        <h1>Your next adventure starts here</h1>
+        <p>Handpicked trips, honest advice and easy booking, so you can spend less time planning and more time exploring.</p>
+        <form class="search" id="search-form">
+          <input type="text" id="search-input" placeholder="Where do you want to go?" aria-label="Destination">
+          <button type="submit" class="btn">Search</button>
+        </form>
+      </div>
+    </section>
+
+    <section id="destinations" class="section">
+      <div class="container">
+        <h2>Popular destinations</h2>
+        <p class="section-intro">A few places our travellers keep coming back to.</p>
+        <div class="grid cards" id="destination-grid"></div>
+        <p class="no-results" id="no-results" hidden>No destinations match your search yet. Get in touch and we'll plan it for you.</p>
+      </div>
+    </section>
+
+    <section id="why" class="section section-alt">
+      <div class="container">
+        <h2>Why travel with us</h2>
+        <div class="grid features">
+          <div class="feature">
+            <div class="feature-icon">&#9992;</div>
+            <h3>Tailored trips</h3>
+            <p>Every itinerary is built around your dates, budget and travel style.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">&#9742;</div>
+            <h3>24/7 support</h3>
+            <p>A real person is on call from the moment you book until you're home.</p>
+          </div>
+          <div class="feature">
+            <div class="feature-icon">&#10003;</div>
+            <h3>Best value</h3>
+            <p>We work directly with trusted partners to keep prices fair.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="testimonials" class="section">
+      <div class="container">
+        <h2>What travellers say</h2>
+        <div class="grid testimonials">
+          <blockquote>
+            <p>"Every detail was taken care of. We just turned up and enjoyed it."</p>
+            <cite>Sample review</cite>
+          </blockquote>
+          <blockquote>
+            <p>"The itinerary was perfectly paced for our family."</p>
+            <cite>Sample review</cite>
+          </blockquote>
+          <blockquote>
+            <p>"Quick replies, great tips and no surprises on the bill."</p>
+            <cite>Sample review</cite>
+          </blockquote>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact" class="section section-alt">
+      <div class="container contact">
+        <div>
+          <h2>Plan your trip</h2>
+          <p>Tell us where you'd like to go and we'll get back to you with ideas.</p>
+        </div>
+        <form class="contact-form" id="contact-form">
+          <label>Name <input type="text" name="name" required></label>
+          <label>Email <input type="email" name="email" required></label>
+          <label>Where to? <input type="text" name="destination"></label>
+          <label>Message <textarea name="message" rows="4"></textarea></label>
+          <button type="submit" class="btn">Send enquiry</button>
+          <p class="form-status" id="form-status" role="status"></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; <span id="year"></span> Wanderlust Travel. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
