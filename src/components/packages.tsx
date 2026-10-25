@@ -3,6 +3,7 @@ import { ArrowRight, ArrowUpRight, Check, Loader2 } from "lucide-react";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { bookRoom, checkDates, listPackages, rand, type Booked, type CheckRequest, type Package, type Room } from "@/lib/packages";
+import type { PackagesHead } from "@/lib/site-content";
 import islands from "@/assets/islands.jpg";
 import cities from "@/assets/cities.jpg";
 import cruises from "@/assets/cruises.jpg";
@@ -26,8 +27,9 @@ function Label({ text, children, className }: { text: string; children: ReactNod
   );
 }
 
-/** "Mauritius packages": the agency's Beachcomber packages, bookable here. Hidden when there are none. */
-export function PackagesSection() {
+/** "Mauritius packages": the agency's Beachcomber packages, bookable here. Hidden when there are none.
+ *  The headings are the agency's own (TribeTravel's visual editor). */
+export function PackagesSection({ head }: { head: PackagesHead }) {
   const [packages, setPackages] = useState<Package[] | null>(null);
   const [minDays, setMinDays] = useState(10);
   const [open, setOpen] = useState<Package | null>(null);
@@ -47,9 +49,9 @@ export function PackagesSection() {
     <section id="packages" className="bg-secondary px-5 py-24 md:px-24">
       <div className="mb-12 flex flex-wrap items-end justify-between gap-6">
         <div>
-          <p className="eyebrow text-primary">Book online</p>
-          <h2 className="mt-3 font-display text-4xl tracking-[-0.03em] md:text-6xl">Mauritius packages</h2>
-          <p className="mt-4 max-w-xl text-muted-foreground">Pick a resort, choose your dates and see live prices. Your quote and itinerary are ready straight away, and your consultant calls you to add flights and transfers.</p>
+          <p className="eyebrow text-primary">{head.eyebrow}</p>
+          <h2 className="mt-3 font-display text-4xl tracking-[-0.03em] md:text-6xl">{head.title}</h2>
+          <p className="mt-4 max-w-xl text-muted-foreground">{head.intro}</p>
         </div>
       </div>
       {packages === null ? (
