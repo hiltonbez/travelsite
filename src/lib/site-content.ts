@@ -158,16 +158,45 @@ export function merge(p: Payload): SiteContent {
   };
 }
 
+const UA = "TribeTravelSite/1.0 (+https://tribetravel.io)";
+
+/** GET JSON with Node's https module. Used while the site is built: Cloudflare in front of TribeTravel refuses
+ *  Node's built-in fetch (undici) as a bot even with a proper user agent, but lets this through. */
+async function nodeGetJson(url: string): Promise<unknown> {
+  const mod = url.startsWith("https:") ? await import("node:https") : await import("node:http");
+  return new Promise((resolve, reject) => {
+    const req = mod.get(url, { headers: { Accept: "application/json", "User-Agent": UA }, timeout: 8000 }, (res) => {
+      if ((res.statusCode ?? 500) >= 300) {
+        res.resume();
+        reject(new Error(`HTTP ${res.statusCode}`));
+        return;
+      }
+      let body = "";
+      res.setEncoding("utf8");
+      res.on("data", (c: string) => (body += c));
+      res.on("end", () => {
+        try {
+          resolve(JSON.parse(body));
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+    req.on("timeout", () => req.destroy(new Error("timeout")));
+    req.on("error", reject);
+  });
+}
+
 /** Fetch the content; FALLBACK when TribeTravel can't be reached in 8 seconds or answers with an error. */
 export async function loadSiteContent(): Promise<SiteContent> {
+  const url = `${TRIBETRAVEL_URL}/api/site/${encodeURIComponent(AGENCY_SLUG)}/content`;
   try {
-    const res = await fetch(`${TRIBETRAVEL_URL}/api/site/${encodeURIComponent(AGENCY_SLUG)}/content`, {
-      signal: AbortSignal.timeout(8000),
-      headers: { Accept: "application/json" },
-    });
+    if (import.meta.env.SSR) return merge((await nodeGetJson(url)) as Payload);
+    const res = await fetch(url, { signal: AbortSignal.timeout(8000), headers: { Accept: "application/json" } });
     if (!res.ok) return FALLBACK;
     return merge((await res.json()) as Payload);
-  } catch {
+  } catch (e) {
+    if (import.meta.env.SSR) console.warn(`site content: using the built-in content (${(e as Error).message})`);
     return FALLBACK;
   }
 }
