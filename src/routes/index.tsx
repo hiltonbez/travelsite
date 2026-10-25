@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, ArrowUpRight, Facebook, Instagram, Mail, MessageCircle, Pause, Phone, Play } from "lucide-react";
 import { EnquiryForm } from "@/components/enquiry-form";
+import { PackagesSection } from "@/components/packages";
 import { AGENCY_SLUG, TRIBETRAVEL_URL, loadSiteContent, phoneE164, waLink } from "@/lib/site-content";
 
 export const Route = createFileRoute("/")({
@@ -75,6 +76,7 @@ function Index() {
           </a>
           <nav className="hidden gap-12 lg:flex">
             <a href="#destinations" className="eyebrow hover:text-primary">Destinations</a>
+            {c.packages && <a href="#packages" className="eyebrow hover:text-primary">Book online</a>}
             <a href="#vanessa" className="eyebrow hover:text-primary">About Vanessa</a>
             <a href="#journal" className="eyebrow hover:text-primary">Journal</a>
           </nav>
@@ -174,6 +176,9 @@ function Index() {
           ))}
         </div>
       </section>
+
+      {/* Beachcomber packages bookable online (TribeTravel), only when the agency has switched them on */}
+      {c.packages && <PackagesSection />}
 
       {/* Video break */}
       <section className="relative h-[80vh] overflow-hidden">

@@ -25,6 +25,7 @@ export type SiteContent = {
   journal: { eyebrow: string; title: string; posts: Post[] };
   contact: { title: string; intro: string; email: string; phone: string; whatsapp: string; facebook: string; instagram: string };
   chat: boolean;
+  packages: boolean;
 };
 
 const fallbackImages: string[] = [islands, safari, cities, cruises];
@@ -78,11 +79,12 @@ export const FALLBACK: SiteContent = {
     instagram: "",
   },
   chat: false,
+  packages: false,
 };
 
 type Sections = Record<string, Record<string, unknown>>;
 type Special = { name: string; destination?: string; summary?: string; from_price?: number | null; nights?: number | null; image?: string };
-type Payload = { sections?: Sections; featured?: Special[]; chat?: boolean };
+type Payload = { sections?: Sections; featured?: Special[]; chat?: boolean; packages?: boolean };
 
 const str = (v: unknown, fb: string) => (typeof v === "string" && v.trim() ? v.trim() : fb);
 
@@ -155,6 +157,7 @@ export function merge(p: Payload): SiteContent {
       instagram: g("contact", "instagram", f.contact.instagram),
     },
     chat: p.chat === true,
+    packages: p.packages === true,
   };
 }
 
