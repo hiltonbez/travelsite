@@ -10,7 +10,10 @@ import { contact } from "@/lib/contact";
 
 const env = (import.meta as { env?: Record<string, string | undefined> }).env ?? {};
 export const TRIBETRAVEL_URL = (env["VITE_TRIBETRAVEL_URL"] || "https://tribetravel.io").replace(/\/$/, "");
-export const AGENCY_SLUG = env["VITE_AGENCY_SLUG"] || "paper-plane-travel-tours";
+export const AGENCY_SLUG = env["VITE_AGENCY_SLUG"] || "sunset-travel";
+
+/** The agency's name on the page (header, footer, page title). */
+export const BRAND = { name: "Sun-Set Travel", short: "SUN-SET", tagline: "Travel & Tours" };
 
 export type Card = { tag: string; name: string; line: string; img: string; price: string };
 export type Post = { title: string; tag: string; img: string; link: string };
@@ -63,25 +66,25 @@ export const FALLBACK: SiteContent = {
     video: "/videos/hero.mp4?v=2", // ?v= busts the Cloudflare cache when the video changes
     image: "",
   },
-  steps: { title: "Make it your journey.", items: ["Choose a place", "Tell us your dates", "Plan with Vanessa"] },
+  steps: { title: "Make it your journey.", items: ["Choose a place", "Tell us your dates", "Plan with us"] },
   places: ["Madagascar", "Zanzibar", "Mauritius", "Seychelles", "Thailand", "Bali", "Maldives", "Kenya", "Zimbabwe"],
   featured: {
     eyebrow: "Destinations",
     title: "Where will you go next?",
-    // Prices from the specials on paperplanetravel.co.za (Oct 2026).
+    // Example trips until the agency adds its own Specials in TribeTravel.
     cards: [
       { tag: "Islands", name: "Madagascar", line: "Nosy Komba, far from the mega-resorts", img: islands, price: "7 nights from R36 500 pp" },
-      { tag: "Safari", name: "Big 5 Safaris", line: "Golden hours with the herds", img: safari, price: "Ask Vanessa for a quote" },
+      { tag: "Safari", name: "Big 5 Safaris", line: "Golden hours with the herds", img: safari, price: "Ask us for a quote" },
       { tag: "Cities", name: "City Breaks", line: "Abu Dhabi, Dubai and beyond", img: cities, price: "5 nights from R24 933 pp" },
       { tag: "Cruises", name: "Cruises", line: "Ocean views, and a balcony upgrade", img: cruises, price: "Ask about the NCL special" },
     ],
   },
   promise: { eyebrow: "Our promise", text: "Not a package. A journey built around the way you want to feel." },
   about: {
-    eyebrow: "About Vanessa",
+    eyebrow: "About us",
     title: "Experience the difference.",
     body:
-      "Paper Plane is a small agency focused on finding you the best travel solutions, for business or pleasure. Vanessa seeks out the adventures that suit you best, at the best possible price, so you make the most of every trip and come home with memories that last forever.",
+      "Sun-Set Travel is a small agency focused on finding you the best travel solutions, for business or pleasure. We seek out the adventures that suit you best, at the best possible price, so you make the most of every trip and come home with memories that last forever.",
     stats: [["1:1", "Personal planning"], ["100%", "Tailor-made"], ["ZAR", "Quoted in rand"], ["2-in-1", "Business & leisure"]],
   },
   journal: {
@@ -95,7 +98,7 @@ export const FALLBACK: SiteContent = {
   },
   contact: {
     title: "Ready when you are.",
-    intro: "Tell Vanessa where you'd like to go and when. She'll come back to you with ideas and a quote in rand.",
+    intro: "Tell us where you'd like to go and when. We'll come back to you with ideas and a quote in rand.",
     email: contact.email,
     phone: contact.phoneDisplay,
     whatsapp: contact.phoneDisplay,
@@ -146,7 +149,7 @@ function rand(n: number) {
 function card(s: Special, i: number): Card {
   const price = s.from_price
     ? `${s.nights ? `${s.nights} nights ` : ""}from ${rand(s.from_price)} pp`
-    : "Ask Vanessa for a quote";
+    : "Ask us for a quote";
   const line = ((s.summary || "").split(/(?<=[.!?])\s/)[0] ?? "").slice(0, 90);
   return { tag: s.destination || "Featured", name: s.name, line, img: s.image || fallbackImages[i % 4] || islands, price };
 }

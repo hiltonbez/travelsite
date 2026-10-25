@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { ANCHORS, BlockView } from "@/components/blocks";
-import { AGENCY_SLUG, TRIBETRAVEL_URL, loadSiteContent } from "@/lib/site-content";
+import { AGENCY_SLUG, BRAND, TRIBETRAVEL_URL, loadSiteContent } from "@/lib/site-content";
 import { usePreview } from "@/lib/preview";
 
 export const Route = createFileRoute("/")({
@@ -9,10 +9,10 @@ export const Route = createFileRoute("/")({
   loader: () => loadSiteContent(),
   head: ({ loaderData }) => ({
     meta: [
-      { title: "Paper Plane Travel & Tours — Oh, the places you'll go" },
+      { title: "Sun-Set Travel — Oh, the places you'll go" },
       { name: "description", content: "A small South African travel agency planning islands, safaris, city breaks and cruises, for business or pleasure, at the best possible price." },
-      { property: "og:title", content: "Paper Plane Travel & Tours — Some places change everything" },
-      { property: "og:description", content: "Tailor-made holidays to Madagascar, Mauritius, Zanzibar, Thailand and beyond, planned personally by Vanessa." },
+      { property: "og:title", content: "Sun-Set Travel — Some places change everything" },
+      { property: "og:description", content: "Tailor-made holidays to Madagascar, Mauritius, Zanzibar, Thailand and beyond, planned personally for you." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
@@ -60,8 +60,8 @@ function Index() {
       <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
         <div className="flex h-16 items-center justify-between px-5 md:px-24">
           <a href="/" className="flex flex-col whitespace-nowrap leading-none">
-            <span className="text-base font-semibold tracking-[0.25em] sm:text-lg sm:tracking-[0.35em]">PAPER PLANE</span>
-            <span className="eyebrow mt-1 text-[0.55rem] text-muted-foreground">Travel &amp; Tours</span>
+            <span className="text-base font-semibold tracking-[0.25em] sm:text-lg sm:tracking-[0.35em]">{BRAND.short}</span>
+            <span className="eyebrow mt-1 text-[0.55rem] text-muted-foreground">{BRAND.tagline}</span>
           </a>
           <nav className="hidden gap-12 lg:flex">
             {NAV.filter(([t]) => present.has(t as never)).map(([t, label]) => (
@@ -87,7 +87,7 @@ function Index() {
             <span key={x}>{i > 0 && <span className="mr-4">/</span>}{x}</span>
           ))}
         </div>
-        <span className="eyebrow">© {new Date().getFullYear()} Paper Plane Travel &amp; Tours</span>
+        <span className="eyebrow">© {new Date().getFullYear()} {BRAND.name}</span>
       </footer>
     </div>
   );

@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 type Status = { kind: "idle" | "sending" | "sent" | "error"; message?: string };
 
-const THANKS = "Thanks! Your enquiry is on its way. Vanessa will be in touch soon.";
+const THANKS = "Thanks! Your enquiry is on its way. We'll be in touch soon.";
 
 const inputClass =
   "w-full border-0 border-b border-border bg-transparent px-0 py-3 text-lg outline-none transition placeholder:text-muted-foreground/60 focus:border-primary";
@@ -45,7 +45,7 @@ export function EnquiryForm({ className }: { className?: string }) {
     }
 
     // TribeTravel stores a name, a contact and a summary, so the trip details
-    // go into the summary where Vanessa will see them.
+    // go into the summary where the agent will see them.
     const summary = [
       data.destination && `Destination: ${data.destination}`,
       data.travel_dates && `When: ${data.travel_dates}`,

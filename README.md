@@ -1,8 +1,10 @@
-# Paper Plane Travel & Tours
+# Sun-Set Travel (demo agency website)
 
-Website for Paper Plane Travel & Tours (Vanessa), replacing paperplanetravel.co.za.
+The demo website for TribeTravel's website service, linked to the Demo Agency
+(`sunset-travel`) and live at https://travelsite.aifundi.io. Agents change its
+words, pictures and sections in TribeTravel's visual editor (Website), then Publish.
 The design started in Lovable and is now maintained here: edit this repo, not the
-Lovable project.
+Lovable project. The agency's name on the page is `BRAND` in `src/lib/site-content.ts`.
 
 Built with React, TanStack Start and Tailwind. At build time each page is saved
 as static HTML, and the Docker image serves it with nginx.
@@ -31,8 +33,9 @@ In Coolify: Dockerfile build pack, port 80, auto-deploy on push to `main`.
 
 ## Content
 
-- Contact details and the TribeTravel enquiry link: `src/lib/contact.ts`
-- Page sections and destination cards: `src/routes/index.tsx`
+- Live content (words, pictures, sections, contact details): TribeTravel, read at build time
+  and drawn by `src/components/blocks.tsx`; fallbacks in `src/lib/site-content.ts`
+- Contact fallbacks and the TribeTravel enquiry link: `src/lib/contact.ts`
 - Enquiry form: `src/components/enquiry-form.tsx`. Submissions go into
-  Paper Plane's TribeTravel Enquiries inbox.
+  the agency's TribeTravel Enquiries inbox.
 - Hero video: `public/videos/hero.mp4`; images: `src/assets/`

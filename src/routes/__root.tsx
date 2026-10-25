@@ -78,7 +78,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Paper Plane — Tailor-made travel" },
+      { title: "Sun-Set Travel — Tailor-made travel" },
       { name: "description", content: "Tailor-made journeys to islands, safaris, cities and cruises." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
