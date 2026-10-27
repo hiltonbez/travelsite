@@ -305,5 +305,7 @@ export async function loadSiteContent(): Promise<SiteContent> {
 }
 
 /** "+27 76 939 9338" -> "+27769399338" and "https://wa.me/27769399338". */
-export const phoneE164 = (p: string) => p.replace(/[^\d+]/g, "");
-export const waLink = (p: string) => `https://wa.me/${p.replace(/\D/g, "")}`;
+// A South African local number (061 424 2403) becomes +27 61 424 2403; WhatsApp links need the international form.
+const intl = (p: string) => p.replace(/[^\d+]/g, "").replace(/^0(?=\d{9}$)/, "+27");
+export const phoneE164 = (p: string) => intl(p);
+export const waLink = (p: string) => `https://wa.me/${intl(p).replace(/\D/g, "")}`;
