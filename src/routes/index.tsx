@@ -20,7 +20,9 @@ export const Route = createFileRoute("/")({
     // from React after load raced the page's own hydration). Any [data-tt-chat-open] element opens it.
     scripts: loaderData?.chat
       ? [{
-          src: `${TRIBETRAVEL_URL}/static/js/quote-chat.js`,
+          // ?v= makes browsers fetch a changed chat script now instead of after their 4-hour cache; raise it
+          // when TribeTravel's quote-chat.js changes.
+          src: `${TRIBETRAVEL_URL}/static/js/quote-chat.js?v=2`,
           defer: true,
           "data-agency": AGENCY_SLUG,
           "data-accent": "#c8102e",
