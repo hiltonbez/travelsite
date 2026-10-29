@@ -17,4 +17,5 @@ export const DESIGNS: Design[] = [
   { path: "/designs/wanderlust", name: "Wanderlust", blurb: "Bold bento grid for adventure and groups" },
   { path: "/designs/meet-your-agent", name: "Meet Your Agent", blurb: "A personal site for a home-based agent" },
   { path: "/designs/itinerary", name: "Itinerary Story", blurb: "Day-by-day trip for destination specialists" },
+  { path: "/designs/enterprise", name: "Enterprise", blurb: "Everything: live booking, AI concierge, automation and an app" },
 ];

@@ -1,5 +1,5 @@
 // Horizon: cinematic luxury. A full-screen video, an elegant serif headline and a glass "where, when, who" quote bar.
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { useEnquiry } from "@/lib/enquiry";
 import { useReveal } from "@/hooks/use-reveal";
@@ -29,7 +29,10 @@ const field = "flex flex-col gap-1.5 px-6 py-4";
 const fieldLabel = `text-[11px] uppercase tracking-[0.24em] ${gold}`;
 const fieldInput = "min-h-7 border-0 bg-transparent p-0 text-[17px] font-semibold text-[#F4F1EC] outline-none [color-scheme:dark] placeholder:text-[#F4F1EC]/45";
 
-export function Horizon() {
+const NAV: [string, string][] = [["#destinations", "Destinations"], ["#how", "How it works"], ["#why", "Why us"], ["#contact", "Contact"]];
+
+/** `nav` replaces the header links; `children` are extra sections after the destinations (the Enterprise design). */
+export function Horizon({ nav = NAV, children }: { nav?: [string, string][]; children?: ReactNode }) {
   useReveal();
   const [tab, setTab] = useState("All");
   const [more, setMore] = useState(false);
@@ -43,10 +46,9 @@ export function Horizon() {
           <span className={`mt-1 text-[10px] tracking-[0.42em] ${gold}`}>{BRAND.tagline.toUpperCase()}</span>
         </a>
         <nav className="hidden gap-9 text-[13px] uppercase tracking-[0.18em] lg:flex">
-          <a href="#destinations" className="hover:text-[#E8C79A]">Destinations</a>
-          <a href="#how" className="hover:text-[#E8C79A]">How it works</a>
-          <a href="#why" className="hover:text-[#E8C79A]">Why us</a>
-          <a href="#contact" className="hover:text-[#E8C79A]">Contact</a>
+          {nav.map(([href, label]) => (
+            <a key={href} href={href} className="hover:text-[#E8C79A]">{label}</a>
+          ))}
         </nav>
         <a href="#quote" className="inline-flex min-h-11 items-center rounded-full bg-[#E8C79A] px-6 text-[13px] font-bold uppercase tracking-[0.14em] text-[#0B0D10] transition hover:-translate-y-0.5">
           Plan my trip
@@ -168,6 +170,8 @@ export function Horizon() {
           })}
         </div>
       </section>
+
+      {children}
 
       <section id="how" className="flex flex-col gap-16 bg-[#F4F1EC] px-[5vw] py-24 text-[#14161A]">
         <div className="reveal flex max-w-[720px] flex-col gap-4">

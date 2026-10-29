@@ -1,0 +1,15 @@
+{
+  "name": "Sun-Set Travel",
+  "short_name": "Sun-Set",
+  "description": "Plan, quote and book your holiday with Sun-Set Travel.",
+  "start_url": "/designs/enterprise",
+  "scope": "/designs/enterprise",
+  "display": "standalone",
+  "background_color": "#0B0D10",
+  "theme_color": "#0B0D10",
+  "icons": [
+    { "src": "/designs/app-icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "/designs/app-icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "/designs/app-icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

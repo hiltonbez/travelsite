@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DesignsEnterpriseRouteImport } from './routes/designs/enterprise'
 import { Route as DesignsHorizonRouteImport } from './routes/designs/horizon'
 import { Route as DesignsItineraryRouteImport } from './routes/designs/itinerary'
 import { Route as DesignsMeetYourAgentRouteImport } from './routes/designs/meet-your-agent'
@@ -19,6 +20,11 @@ import { Route as DesignsWanderlustRouteImport } from './routes/designs/wanderlu
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsEnterpriseRoute = DesignsEnterpriseRouteImport.update({
+  id: '/designs/enterprise',
+  path: '/designs/enterprise',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsHorizonRoute = DesignsHorizonRouteImport.update({
@@ -49,6 +55,7 @@ const DesignsWanderlustRoute = DesignsWanderlustRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/designs/enterprise': typeof DesignsEnterpriseRoute
   '/designs/horizon': typeof DesignsHorizonRoute
   '/designs/itinerary': typeof DesignsItineraryRoute
   '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
@@ -57,6 +64,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/designs/enterprise': typeof DesignsEnterpriseRoute
   '/designs/horizon': typeof DesignsHorizonRoute
   '/designs/itinerary': typeof DesignsItineraryRoute
   '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
@@ -66,6 +74,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/designs/enterprise': typeof DesignsEnterpriseRoute
   '/designs/horizon': typeof DesignsHorizonRoute
   '/designs/itinerary': typeof DesignsItineraryRoute
   '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
@@ -76,6 +85,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/designs/enterprise'
     | '/designs/horizon'
     | '/designs/itinerary'
     | '/designs/meet-your-agent'
@@ -84,6 +94,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/designs/enterprise'
     | '/designs/horizon'
     | '/designs/itinerary'
     | '/designs/meet-your-agent'
@@ -92,6 +103,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/designs/enterprise'
     | '/designs/horizon'
     | '/designs/itinerary'
     | '/designs/meet-your-agent'
@@ -101,6 +113,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesignsEnterpriseRoute: typeof DesignsEnterpriseRoute
   DesignsHorizonRoute: typeof DesignsHorizonRoute
   DesignsItineraryRoute: typeof DesignsItineraryRoute
   DesignsMeetYourAgentRoute: typeof DesignsMeetYourAgentRoute
@@ -115,6 +128,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/enterprise': {
+      id: '/designs/enterprise'
+      path: '/designs/enterprise'
+      fullPath: '/designs/enterprise'
+      preLoaderRoute: typeof DesignsEnterpriseRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/designs/horizon': {
@@ -157,6 +177,7 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesignsEnterpriseRoute: DesignsEnterpriseRoute,
   DesignsHorizonRoute: DesignsHorizonRoute,
   DesignsItineraryRoute: DesignsItineraryRoute,
   DesignsMeetYourAgentRoute: DesignsMeetYourAgentRoute,

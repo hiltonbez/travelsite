@@ -83,7 +83,8 @@ export function PackagesSection({ head }: { head: PackagesHead }) {
 
 type Step = "dates" | "rooms" | "details" | "done";
 
-function BookingDialog({ pkg, minDays, onClose }: { pkg: Package | null; minDays: number; onClose: () => void }) {
+/** Book one package: dates, room, details, then the quote Tribe made. Also used by the Enterprise design. */
+export function BookingDialog({ pkg, minDays, onClose }: { pkg: Package | null; minDays: number; onClose: () => void }) {
   const [step, setStep] = useState<Step>("dates");
   const [req, setReq] = useState<CheckRequest | null>(null);
   const [rooms, setRooms] = useState<Room[]>([]);

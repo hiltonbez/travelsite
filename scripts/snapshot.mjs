@@ -15,6 +15,7 @@ const PAGES = [
   { path: "/designs/wanderlust", file: "designs/wanderlust/index.html", status: 200 },
   { path: "/designs/meet-your-agent", file: "designs/meet-your-agent/index.html", status: 200 },
   { path: "/designs/itinerary", file: "designs/itinerary/index.html", status: 200 },
+  { path: "/designs/enterprise", file: "designs/enterprise/index.html", status: 200 },
   // Any unknown path renders the not-found page; nginx serves it for 404s.
   { path: "/__not-found__", file: "404.html", status: 404 },
 ];

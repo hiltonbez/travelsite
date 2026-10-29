@@ -19,6 +19,7 @@
 }
 @keyframes d-dash { to { stroke-dashoffset: -40; } }
 @keyframes d-sway { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-30px); } }
+@keyframes d-grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
 
 .d-rise { animation: d-rise 1.1s cubic-bezier(.2, .7, .2, 1) both; }
 .d-slide { animation: d-slide .45s cubic-bezier(.2, .7, .2, 1) both; }
@@ -30,12 +31,15 @@
 .d-blob { animation: d-blob 9s ease-in-out infinite; }
 .d-dash { animation: d-dash 2s linear infinite; }
 .d-sway { animation: d-sway 7s ease-in-out infinite; }
+.d-grow { transform-origin: left; animation: d-grow 1.4s cubic-bezier(.2, .7, .2, 1) both; }
+/* Inside a .reveal block, wait until it scrolls into view (hooks/use-reveal.ts adds .in). */
+.reveal:not(.in) .d-grow { animation-play-state: paused; }
 
 /* Photos that zoom gently on hover; put .d-zoom on the link or card around the image. */
 .d-zoom img { transition: transform 1.2s cubic-bezier(.2, .7, .2, 1); }
 .d-zoom:hover img { transform: scale(1.06); }
 
 @media (prefers-reduced-motion: reduce) {
-  .d-rise, .d-slide, .d-float, .d-pulse, .d-marquee, .d-spin, .d-words, .d-blob, .d-dash, .d-sway { animation: none; }
+  .d-rise, .d-slide, .d-float, .d-pulse, .d-marquee, .d-spin, .d-words, .d-blob, .d-dash, .d-sway, .d-grow { animation: none; }
   .d-zoom img { transition: none; }
 }
