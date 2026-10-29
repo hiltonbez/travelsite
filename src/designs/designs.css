@@ -1,0 +1,41 @@
+/* Animations for the gallery designs (src/designs/). Layout and colour are Tailwind classes in each design. */
+
+@keyframes d-rise { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+@keyframes d-slide { from { opacity: 0; transform: translateX(18px); } to { opacity: 1; transform: none; } }
+@keyframes d-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+@keyframes d-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.08); } }
+@keyframes d-marquee { to { transform: translateX(-50%); } }
+@keyframes d-spin { to { transform: rotate(360deg); } }
+@keyframes d-words {
+  0%, 22% { transform: translateY(0); }
+  25%, 47% { transform: translateY(-1em); }
+  50%, 72% { transform: translateY(-2em); }
+  75%, 97% { transform: translateY(-3em); }
+  100% { transform: translateY(-4em); }
+}
+@keyframes d-blob {
+  0%, 100% { border-radius: 58% 42% 50% 50% / 50% 55% 45% 50%; }
+  50% { border-radius: 45% 55% 40% 60% / 60% 42% 58% 40%; }
+}
+@keyframes d-dash { to { stroke-dashoffset: -40; } }
+@keyframes d-sway { 0%, 100% { transform: translateX(0); } 50% { transform: translateX(-30px); } }
+
+.d-rise { animation: d-rise 1.1s cubic-bezier(.2, .7, .2, 1) both; }
+.d-slide { animation: d-slide .45s cubic-bezier(.2, .7, .2, 1) both; }
+.d-float { animation: d-float 5s ease-in-out infinite; }
+.d-pulse { animation: d-pulse 2.6s ease-in-out infinite; }
+.d-marquee { animation: d-marquee 36s linear infinite; }
+.d-spin { animation: d-spin 14s linear infinite; }
+.d-words { animation: d-words 9s cubic-bezier(.7, 0, .3, 1) infinite; }
+.d-blob { animation: d-blob 9s ease-in-out infinite; }
+.d-dash { animation: d-dash 2s linear infinite; }
+.d-sway { animation: d-sway 7s ease-in-out infinite; }
+
+/* Photos that zoom gently on hover; put .d-zoom on the link or card around the image. */
+.d-zoom img { transition: transform 1.2s cubic-bezier(.2, .7, .2, 1); }
+.d-zoom:hover img { transform: scale(1.06); }
+
+@media (prefers-reduced-motion: reduce) {
+  .d-rise, .d-slide, .d-float, .d-pulse, .d-marquee, .d-spin, .d-words, .d-blob, .d-dash, .d-sway { animation: none; }
+  .d-zoom img { transition: none; }
+}

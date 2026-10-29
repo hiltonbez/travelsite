@@ -1,11 +1,6 @@
-import { useState, type FormEvent } from "react";
 import { ArrowUpRight } from "lucide-react";
-import { contact } from "@/lib/contact";
+import { useEnquiry } from "@/lib/enquiry";
 import { cn } from "@/lib/utils";
-
-type Status = { kind: "idle" | "sending" | "sent" | "error"; message?: string };
-
-const THANKS = "Thanks! Your enquiry is on its way. We'll be in touch soon.";
 
 const inputClass =
   "w-full border-0 border-b border-border bg-transparent px-0 py-3 text-lg outline-none transition placeholder:text-muted-foreground/60 focus:border-primary";
@@ -20,63 +15,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 }
 
 export function EnquiryForm({ className }: { className?: string }) {
-  const [status, setStatus] = useState<Status>({ kind: "idle" });
-
-  async function onSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const fd = new FormData(form);
-    const field = (key: string) => String(fd.get(key) ?? "").trim();
-    const data = {
-      name: field("name"),
-      email: field("email"),
-      phone: field("phone"),
-      destination: field("destination"),
-      travel_dates: field("travel_dates"),
-      travellers: field("travellers"),
-      message: field("message"),
-    };
-
-    // Bots tend to tick the hidden checkbox; pretend it worked and send nothing.
-    if (fd.get("botcheck")) {
-      form.reset();
-      setStatus({ kind: "sent", message: THANKS });
-      return;
-    }
-
-    // TribeTravel stores a name, a contact and a summary, so the trip details
-    // go into the summary where the agent will see them.
-    const summary = [
-      data.destination && `Destination: ${data.destination}`,
-      data.travel_dates && `When: ${data.travel_dates}`,
-      data.travellers && `Travellers: ${data.travellers}`,
-      data.phone && `Phone: ${data.phone}`,
-      data.message && `\n${data.message}`,
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    setStatus({ kind: "sending" });
-    try {
-      const response = await fetch(contact.enquiryUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name: data.name, email: data.email, message: summary }),
-      });
-      const result = await response.json().catch(() => ({}));
-      if (!response.ok || !result.ok) throw new Error(result.error || `HTTP ${response.status}`);
-      form.reset();
-      setStatus({ kind: "sent", message: THANKS });
-    } catch (err) {
-      console.error("Enquiry form:", err);
-      setStatus({
-        kind: "error",
-        message: `Sorry, something went wrong sending your enquiry. Please try again, or email ${contact.email}.`,
-      });
-    }
-  }
-
-  const sending = status.kind === "sending";
+  const { status, onSubmit, sending } = useEnquiry();
 
   return (
     <form onSubmit={onSubmit} className={cn("grid gap-6", className)}>

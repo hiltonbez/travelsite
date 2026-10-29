@@ -6,5 +6,7 @@ on every push to `main`. See README.md.
 
 - Keep `main` deployable: run `npm run build:static` before pushing.
 - New pages must be added to `PAGES` in `scripts/snapshot.mjs`, or they won't exist in production.
+- A new gallery design needs a component in `src/designs/`, a route in `src/routes/designs/`, an entry in
+  `DESIGNS` (`src/lib/designs.ts`) and a `PAGES` entry; the routing test checks the last two match.
 - `@lovable.dev/vite-tanstack-config` is still the Vite config wrapper; don't add the
   plugins it already includes (see the comment in vite.config.ts).

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect } from "react";
 import { ANCHORS, BlockView } from "@/components/blocks";
+import { DesignBar } from "@/components/design-bar";
+import { useReveal } from "@/hooks/use-reveal";
 import { AGENCY_SLUG, BRAND, TRIBETRAVEL_URL, loadSiteContent } from "@/lib/site-content";
 import { usePreview } from "@/lib/preview";
 
@@ -34,22 +35,10 @@ export const Route = createFileRoute("/")({
   component: Index,
 });
 
-function useReveal(key: unknown) {
-  useEffect(() => {
-    const els = document.querySelectorAll(".reveal:not(.in)");
-    const io = new IntersectionObserver(
-      (es) => es.forEach((e) => e.isIntersecting && e.target.classList.add("in")),
-      { threshold: 0.15 },
-    );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
-  }, [key]);
-}
-
 const NAV: [string, string][] = [["featured", "Destinations"], ["packages", "Book online"], ["about", "About us"], ["journal", "Journal"]];
 
 function Index() {
-  const { content: c } = usePreview(Route.useLoaderData());
+  const { content: c, preview } = usePreview(Route.useLoaderData());
   useReveal(c.blocks);
   const ctx = { chat: c.chat };
   // With the chat on, the "plan" buttons open it; otherwise they scroll to the enquiry form.
@@ -59,6 +48,8 @@ function Index() {
 
   return (
     <div className="min-h-screen bg-background font-sans text-foreground">
+      {/* Not in TribeTravel's visual editor, where the agency is editing this design. */}
+      {!preview && <DesignBar current="/" />}
       <header className="sticky top-0 z-40 border-b border-border bg-background/90 backdrop-blur">
         <div className="flex h-16 items-center justify-between px-5 md:px-24">
           <a href="/" className="flex flex-col whitespace-nowrap leading-none">

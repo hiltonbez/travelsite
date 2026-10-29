@@ -9,6 +9,12 @@ import { dirname, join } from "node:path";
 
 const PAGES = [
   { path: "/", file: "index.html", status: 200 },
+  // The design gallery (src/lib/designs.ts)
+  { path: "/designs/horizon", file: "designs/horizon/index.html", status: 200 },
+  { path: "/designs/quick-quote", file: "designs/quick-quote/index.html", status: 200 },
+  { path: "/designs/wanderlust", file: "designs/wanderlust/index.html", status: 200 },
+  { path: "/designs/meet-your-agent", file: "designs/meet-your-agent/index.html", status: 200 },
+  { path: "/designs/itinerary", file: "designs/itinerary/index.html", status: 200 },
   // Any unknown path renders the not-found page; nginx serves it for 404s.
   { path: "/__not-found__", file: "404.html", status: 404 },
 ];

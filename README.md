@@ -9,6 +9,15 @@ Lovable project. The agency's name on the page is `BRAND` in `src/lib/site-conte
 Built with React, TanStack Start and Tailwind. At build time each page is saved
 as static HTML, and the Docker image serves it with nginx.
 
+## Design gallery
+
+The demo also shows every website design TribeTravel offers. A bar along the top of each page
+(`src/components/design-bar.tsx`) switches between them: Classic (`/`, the editable site) and the
+designs under `/designs/` (Horizon, Quick Quote, Wanderlust, Meet Your Agent, Itinerary Story), each in
+`src/designs/`. Their quote forms send real enquiries to the agency's TribeTravel inbox. The list is in
+`src/lib/designs.ts`; the bar shows only on the demo agency's site (or set `VITE_SHOW_DESIGNS=true`/`false`)
+and never inside TribeTravel's visual editor.
+
 ## Develop
 
 ```bash

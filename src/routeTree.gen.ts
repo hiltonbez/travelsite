@@ -10,33 +10,102 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DesignsHorizonRouteImport } from './routes/designs/horizon'
+import { Route as DesignsItineraryRouteImport } from './routes/designs/itinerary'
+import { Route as DesignsMeetYourAgentRouteImport } from './routes/designs/meet-your-agent'
+import { Route as DesignsQuickQuoteRouteImport } from './routes/designs/quick-quote'
+import { Route as DesignsWanderlustRouteImport } from './routes/designs/wanderlust'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesignsHorizonRoute = DesignsHorizonRouteImport.update({
+  id: '/designs/horizon',
+  path: '/designs/horizon',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsItineraryRoute = DesignsItineraryRouteImport.update({
+  id: '/designs/itinerary',
+  path: '/designs/itinerary',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsMeetYourAgentRoute = DesignsMeetYourAgentRouteImport.update({
+  id: '/designs/meet-your-agent',
+  path: '/designs/meet-your-agent',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsQuickQuoteRoute = DesignsQuickQuoteRouteImport.update({
+  id: '/designs/quick-quote',
+  path: '/designs/quick-quote',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsWanderlustRoute = DesignsWanderlustRouteImport.update({
+  id: '/designs/wanderlust',
+  path: '/designs/wanderlust',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/designs/horizon': typeof DesignsHorizonRoute
+  '/designs/itinerary': typeof DesignsItineraryRoute
+  '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
+  '/designs/quick-quote': typeof DesignsQuickQuoteRoute
+  '/designs/wanderlust': typeof DesignsWanderlustRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/designs/horizon': typeof DesignsHorizonRoute
+  '/designs/itinerary': typeof DesignsItineraryRoute
+  '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
+  '/designs/quick-quote': typeof DesignsQuickQuoteRoute
+  '/designs/wanderlust': typeof DesignsWanderlustRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/designs/horizon': typeof DesignsHorizonRoute
+  '/designs/itinerary': typeof DesignsItineraryRoute
+  '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
+  '/designs/quick-quote': typeof DesignsQuickQuoteRoute
+  '/designs/wanderlust': typeof DesignsWanderlustRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/designs/horizon'
+    | '/designs/itinerary'
+    | '/designs/meet-your-agent'
+    | '/designs/quick-quote'
+    | '/designs/wanderlust'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/designs/horizon'
+    | '/designs/itinerary'
+    | '/designs/meet-your-agent'
+    | '/designs/quick-quote'
+    | '/designs/wanderlust'
+  id:
+    | '__root__'
+    | '/'
+    | '/designs/horizon'
+    | '/designs/itinerary'
+    | '/designs/meet-your-agent'
+    | '/designs/quick-quote'
+    | '/designs/wanderlust'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesignsHorizonRoute: typeof DesignsHorizonRoute
+  DesignsItineraryRoute: typeof DesignsItineraryRoute
+  DesignsMeetYourAgentRoute: typeof DesignsMeetYourAgentRoute
+  DesignsQuickQuoteRoute: typeof DesignsQuickQuoteRoute
+  DesignsWanderlustRoute: typeof DesignsWanderlustRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +117,51 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/designs/horizon': {
+      id: '/designs/horizon'
+      path: '/designs/horizon'
+      fullPath: '/designs/horizon'
+      preLoaderRoute: typeof DesignsHorizonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/itinerary': {
+      id: '/designs/itinerary'
+      path: '/designs/itinerary'
+      fullPath: '/designs/itinerary'
+      preLoaderRoute: typeof DesignsItineraryRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/meet-your-agent': {
+      id: '/designs/meet-your-agent'
+      path: '/designs/meet-your-agent'
+      fullPath: '/designs/meet-your-agent'
+      preLoaderRoute: typeof DesignsMeetYourAgentRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/quick-quote': {
+      id: '/designs/quick-quote'
+      path: '/designs/quick-quote'
+      fullPath: '/designs/quick-quote'
+      preLoaderRoute: typeof DesignsQuickQuoteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/wanderlust': {
+      id: '/designs/wanderlust'
+      path: '/designs/wanderlust'
+      fullPath: '/designs/wanderlust'
+      preLoaderRoute: typeof DesignsWanderlustRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesignsHorizonRoute: DesignsHorizonRoute,
+  DesignsItineraryRoute: DesignsItineraryRoute,
+  DesignsMeetYourAgentRoute: DesignsMeetYourAgentRoute,
+  DesignsQuickQuoteRoute: DesignsQuickQuoteRoute,
+  DesignsWanderlustRoute: DesignsWanderlustRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
