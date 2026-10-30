@@ -146,7 +146,7 @@ function LiveSuppliers() {
         )
       )}
 
-      <BookingDialog pkg={book} minDays={minDays} onClose={() => setBook(null)} />
+      <BookingDialog pkg={book} minDays={minDays} onClose={() => setBook(null)} className="d-horizon-dialog sm:rounded-3xl" />
       <HolidayDialog holiday={holiday} onClose={() => setHoliday(null)} />
     </section>
   );

@@ -84,7 +84,8 @@ export function PackagesSection({ head }: { head: PackagesHead }) {
 type Step = "dates" | "rooms" | "details" | "done";
 
 /** Book one package: dates, room, details, then the quote Tribe made. Also used by the Enterprise design. */
-export function BookingDialog({ pkg, minDays, onClose }: { pkg: Package | null; minDays: number; onClose: () => void }) {
+/** Booking a package: dates, room, details, quote. `className` restyles it for a gallery design (see designs.css). */
+export function BookingDialog({ pkg, minDays, onClose, className }: { pkg: Package | null; minDays: number; onClose: () => void; className?: string }) {
   const [step, setStep] = useState<Step>("dates");
   const [req, setReq] = useState<CheckRequest | null>(null);
   const [rooms, setRooms] = useState<Room[]>([]);
@@ -121,7 +122,7 @@ export function BookingDialog({ pkg, minDays, onClose }: { pkg: Package | null; 
 
   return (
     <Dialog open={!!pkg} onOpenChange={(o) => !o && onClose()}>
-      <DialogContent className="max-h-[100svh] max-w-2xl overflow-y-auto rounded-none p-0 sm:max-h-[90vh]">
+      <DialogContent className={cn("max-h-[100svh] max-w-2xl overflow-y-auto rounded-none p-0 sm:max-h-[90vh]", className)}>
         {pkg && (
           <div>
             <div className="relative h-44 overflow-hidden">
