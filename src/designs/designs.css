@@ -40,7 +40,7 @@
 .d-zoom:hover img { transform: scale(1.06); }
 
 /* The shared booking pop-up (components/packages.tsx) in Horizon's dark and gold. The pop-up is built from the
-   site's theme colours, so swapping them here restyles all of it; it opens outside the page, so set the font too. */
+   site's theme colours, so swapping them here restyles most of it; it opens outside the page, so set the fonts too. */
 .d-horizon-dialog {
   --background: #111419;
   --foreground: #F4F1EC;
@@ -52,7 +52,6 @@
   --input: rgb(244 241 236 / .18);
   --ring: #E8C79A;
   --destructive: #F87171;
-  --font-display: "Cormorant Garamond", serif;
   font-family: "Manrope", system-ui, sans-serif;
   color-scheme: dark;
   background: var(--background);
@@ -60,6 +59,8 @@
   border-color: var(--border);
 }
 .d-horizon-dialog option { background: #111419; }
+/* Tailwind bakes the display font into .font-display, so it can't be swapped with a variable like the colours. */
+.d-horizon-dialog .font-display { font-family: "Cormorant Garamond", serif; font-weight: 500; letter-spacing: 0; }
 
 @media (prefers-reduced-motion: reduce) {
   .d-rise, .d-slide, .d-float, .d-pulse, .d-marquee, .d-spin, .d-words, .d-blob, .d-dash, .d-sway, .d-grow { animation: none; }
