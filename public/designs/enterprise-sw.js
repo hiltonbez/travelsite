@@ -1,8 +1,8 @@
-// Service worker for the Enterprise design installed as an app (src/designs/enterprise.tsx registers it).
-// Pages: network first, the last copy when offline. Hashed build files and pictures: cache first.
+// Service worker for the Enterprise design installed as an app (src/designs/enterprise/layout.tsx registers it).
+// Pages: network first, each page's last copy when offline (the home page if that page was never opened). Hashed build files and pictures: cache first.
 // TribeTravel's API is never cached: prices, chat and bookings are always live.
 // Push: TribeTravel's "your quote is ready" alerts ({title, body, url}); tapping one opens the quote, or the app.
-const CACHE = "sunset-app-v1";
+const CACHE = "sunset-app-v2";
 const START = "/designs/enterprise";
 
 self.addEventListener("install", (e) => {
@@ -27,10 +27,10 @@ self.addEventListener("fetch", (e) => {
       fetch(req)
         .then((res) => {
           const copy = res.clone();
-          caches.open(CACHE).then((c) => c.put(START, copy));
+          caches.open(CACHE).then((c) => c.put(req, copy));
           return res;
         })
-        .catch(() => caches.match(START)),
+        .catch(() => caches.match(req).then((hit) => hit || caches.match(START))),
     );
     return;
   }

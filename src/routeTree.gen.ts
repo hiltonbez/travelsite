@@ -16,6 +16,15 @@ import { Route as DesignsItineraryRouteImport } from './routes/designs/itinerary
 import { Route as DesignsMeetYourAgentRouteImport } from './routes/designs/meet-your-agent'
 import { Route as DesignsQuickQuoteRouteImport } from './routes/designs/quick-quote'
 import { Route as DesignsWanderlustRouteImport } from './routes/designs/wanderlust'
+import { Route as DesignsEnterpriseIndexRouteImport } from './routes/designs/enterprise.index'
+import { Route as DesignsEnterpriseAboutRouteImport } from './routes/designs/enterprise.about'
+import { Route as DesignsEnterpriseContactRouteImport } from './routes/designs/enterprise.contact'
+import { Route as DesignsEnterpriseGalleryRouteImport } from './routes/designs/enterprise.gallery'
+import { Route as DesignsEnterprisePrivacyRouteImport } from './routes/designs/enterprise.privacy'
+import { Route as DesignsEnterpriseDestinationsIndexRouteImport } from './routes/designs/enterprise.destinations.index'
+import { Route as DesignsEnterpriseDestinationsSlugRouteImport } from './routes/designs/enterprise.destinations.$slug'
+import { Route as DesignsEnterpriseNewsIndexRouteImport } from './routes/designs/enterprise.news.index'
+import { Route as DesignsEnterpriseNewsSlugRouteImport } from './routes/designs/enterprise.news.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -52,34 +61,112 @@ const DesignsWanderlustRoute = DesignsWanderlustRouteImport.update({
   path: '/designs/wanderlust',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesignsEnterpriseIndexRoute = DesignsEnterpriseIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DesignsEnterpriseRoute,
+} as any)
+const DesignsEnterpriseAboutRoute = DesignsEnterpriseAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => DesignsEnterpriseRoute,
+} as any)
+const DesignsEnterpriseContactRoute =
+  DesignsEnterpriseContactRouteImport.update({
+    id: '/contact',
+    path: '/contact',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsEnterpriseGalleryRoute =
+  DesignsEnterpriseGalleryRouteImport.update({
+    id: '/gallery',
+    path: '/gallery',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsEnterprisePrivacyRoute =
+  DesignsEnterprisePrivacyRouteImport.update({
+    id: '/privacy',
+    path: '/privacy',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsEnterpriseDestinationsIndexRoute =
+  DesignsEnterpriseDestinationsIndexRouteImport.update({
+    id: '/destinations/',
+    path: '/destinations/',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsEnterpriseDestinationsSlugRoute =
+  DesignsEnterpriseDestinationsSlugRouteImport.update({
+    id: '/destinations/$slug',
+    path: '/destinations/$slug',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsEnterpriseNewsIndexRoute =
+  DesignsEnterpriseNewsIndexRouteImport.update({
+    id: '/news/',
+    path: '/news/',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsEnterpriseNewsSlugRoute =
+  DesignsEnterpriseNewsSlugRouteImport.update({
+    id: '/news/$slug',
+    path: '/news/$slug',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/designs/enterprise': typeof DesignsEnterpriseRoute
+  '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
   '/designs/horizon': typeof DesignsHorizonRoute
   '/designs/itinerary': typeof DesignsItineraryRoute
   '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
   '/designs/quick-quote': typeof DesignsQuickQuoteRoute
   '/designs/wanderlust': typeof DesignsWanderlustRoute
+  '/designs/enterprise/about': typeof DesignsEnterpriseAboutRoute
+  '/designs/enterprise/contact': typeof DesignsEnterpriseContactRoute
+  '/designs/enterprise/gallery': typeof DesignsEnterpriseGalleryRoute
+  '/designs/enterprise/privacy': typeof DesignsEnterprisePrivacyRoute
+  '/designs/enterprise/': typeof DesignsEnterpriseIndexRoute
+  '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
+  '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
+  '/designs/enterprise/destinations/': typeof DesignsEnterpriseDestinationsIndexRoute
+  '/designs/enterprise/news/': typeof DesignsEnterpriseNewsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/designs/enterprise': typeof DesignsEnterpriseRoute
   '/designs/horizon': typeof DesignsHorizonRoute
   '/designs/itinerary': typeof DesignsItineraryRoute
   '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
   '/designs/quick-quote': typeof DesignsQuickQuoteRoute
   '/designs/wanderlust': typeof DesignsWanderlustRoute
+  '/designs/enterprise/about': typeof DesignsEnterpriseAboutRoute
+  '/designs/enterprise/contact': typeof DesignsEnterpriseContactRoute
+  '/designs/enterprise/gallery': typeof DesignsEnterpriseGalleryRoute
+  '/designs/enterprise/privacy': typeof DesignsEnterprisePrivacyRoute
+  '/designs/enterprise': typeof DesignsEnterpriseIndexRoute
+  '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
+  '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
+  '/designs/enterprise/destinations': typeof DesignsEnterpriseDestinationsIndexRoute
+  '/designs/enterprise/news': typeof DesignsEnterpriseNewsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/designs/enterprise': typeof DesignsEnterpriseRoute
+  '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
   '/designs/horizon': typeof DesignsHorizonRoute
   '/designs/itinerary': typeof DesignsItineraryRoute
   '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
   '/designs/quick-quote': typeof DesignsQuickQuoteRoute
   '/designs/wanderlust': typeof DesignsWanderlustRoute
+  '/designs/enterprise/about': typeof DesignsEnterpriseAboutRoute
+  '/designs/enterprise/contact': typeof DesignsEnterpriseContactRoute
+  '/designs/enterprise/gallery': typeof DesignsEnterpriseGalleryRoute
+  '/designs/enterprise/privacy': typeof DesignsEnterprisePrivacyRoute
+  '/designs/enterprise/': typeof DesignsEnterpriseIndexRoute
+  '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
+  '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
+  '/designs/enterprise/destinations/': typeof DesignsEnterpriseDestinationsIndexRoute
+  '/designs/enterprise/news/': typeof DesignsEnterpriseNewsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,15 +178,32 @@ export interface FileRouteTypes {
     | '/designs/meet-your-agent'
     | '/designs/quick-quote'
     | '/designs/wanderlust'
+    | '/designs/enterprise/about'
+    | '/designs/enterprise/contact'
+    | '/designs/enterprise/gallery'
+    | '/designs/enterprise/privacy'
+    | '/designs/enterprise/'
+    | '/designs/enterprise/destinations/$slug'
+    | '/designs/enterprise/news/$slug'
+    | '/designs/enterprise/destinations/'
+    | '/designs/enterprise/news/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/designs/enterprise'
     | '/designs/horizon'
     | '/designs/itinerary'
     | '/designs/meet-your-agent'
     | '/designs/quick-quote'
     | '/designs/wanderlust'
+    | '/designs/enterprise/about'
+    | '/designs/enterprise/contact'
+    | '/designs/enterprise/gallery'
+    | '/designs/enterprise/privacy'
+    | '/designs/enterprise'
+    | '/designs/enterprise/destinations/$slug'
+    | '/designs/enterprise/news/$slug'
+    | '/designs/enterprise/destinations'
+    | '/designs/enterprise/news'
   id:
     | '__root__'
     | '/'
@@ -109,11 +213,20 @@ export interface FileRouteTypes {
     | '/designs/meet-your-agent'
     | '/designs/quick-quote'
     | '/designs/wanderlust'
+    | '/designs/enterprise/about'
+    | '/designs/enterprise/contact'
+    | '/designs/enterprise/gallery'
+    | '/designs/enterprise/privacy'
+    | '/designs/enterprise/'
+    | '/designs/enterprise/destinations/$slug'
+    | '/designs/enterprise/news/$slug'
+    | '/designs/enterprise/destinations/'
+    | '/designs/enterprise/news/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  DesignsEnterpriseRoute: typeof DesignsEnterpriseRoute
+  DesignsEnterpriseRoute: typeof DesignsEnterpriseRouteWithChildren
   DesignsHorizonRoute: typeof DesignsHorizonRoute
   DesignsItineraryRoute: typeof DesignsItineraryRoute
   DesignsMeetYourAgentRoute: typeof DesignsMeetYourAgentRoute
@@ -172,12 +285,104 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsWanderlustRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/designs/enterprise/': {
+      id: '/designs/enterprise/'
+      path: '/'
+      fullPath: '/designs/enterprise/'
+      preLoaderRoute: typeof DesignsEnterpriseIndexRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/about': {
+      id: '/designs/enterprise/about'
+      path: '/about'
+      fullPath: '/designs/enterprise/about'
+      preLoaderRoute: typeof DesignsEnterpriseAboutRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/contact': {
+      id: '/designs/enterprise/contact'
+      path: '/contact'
+      fullPath: '/designs/enterprise/contact'
+      preLoaderRoute: typeof DesignsEnterpriseContactRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/gallery': {
+      id: '/designs/enterprise/gallery'
+      path: '/gallery'
+      fullPath: '/designs/enterprise/gallery'
+      preLoaderRoute: typeof DesignsEnterpriseGalleryRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/privacy': {
+      id: '/designs/enterprise/privacy'
+      path: '/privacy'
+      fullPath: '/designs/enterprise/privacy'
+      preLoaderRoute: typeof DesignsEnterprisePrivacyRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/destinations/': {
+      id: '/designs/enterprise/destinations/'
+      path: '/destinations'
+      fullPath: '/designs/enterprise/destinations/'
+      preLoaderRoute: typeof DesignsEnterpriseDestinationsIndexRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/destinations/$slug': {
+      id: '/designs/enterprise/destinations/$slug'
+      path: '/destinations/$slug'
+      fullPath: '/designs/enterprise/destinations/$slug'
+      preLoaderRoute: typeof DesignsEnterpriseDestinationsSlugRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/news/': {
+      id: '/designs/enterprise/news/'
+      path: '/news'
+      fullPath: '/designs/enterprise/news/'
+      preLoaderRoute: typeof DesignsEnterpriseNewsIndexRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
+    '/designs/enterprise/news/$slug': {
+      id: '/designs/enterprise/news/$slug'
+      path: '/news/$slug'
+      fullPath: '/designs/enterprise/news/$slug'
+      preLoaderRoute: typeof DesignsEnterpriseNewsSlugRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
   }
 }
 
+interface DesignsEnterpriseRouteChildren {
+  DesignsEnterpriseAboutRoute: typeof DesignsEnterpriseAboutRoute
+  DesignsEnterpriseContactRoute: typeof DesignsEnterpriseContactRoute
+  DesignsEnterpriseGalleryRoute: typeof DesignsEnterpriseGalleryRoute
+  DesignsEnterprisePrivacyRoute: typeof DesignsEnterprisePrivacyRoute
+  DesignsEnterpriseIndexRoute: typeof DesignsEnterpriseIndexRoute
+  DesignsEnterpriseDestinationsSlugRoute: typeof DesignsEnterpriseDestinationsSlugRoute
+  DesignsEnterpriseNewsSlugRoute: typeof DesignsEnterpriseNewsSlugRoute
+  DesignsEnterpriseDestinationsIndexRoute: typeof DesignsEnterpriseDestinationsIndexRoute
+  DesignsEnterpriseNewsIndexRoute: typeof DesignsEnterpriseNewsIndexRoute
+}
+
+const DesignsEnterpriseRouteChildren: DesignsEnterpriseRouteChildren = {
+  DesignsEnterpriseAboutRoute: DesignsEnterpriseAboutRoute,
+  DesignsEnterpriseContactRoute: DesignsEnterpriseContactRoute,
+  DesignsEnterpriseGalleryRoute: DesignsEnterpriseGalleryRoute,
+  DesignsEnterprisePrivacyRoute: DesignsEnterprisePrivacyRoute,
+  DesignsEnterpriseIndexRoute: DesignsEnterpriseIndexRoute,
+  DesignsEnterpriseDestinationsSlugRoute:
+    DesignsEnterpriseDestinationsSlugRoute,
+  DesignsEnterpriseNewsSlugRoute: DesignsEnterpriseNewsSlugRoute,
+  DesignsEnterpriseDestinationsIndexRoute:
+    DesignsEnterpriseDestinationsIndexRoute,
+  DesignsEnterpriseNewsIndexRoute: DesignsEnterpriseNewsIndexRoute,
+}
+
+const DesignsEnterpriseRouteWithChildren =
+  DesignsEnterpriseRoute._addFileChildren(DesignsEnterpriseRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  DesignsEnterpriseRoute: DesignsEnterpriseRoute,
+  DesignsEnterpriseRoute: DesignsEnterpriseRouteWithChildren,
   DesignsHorizonRoute: DesignsHorizonRoute,
   DesignsItineraryRoute: DesignsItineraryRoute,
   DesignsMeetYourAgentRoute: DesignsMeetYourAgentRoute,

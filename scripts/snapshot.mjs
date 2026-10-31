@@ -16,6 +16,22 @@ const PAGES = [
   { path: "/designs/meet-your-agent", file: "designs/meet-your-agent/index.html", status: 200 },
   { path: "/designs/itinerary", file: "designs/itinerary/index.html", status: 200 },
   { path: "/designs/enterprise", file: "designs/enterprise/index.html", status: 200 },
+  // The Enterprise design's other pages (src/designs/enterprise/content.ts lists the destinations and posts)
+  { path: "/designs/enterprise/destinations", file: "designs/enterprise/destinations/index.html", status: 200 },
+  { path: "/designs/enterprise/destinations/mauritius", file: "designs/enterprise/destinations/mauritius/index.html", status: 200 },
+  { path: "/designs/enterprise/destinations/zanzibar", file: "designs/enterprise/destinations/zanzibar/index.html", status: 200 },
+  { path: "/designs/enterprise/destinations/victoria-falls", file: "designs/enterprise/destinations/victoria-falls/index.html", status: 200 },
+  { path: "/designs/enterprise/destinations/kruger", file: "designs/enterprise/destinations/kruger/index.html", status: 200 },
+  { path: "/designs/enterprise/destinations/cape-town", file: "designs/enterprise/destinations/cape-town/index.html", status: 200 },
+  { path: "/designs/enterprise/destinations/santorini", file: "designs/enterprise/destinations/santorini/index.html", status: 200 },
+  { path: "/designs/enterprise/gallery", file: "designs/enterprise/gallery/index.html", status: 200 },
+  { path: "/designs/enterprise/about", file: "designs/enterprise/about/index.html", status: 200 },
+  { path: "/designs/enterprise/news", file: "designs/enterprise/news/index.html", status: 200 },
+  { path: "/designs/enterprise/news/mauritius-in-winter", file: "designs/enterprise/news/mauritius-in-winter/index.html", status: 200 },
+  { path: "/designs/enterprise/news/first-safari", file: "designs/enterprise/news/first-safari/index.html", status: 200 },
+  { path: "/designs/enterprise/news/greek-islands-on-a-cruise", file: "designs/enterprise/news/greek-islands-on-a-cruise/index.html", status: 200 },
+  { path: "/designs/enterprise/contact", file: "designs/enterprise/contact/index.html", status: 200 },
+  { path: "/designs/enterprise/privacy", file: "designs/enterprise/privacy/index.html", status: 200 },
   // Any unknown path renders the not-found page; nginx serves it for 404s.
   { path: "/__not-found__", file: "404.html", status: 404 },
 ];
