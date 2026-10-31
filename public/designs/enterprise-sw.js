@@ -1,6 +1,7 @@
 // Service worker for the Enterprise design installed as an app (src/designs/enterprise.tsx registers it).
 // Pages: network first, the last copy when offline. Hashed build files and pictures: cache first.
 // TribeTravel's API is never cached: prices, chat and bookings are always live.
+// Push: TribeTravel's "your quote is ready" alerts ({title, body, url}); tapping one opens the quote, or the app.
 const CACHE = "sunset-app-v1";
 const START = "/designs/enterprise";
 
@@ -45,4 +46,27 @@ self.addEventListener("fetch", (e) => {
       })),
     );
   }
+});
+
+self.addEventListener("push", (e) => {
+  let data = {};
+  try {
+    data = e.data ? e.data.json() : {};
+  } catch {
+    data = { body: e.data ? e.data.text() : "" };
+  }
+  e.waitUntil(
+    self.registration.showNotification(data.title || "Sun-Set Travel", {
+      body: data.body || "",
+      icon: "/designs/app-icon-192.png",
+      badge: "/designs/app-icon-192.png",
+      data: { url: data.url || START },
+    }),
+  );
+});
+
+self.addEventListener("notificationclick", (e) => {
+  e.notification.close();
+  const url = (e.notification.data && e.notification.data.url) || START;
+  e.waitUntil(self.clients.openWindow(url));
 });

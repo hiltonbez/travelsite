@@ -1,6 +1,7 @@
 // Enterprise: Horizon with everything TribeTravel can do behind a website, for the top package ("Enterprise / App").
 // Live supplier packages (Beachcomber, bookable; Thompsons, enquire), an AI concierge talking to Tribe's chat API,
-// what Tribe automates after an enquiry, integrations, the website dashboard, and the site as an installable app.
+// booking a call with a consultant (live seats), what Tribe automates after an enquiry, integrations (HubSpot built in),
+// the website's own live figures, and the site as an installable app with "your quote is ready" alerts.
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowRight, BarChart3, Bell, Bot, CalendarClock, Check, CreditCard, Download, Eye, FileText, Loader2, MessageCircle,
@@ -8,12 +9,15 @@ import {
 } from "lucide-react";
 import { BookingDialog } from "@/components/packages";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
+import {
+  alertsSupported, bookCall, callIcs, getFigures, listSlots, turnOnAlerts, type CallBooked, type Figures, type Slots,
+} from "@/lib/agency-extras";
 import { sendChat, startChat } from "@/lib/chat";
 import { useEnquiry } from "@/lib/enquiry";
 import { listPackages, rand, type Package } from "@/lib/packages";
 import { getHoliday, listHolidays, type Holiday, type HolidayFull } from "@/lib/thompsons";
 import { Horizon } from "@/designs/horizon";
-import { BRAND, BotTrap, FormStatus, media } from "@/designs/shared";
+import { BRAND, BotTrap, FormStatus, contact, media, tel } from "@/designs/shared";
 
 export { HORIZON_FONTS as ENTERPRISE_FONTS } from "@/designs/horizon";
 
@@ -22,7 +26,7 @@ const gold = "text-[#E8C79A]";
 const eyebrow = `text-xs uppercase tracking-[0.4em] ${gold}`;
 const h2 = `${serif} text-5xl leading-none font-medium md:text-[64px]`;
 
-const NAV: [string, string][] = [["#live", "Book online"], ["#concierge", "AI concierge"], ["#app", "Get the app"], ["#contact", "Contact"]];
+const NAV: [string, string][] = [["#live", "Book online"], ["#concierge", "AI concierge"], ["#call", "Book a call"], ["#app", "Get the app"], ["#contact", "Contact"]];
 
 /** The concierge panel opens from its section and from the floating button; this keeps them in step. */
 const OPEN_EVENT = "tt-concierge-open";
@@ -39,6 +43,7 @@ export function Enterprise() {
     <Horizon nav={NAV}>
       <LiveSuppliers />
       <Concierge />
+      <BookCall />
       <Automation />
       <Integrations />
       <Analytics />
@@ -225,6 +230,134 @@ function Consent({ dark = false }: { dark?: boolean }) {
       <input type="checkbox" required className="mt-0.5 h-4 w-4 flex-none accent-[#8A6A3C]" />
       I agree that {BRAND.name} may use my details to plan and quote my trip (POPIA). We never share them with anyone else.
     </label>
+  );
+}
+
+// ------------------------------------------------------------------ book a call
+function BookCall() {
+  // null while loading; a string when TribeTravel couldn't give times (switched off, or unreachable)
+  const [slots, setSlots] = useState<Slots | string | null>(null);
+  const [day, setDay] = useState(0);
+  const [pick, setPick] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState("");
+  const [booked, setBooked] = useState<CallBooked | null>(null);
+
+  const load = () => listSlots().then(setSlots).catch((e: Error) => setSlots(e.message));
+  useEffect(() => { load(); }, []);
+
+  const days = typeof slots === "object" && slots ? slots.days : [];
+  const today = days[day];
+  const dayFull = !!today && today.slots.every((s) => s.left === 0);
+  const nextFree = typeof slots === "object" && slots ? slots.next_free : null;
+
+  function goTo(start: string) {
+    const i = days.findIndex((d) => d.date === start.slice(0, 10));
+    if (i >= 0) setDay(i);
+    setPick(start);
+  }
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    if (!pick) return;
+    const fd = new FormData(e.currentTarget);
+    const text = (k: string) => String(fd.get(k) || "").trim();
+    setBusy(true);
+    setError("");
+    try {
+      setBooked(await bookCall({ start: pick, name: text("name"), email: text("email"), phone: text("phone"),
+        topic: text("topic"), website: fd.get("botcheck") ? "bot" : "" }));
+    } catch (err) {
+      setError((err as Error).message);
+      setPick(null);
+      load();                                 // someone else may have just taken that time
+    } finally {
+      setBusy(false);
+    }
+  }
+
+  function calendarLink(c: CallBooked) {
+    const blob = new Blob([callIcs(c, `Call with ${BRAND.name}`)], { type: "text/calendar" });
+    return URL.createObjectURL(blob);
+  }
+
+  const input = "min-h-12 w-full rounded-xl border border-[#F4F1EC]/15 bg-transparent px-4 text-[15px] outline-none placeholder:text-[#F4F1EC]/40 focus:border-[#E8C79A]";
+  return (
+    <section id="call" className="grid scroll-mt-6 items-start gap-12 border-t border-[#F4F1EC]/10 px-[5vw] py-24 lg:grid-cols-[.8fr_1.2fr]">
+      <div className="reveal flex flex-col gap-5 lg:sticky lg:top-10">
+        <span className={`${eyebrow} flex items-center gap-3`}><CalendarClock className="h-4 w-4" /> Talk to a consultant</span>
+        <h2 className={h2}>Book a call, <em className={gold}>when it suits you.</em></h2>
+        <p className="text-lg leading-relaxed text-[#F4F1EC]/75">
+          Pick a time and one of our consultants calls you to plan your trip. Times are live: when one fills up, we show you the next free one.
+        </p>
+      </div>
+      <div className="reveal min-w-0 rounded-[28px] border border-[#F4F1EC]/12 bg-[#111419] p-6 md:p-8">
+        {booked ? (
+          <div className="d-slide flex flex-col items-start gap-4">
+            <span className="flex h-14 w-14 items-center justify-center rounded-full bg-[#E8C79A] text-[#0B0D10]"><Check className="h-7 w-7" /></span>
+            <h3 className={`${serif} text-4xl leading-tight`}>You're booked for {booked.label}.</h3>
+            <p className="text-[#F4F1EC]/75">A {booked.minutes}-minute call. Your consultant has been told and will call you then.</p>
+            <a href={calendarLink(booked)} download="call.ics" className="inline-flex min-h-12 items-center gap-2 rounded-full bg-[#E8C79A] px-6 text-sm font-bold uppercase tracking-[0.12em] text-[#0B0D10]">
+              <CalendarClock className="h-4 w-4" /> Add to my calendar
+            </a>
+          </div>
+        ) : slots === null ? (
+          <div className="flex items-center gap-3 text-[#F4F1EC]/70"><Loader2 className="h-5 w-5 animate-spin" /> Loading times…</div>
+        ) : typeof slots === "string" || days.length === 0 ? (
+          <p className="text-[#F4F1EC]/80">
+            {typeof slots === "string" ? slots : "There are no times open in the next two weeks."} Our number is{" "}
+            <a href={tel} className={`font-semibold ${gold}`}>{contact.phoneDisplay}</a>.
+          </p>
+        ) : (
+          <div className="flex flex-col gap-6">
+            <div className="-mx-1 flex gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:thin]" role="tablist" aria-label="Day">
+              {days.map((d, i) => {
+                const full = d.slots.every((s) => s.left === 0);
+                return (
+                  <button key={d.date} type="button" role="tab" aria-selected={i === day} onClick={() => { setDay(i); setPick(null); }}
+                    className={`flex min-h-14 flex-none flex-col items-center justify-center rounded-2xl border px-4 text-sm transition ${i === day ? "border-[#E8C79A] bg-[#E8C79A] text-[#0B0D10]" : "border-[#F4F1EC]/20 hover:border-[#E8C79A]"} ${full && i !== day ? "opacity-45" : ""}`}>
+                    <b>{d.label.split(" ")[0]}</b>
+                    <span className="text-xs">{d.label.split(" ").slice(1).join(" ")}</span>
+                  </button>
+                );
+              })}
+            </div>
+            {dayFull && nextFree && (
+              <p className="flex flex-wrap items-center gap-2 rounded-2xl border border-[#E8C79A]/40 bg-[#E8C79A]/10 px-4 py-3 text-sm">
+                This day is fully booked. Next free time: <b>{nextFree.slice(11)} on {days.find((d) => d.date === nextFree.slice(0, 10))?.label}</b>
+                <button type="button" onClick={() => goTo(nextFree)} className={`font-semibold underline underline-offset-4 ${gold}`}>Pick it</button>
+              </p>
+            )}
+            <div className="grid grid-cols-3 gap-2 sm:grid-cols-4" role="radiogroup" aria-label="Time">
+              {today?.slots.map((s) => (
+                <button key={s.start} type="button" role="radio" aria-checked={pick === s.start} disabled={s.left === 0} onClick={() => setPick(s.start)}
+                  className={`flex min-h-12 flex-col items-center justify-center rounded-xl border text-sm font-semibold transition disabled:cursor-not-allowed disabled:opacity-40 ${pick === s.start ? "border-[#E8C79A] bg-[#E8C79A] text-[#0B0D10]" : "border-[#F4F1EC]/20 hover:border-[#E8C79A]"}`}>
+                  {s.time}
+                  {s.left === 0 && <span className="text-[10px] font-normal uppercase tracking-wider">Full</span>}
+                </button>
+              ))}
+            </div>
+            {error && <p role="alert" className="text-sm font-semibold text-[#F87171]">{error}</p>}
+            {pick && (
+              <form onSubmit={onSubmit} className="d-slide grid gap-3 border-t border-[#F4F1EC]/10 pt-6">
+                <p className="text-sm text-[#F4F1EC]/75">Your call: <b className="text-[#F4F1EC]">{today?.label} at {pick.slice(11)}</b> ({typeof slots === "object" ? slots.minutes : 30} minutes)</p>
+                <div className="grid gap-3 sm:grid-cols-2">
+                  <input name="name" required autoComplete="name" placeholder="Your name" className={input} />
+                  <input name="phone" type="tel" required autoComplete="tel" placeholder="Mobile number" className={input} />
+                </div>
+                <input name="email" type="email" required autoComplete="email" placeholder="Email" className={input} />
+                <input name="topic" placeholder="What would you like to talk about? (optional)" className={input} />
+                <BotTrap />
+                <Consent dark />
+                <button type="submit" disabled={busy} className="min-h-14 rounded-full bg-[#E8C79A] text-sm font-bold uppercase tracking-[0.14em] text-[#0B0D10] disabled:opacity-60">
+                  {busy ? "Booking…" : "Book my call"}
+                </button>
+              </form>
+            )}
+          </div>
+        )}
+      </div>
+    </section>
   );
 }
 
@@ -435,7 +568,8 @@ function Automation() {
 // ------------------------------------------------------------------ integrations
 const TOOLS = [
   { icon: Plug, name: "Supplier connections", text: "Beachcomber, Thompsons, MSC, TBO and more, connected in TribeTravel." },
-  { icon: Webhook, name: "Your own CRM and tools", text: "HubSpot, Zoho or Salesforce through the TribeTravel API and signed webhooks." },
+  { icon: UserPlus, name: "HubSpot, built in", text: "Every website enquiry, chat, booking and call becomes a HubSpot lead with a note of what they asked." },
+  { icon: Webhook, name: "Your own CRM and tools", text: "Zoho, Salesforce or anything else through the TribeTravel API and signed webhooks." },
   { icon: CreditCard, name: "Paystack payments", text: "Card payments on every invoice, matched to the booking automatically." },
   { icon: MessageCircle, name: "WhatsApp Business", text: "Client messages land on their timeline; consultants reply from Tribe." },
   { icon: BarChart3, name: "Google Analytics & Meta", text: "GA4 and Meta Pixel, to see which campaigns bring bookings." },
@@ -463,38 +597,50 @@ function Integrations() {
 }
 
 // ------------------------------------------------------------------ analytics
-const FUNNEL: [string, number][] = [["Visitors", 4820], ["AI chats", 612], ["Leads", 246], ["Quotes sent", 158], ["Bookings", 47]];
+const SAMPLE: Figures = { days: 30, chats: 612, enquiries: 246, quotes: 158, bookings: 47, calls: 38, value: 1200000, currency: "ZAR", as_of: "" };
+
+const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "-");
 
 function Analytics() {
-  const max = FUNNEL[0]![1];
+  // The agency's real figures from TribeTravel (last 30 days) when it shares them; the sample until then.
+  const [live, setLive] = useState<Figures | null>(null);
+  useEffect(() => { getFigures().then(setLive).catch(() => setLive(null)); }, []);
+  const f = live ?? SAMPLE;
+  const funnel: [string, number][] = [["AI chats", f.chats], ["Enquiries", f.enquiries], ["Calls booked", f.calls], ["Quotes", f.quotes], ["Bookings", f.bookings]];
+  const max = Math.max(1, ...funnel.map(([, n]) => n));
   return (
     <section className="grid items-center gap-12 bg-[#F4F1EC] px-[5vw] py-24 text-[#14161A] lg:grid-cols-[.85fr_1.15fr]">
       <div className="reveal flex flex-col gap-5">
         <span className="text-xs uppercase tracking-[0.4em] text-[#8A6A3C]">For the agency</span>
         <h2 className={`${serif} text-5xl leading-none font-medium md:text-[64px]`}>See what your website earns.</h2>
         <p className="text-lg leading-relaxed text-[#4A4D55]">
-          The Website dashboard in TribeTravel follows every visitor from first click to paid booking: chats, leads, quotes, bookings and revenue, month by month.
+          TribeTravel follows every website visitor from first chat to paid booking.{" "}
+          {live ? `This is this website's own record for the last ${live.days} days, straight from TribeTravel.` : "Switched on, this shows the website's own record for the last 30 days, straight from TribeTravel."}
         </p>
       </div>
       <div className="reveal rounded-[28px] bg-white p-6 shadow-[0_40px_80px_-40px_rgba(20,22,26,.35)] md:p-8">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <b className="flex items-center gap-2 text-lg"><BarChart3 className="h-5 w-5 text-[#8A6A3C]" /> Website dashboard</b>
-          <span className="rounded-full bg-[#F4F1EC] px-3 py-1 text-xs font-semibold text-[#8A6A3C]">Sample figures</span>
+          {live ? (
+            <span className="flex items-center gap-2 rounded-full bg-[#ECFDF3] px-3 py-1 text-xs font-semibold text-[#15803D]"><LiveDot /> Live, last {live.days} days</span>
+          ) : (
+            <span className="rounded-full bg-[#F4F1EC] px-3 py-1 text-xs font-semibold text-[#8A6A3C]">Sample figures</span>
+          )}
         </div>
         <ol className="mt-6 flex flex-col gap-3.5">
-          {FUNNEL.map(([label, n], i) => (
+          {funnel.map(([label, n], i) => (
             <li key={label} className="grid grid-cols-[110px_1fr_64px] items-center gap-3 text-sm">
               <span className="font-semibold">{label}</span>
               <span className="h-3 overflow-hidden rounded-full bg-[#F4F1EC]">
-                <span className="d-grow block h-full rounded-full bg-[linear-gradient(90deg,#8A6A3C,#E8C79A)]" style={{ width: `${Math.max(6, (n / max) * 100)}%`, animationDelay: `${i * 120}ms` }} />
+                <span className="d-grow block h-full rounded-full bg-[linear-gradient(90deg,#8A6A3C,#E8C79A)]" style={{ width: `${Math.max(4, (n / max) * 100)}%`, animationDelay: `${i * 120}ms` }} />
               </span>
               <span className="text-right font-bold tabular-nums">{n.toLocaleString("en-ZA")}</span>
             </li>
           ))}
         </ol>
         <div className="mt-7 grid grid-cols-3 gap-3 border-t border-[#EDE7DD] pt-6 text-center">
-          {[["Website revenue", "R1.2m"], ["Chat to lead", "40%"], ["Quote to booking", "30%"]].map(([k, v]) => (
-            <div key={k} className="flex flex-col gap-1"><b className={`${serif} text-3xl`}>{v}</b><span className="text-xs text-[#4A4D55]">{k}</span></div>
+          {[["Booked from the website", rand(f.value, f.currency)], ["Enquiry to quote", pct(f.quotes, f.enquiries)], ["Quote to booking", pct(f.bookings, f.quotes)]].map(([k, v]) => (
+            <div key={k} className="flex flex-col gap-1"><b className={`${serif} text-2xl md:text-3xl`}>{v}</b><span className="text-xs text-[#4A4D55]">{k}</span></div>
           ))}
         </div>
       </div>
@@ -531,6 +677,51 @@ function useInstall() {
   return { canInstall: !!prompt, installed, ios, install };
 }
 
+/** "Your quote is ready" alerts: the browser subscribes through the app's service worker, matched to quotes by email. */
+function TripAlerts() {
+  const [state, setState] = useState<"idle" | "busy" | "on" | "unsupported">("idle");
+  const [error, setError] = useState("");
+  useEffect(() => {
+    if (!alertsSupported()) setState("unsupported");
+    else if (Notification.permission === "granted") {
+      navigator.serviceWorker.ready.then((r) => r.pushManager.getSubscription()).then((sub) => sub && setState("on")).catch(() => {});
+    }
+  }, []);
+
+  async function onSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setState("busy");
+    setError("");
+    try {
+      await turnOnAlerts(String(new FormData(e.currentTarget).get("email") || "").trim());
+      setState("on");
+    } catch (err) {
+      setError((err as Error).message);
+      setState("idle");
+    }
+  }
+
+  if (state === "unsupported") {
+    return <p className="text-sm text-[#F4F1EC]/60">Trip alerts work once the app is on your home screen (on iPhone, iOS 16.4 or later).</p>;
+  }
+  if (state === "on") {
+    return <span className="flex items-center gap-2 font-semibold text-[#4ADE80]"><Bell className="h-5 w-5" /> Trip alerts are on for this device</span>;
+  }
+  return (
+    <form onSubmit={onSubmit} className="flex flex-col gap-3 rounded-2xl border border-[#F4F1EC]/15 p-5">
+      <b className="flex items-center gap-2"><Bell className={`h-5 w-5 ${gold}`} /> Get an alert when your quote is ready</b>
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <input name="email" type="email" required autoComplete="email" placeholder="The email you enquired with"
+          className="min-h-12 flex-1 rounded-full border border-[#F4F1EC]/15 bg-transparent px-5 text-[15px] outline-none placeholder:text-[#F4F1EC]/40 focus:border-[#E8C79A]" />
+        <button type="submit" disabled={state === "busy"} className="min-h-12 rounded-full bg-[#E8C79A] px-6 text-sm whitespace-nowrap font-bold uppercase tracking-[0.12em] text-[#0B0D10] disabled:opacity-60">
+          {state === "busy" ? "Turning on..." : "Turn on alerts"}
+        </button>
+      </div>
+      {error && <p role="alert" className="text-sm font-semibold text-[#F87171]">{error}</p>}
+    </form>
+  );
+}
+
 function InstallApp() {
   const app = useInstall();
   return (
@@ -554,6 +745,7 @@ function InstallApp() {
               : <>On your phone: open the browser menu and choose <b>Install app</b> or <b>Add to Home screen</b>.</>}
           </p>
         )}
+        <TripAlerts />
         <button type="button" onClick={() => window.dispatchEvent(new Event(OPEN_EVENT))} className={`self-start text-sm font-semibold underline-offset-4 hover:underline ${gold}`}>
           Or ask the concierge now →
         </button>
