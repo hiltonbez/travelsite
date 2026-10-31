@@ -12,7 +12,7 @@ export const Route = createFileRoute("/designs/enterprise")({
     );
     // The installable app (public/designs/enterprise.webmanifest)
     return {
-      meta: [...h.meta, { name: "theme-color", content: "#0B0D10" }],
+      meta: [...h.meta, { name: "theme-color", content: "#0B1424" }],
       links: [
         ...h.links,
         { rel: "manifest", href: "/designs/enterprise.webmanifest" },
