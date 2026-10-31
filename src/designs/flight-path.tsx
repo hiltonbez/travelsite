@@ -1,6 +1,7 @@
 // The Enterprise design's flight path: an SVG route drawn through every `[data-stop]` section of its parent, whose
-// orange trail grows as the page scrolls with a plane riding the tip. Decorative only: the prerendered page is
-// complete without it, and with reduced motion the route is drawn in full and nothing moves.
+// orange trail grows as the page scrolls with a plane riding the tip. The plane flies level with a line a little
+// below the middle of the screen, so it is always in view. Decorative only: the prerendered page is complete
+// without it, and with reduced motion the route is drawn in full and nothing moves.
 import { useEffect, useRef } from "react";
 
 const reducedMotion = () => window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -26,18 +27,27 @@ export function FlightPath() {
   const plane = useRef<SVGGElement>(null);
   const length = useRef(0);
 
-  function draw(y: number, reduced: boolean) {
-    const path = trail.current;
-    if (!path || !length.current) return;
+  function draw(_: number, reduced: boolean) {
+    const path = trail.current, host = svg.current?.parentElement;
+    if (!path || !host || !length.current) return;
     const L = length.current;
-    const max = Math.max(1, document.documentElement.scrollHeight - window.innerHeight);
-    const p = reduced ? 1 : Math.min(1, Math.max(0, y / max));
-    path.style.strokeDashoffset = String(L * (1 - p));
-    const at = path.getPointAtLength(L * p);
-    const back = path.getPointAtLength(Math.max(0, L * p - 2));
-    const ahead = path.getPointAtLength(Math.min(L, L * p + 2));
+    // The route only ever heads down the page, so find how far along it reaches the eye line by halving.
+    const eye = window.innerHeight * 0.58 - host.getBoundingClientRect().top;
+    let at = L;
+    if (!reduced) {
+      let lo = 0, hi = L;
+      for (let i = 0; i < 22; i++) {
+        const mid = (lo + hi) / 2;
+        if (path.getPointAtLength(mid).y < eye) lo = mid; else hi = mid;
+      }
+      at = lo;
+    }
+    path.style.strokeDashoffset = String(L - at);
+    const point = path.getPointAtLength(at);
+    const back = path.getPointAtLength(Math.max(0, at - 2));
+    const ahead = path.getPointAtLength(Math.min(L, at + 2));
     const angle = (Math.atan2(ahead.y - back.y, ahead.x - back.x) * 180) / Math.PI + 90;
-    plane.current?.setAttribute("transform", `translate(${at.x} ${at.y}) rotate(${angle})`);
+    plane.current?.setAttribute("transform", `translate(${point.x} ${point.y}) rotate(${angle})`);
   }
 
   useOnScroll(draw);
