@@ -1,8 +1,9 @@
 // The Enterprise site's pages. Home is the route page with every stop; the rest are the pages a full agency site
 // has: destinations (and one page per destination), gallery, about, travel news (and one page per post), contact
 // and privacy. Each is prerendered on its own (scripts/snapshot.mjs PAGES).
-import { useState } from "react";
-import { ArrowRight, Clock, Mail, MapPin, Phone, Plane, Sun } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Clock, Loader2, Mail, MapPin, Phone, Plane, Sun } from "lucide-react";
+import { getPost, listPosts, type Post, type PostItem } from "@/lib/blog";
 import { FlightPath } from "@/designs/flight-path";
 import { BRAND, WhatsAppIcon, contact, mailto, tel } from "@/designs/shared";
 import { BehindTheScenes } from "@/designs/enterprise/agency";
@@ -75,9 +76,27 @@ function WhereWeFly() {
   );
 }
 
-function ArticleCard({ a }: { a: Article }) {
+/** A post in a list: one of the agency's own posts from TribeTravel (Marketing > Blog), or one of the sample posts. */
+type NewsCard = { href: string; image: string; tag: string; minutes: number; title: string; summary: string; date: string };
+
+const fromArticle = (a: Article): NewsCard => ({ href: `${BASE}/news/${a.slug}`, image: a.image, tag: a.tag, minutes: a.minutes, title: a.title, summary: a.summary, date: a.date });
+const fromPost = (p: PostItem): NewsCard => ({
+  href: `${BASE}/news/post?p=${encodeURIComponent(p.slug)}`, image: p.image || DESTINATIONS[0]!.photos[1], tag: p.category || "Travel news",
+  minutes: p.minutes, title: p.title, summary: p.summary, date: p.date,
+});
+
+/** The agency's published posts once TribeTravel answers; the sample posts until then, or when it has none. */
+function useNews() {
+  const [news, setNews] = useState<NewsCard[]>(ARTICLES.map(fromArticle));
+  useEffect(() => {
+    listPosts().then((posts) => { if (posts.length) setNews(posts.map(fromPost)); });
+  }, []);
+  return news;
+}
+
+function ArticleCard({ a }: { a: NewsCard }) {
   return (
-    <a href={`${BASE}/news/${a.slug}`} className={`d-zoom group flex flex-col overflow-hidden transition hover:-translate-y-1 hover:border-[#FF6A2E]/60 ${panel}`}>
+    <a href={a.href} className={`d-zoom group flex flex-col overflow-hidden transition hover:-translate-y-1 hover:border-[#FF6A2E]/60 ${panel}`}>
       <span className="relative block aspect-[16/10] overflow-hidden"><img src={a.image} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" /></span>
       <span className="flex flex-1 flex-col gap-2 p-5">
         <span className={`${label} ${orange}`}>{a.tag} · {a.minutes} min read</span>
@@ -90,6 +109,7 @@ function ArticleCard({ a }: { a: Article }) {
 }
 
 function LatestNews() {
+  const news = useNews();
   return (
     <section className={`relative z-10 flex flex-col gap-10 ${gutter} py-24`}>
       <div className="flex flex-wrap items-end justify-between gap-6">
@@ -99,7 +119,7 @@ function LatestNews() {
         </div>
         <a href={`${BASE}/news`} className={ghost}>All travel news <ArrowRight className="h-4 w-4" /></a>
       </div>
-      <div className="grid gap-5 md:grid-cols-3">{ARTICLES.map((a) => <ArticleCard key={a.slug} a={a} />)}</div>
+      <div className="grid gap-5 md:grid-cols-3">{news.slice(0, 3).map((a) => <ArticleCard key={a.href} a={a} />)}</div>
     </section>
   );
 }
@@ -271,12 +291,13 @@ export function AboutPage() {
 
 // ------------------------------------------------------------------ travel news
 export function NewsPage() {
+  const news = useNews();
   return (
     <EnterpriseLayout current={`${BASE}/news`}>
       <PageTitle crumb="Travel news" title={<>Travel news <span className={orange}>&amp; ideas.</span></>}
         intro="Where to go, when to go and what to pack, from the people who plan it every day. New posts go out in our monthly trip letter too." />
       <section className={`relative z-10 grid gap-5 ${gutter} pb-24 md:grid-cols-3`}>
-        {ARTICLES.map((a) => <ArticleCard key={a.slug} a={a} />)}
+        {news.map((a) => <ArticleCard key={a.href} a={a} />)}
       </section>
     </EnterpriseLayout>
   );
@@ -303,8 +324,58 @@ export function ArticlePage({ slug }: { slug: string }) {
       </article>
       <section className={`relative z-10 flex flex-col gap-8 ${gutter} pb-24`}>
         <StopLabel>Keep reading</StopLabel>
-        <div className="grid gap-5 md:grid-cols-2">{ARTICLES.filter((x) => x.slug !== a.slug).map((x) => <ArticleCard key={x.slug} a={x} />)}</div>
+        <div className="grid gap-5 md:grid-cols-2">{ARTICLES.filter((x) => x.slug !== a.slug).map((x) => <ArticleCard key={x.slug} a={fromArticle(x)} />)}</div>
       </section>
+    </EnterpriseLayout>
+  );
+}
+
+/** One of the agency's own posts (Marketing > Blog in TribeTravel), read in the browser from ?p=<slug>: one prerendered
+ *  page serves every post, so a new post needs no rebuild. The post's design (colours, fonts, blocks) comes from
+ *  TribeTravel as HTML. */
+export function PostPage() {
+  const [post, setPost] = useState<Post | null>(null);
+  const [error, setError] = useState("");
+  useEffect(() => {
+    const slug = new URLSearchParams(window.location.search).get("p") || "";
+    if (!slug) { setError("This post couldn't be found."); return; }
+    getPost(slug).then((p) => {
+      setPost(p);
+      document.title = `${p.seo_title || p.title} — ${BRAND.name}`;
+      document.querySelector('meta[name="description"]')?.setAttribute("content", p.seo_description || p.summary);
+      for (const href of p.fonts || []) {
+        if (!document.querySelector(`link[href="${href}"]`)) document.head.appendChild(Object.assign(document.createElement("link"), { rel: "stylesheet", href }));
+      }
+    }).catch((e: Error) => setError(e.message));
+  }, []);
+
+  return (
+    <EnterpriseLayout current={`${BASE}/news`}>
+      <article className={`relative z-10 mx-auto flex max-w-[820px] flex-col gap-6 ${gutter} pt-14 pb-24 md:pt-20`}>
+        <p className={`${label} ${soft}`}><a href={`${BASE}/news`} className="hover:text-[#FF6A2E]">Travel news</a>{post?.category && <> <span className={orange}>→</span> {post.category}</>}</p>
+        {error ? (
+          <div className={`flex flex-col items-start gap-4 p-8 ${panel}`}>
+            <p className="text-lg">{error}</p>
+            <a href={`${BASE}/news`} className={btn}>All travel news</a>
+          </div>
+        ) : !post ? (
+          <p className={`flex items-center gap-3 ${soft}`}><Loader2 className="h-5 w-5 animate-spin" /> Loading the post…</p>
+        ) : (
+          <>
+            <h1 className={`d-rise ${display} text-[clamp(32px,5vw,60px)] leading-[0.95]`}>{post.title}</h1>
+            <p className={`flex flex-wrap items-center gap-4 ${mono} text-xs ${soft}`}>
+              <span>{date(post.date)}</span><span className="flex items-center gap-1.5"><Clock className="h-3.5 w-3.5" /> {post.minutes} min read</span><span>By the {BRAND.name} team</span>
+            </p>
+            {post.summary && <p className="text-xl leading-relaxed">{post.summary}</p>}
+            {/* Written in TribeTravel's block editor and cleaned there; shown in the agency's own design. */}
+            <div className="overflow-hidden rounded-[22px]" dangerouslySetInnerHTML={{ __html: post.body_html }} />
+            <div className={`mt-4 flex flex-wrap items-center justify-between gap-4 p-6 ${panel}`}>
+              <span className="text-lg">Want to go? We'll plan it for you.</span>
+              <a href={`${BASE}#quote`} className={btn}>Get my quote <ArrowRight className="h-4 w-4" /></a>
+            </div>
+          </>
+        )}
+      </article>
     </EnterpriseLayout>
   );
 }

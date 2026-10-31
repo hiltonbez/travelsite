@@ -25,6 +25,7 @@ import { Route as DesignsEnterpriseDestinationsIndexRouteImport } from './routes
 import { Route as DesignsEnterpriseDestinationsSlugRouteImport } from './routes/designs/enterprise.destinations.$slug'
 import { Route as DesignsEnterpriseNewsIndexRouteImport } from './routes/designs/enterprise.news.index'
 import { Route as DesignsEnterpriseNewsSlugRouteImport } from './routes/designs/enterprise.news.$slug'
+import { Route as DesignsEnterpriseNewsPostRouteImport } from './routes/designs/enterprise.news.post'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -113,6 +114,12 @@ const DesignsEnterpriseNewsSlugRoute =
     path: '/news/$slug',
     getParentRoute: () => DesignsEnterpriseRoute,
   } as any)
+const DesignsEnterpriseNewsPostRoute =
+  DesignsEnterpriseNewsPostRouteImport.update({
+    id: '/news/post',
+    path: '/news/post',
+    getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -129,6 +136,7 @@ export interface FileRoutesByFullPath {
   '/designs/enterprise/': typeof DesignsEnterpriseIndexRoute
   '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
   '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
+  '/designs/enterprise/news/post': typeof DesignsEnterpriseNewsPostRoute
   '/designs/enterprise/destinations/': typeof DesignsEnterpriseDestinationsIndexRoute
   '/designs/enterprise/news/': typeof DesignsEnterpriseNewsIndexRoute
 }
@@ -146,6 +154,7 @@ export interface FileRoutesByTo {
   '/designs/enterprise': typeof DesignsEnterpriseIndexRoute
   '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
   '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
+  '/designs/enterprise/news/post': typeof DesignsEnterpriseNewsPostRoute
   '/designs/enterprise/destinations': typeof DesignsEnterpriseDestinationsIndexRoute
   '/designs/enterprise/news': typeof DesignsEnterpriseNewsIndexRoute
 }
@@ -165,6 +174,7 @@ export interface FileRoutesById {
   '/designs/enterprise/': typeof DesignsEnterpriseIndexRoute
   '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
   '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
+  '/designs/enterprise/news/post': typeof DesignsEnterpriseNewsPostRoute
   '/designs/enterprise/destinations/': typeof DesignsEnterpriseDestinationsIndexRoute
   '/designs/enterprise/news/': typeof DesignsEnterpriseNewsIndexRoute
 }
@@ -185,6 +195,7 @@ export interface FileRouteTypes {
     | '/designs/enterprise/'
     | '/designs/enterprise/destinations/$slug'
     | '/designs/enterprise/news/$slug'
+    | '/designs/enterprise/news/post'
     | '/designs/enterprise/destinations/'
     | '/designs/enterprise/news/'
   fileRoutesByTo: FileRoutesByTo
@@ -202,6 +213,7 @@ export interface FileRouteTypes {
     | '/designs/enterprise'
     | '/designs/enterprise/destinations/$slug'
     | '/designs/enterprise/news/$slug'
+    | '/designs/enterprise/news/post'
     | '/designs/enterprise/destinations'
     | '/designs/enterprise/news'
   id:
@@ -220,6 +232,7 @@ export interface FileRouteTypes {
     | '/designs/enterprise/'
     | '/designs/enterprise/destinations/$slug'
     | '/designs/enterprise/news/$slug'
+    | '/designs/enterprise/news/post'
     | '/designs/enterprise/destinations/'
     | '/designs/enterprise/news/'
   fileRoutesById: FileRoutesById
@@ -348,6 +361,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsEnterpriseNewsSlugRouteImport
       parentRoute: typeof DesignsEnterpriseRoute
     }
+    '/designs/enterprise/news/post': {
+      id: '/designs/enterprise/news/post'
+      path: '/news/post'
+      fullPath: '/designs/enterprise/news/post'
+      preLoaderRoute: typeof DesignsEnterpriseNewsPostRouteImport
+      parentRoute: typeof DesignsEnterpriseRoute
+    }
   }
 }
 
@@ -359,6 +379,7 @@ interface DesignsEnterpriseRouteChildren {
   DesignsEnterpriseIndexRoute: typeof DesignsEnterpriseIndexRoute
   DesignsEnterpriseDestinationsSlugRoute: typeof DesignsEnterpriseDestinationsSlugRoute
   DesignsEnterpriseNewsSlugRoute: typeof DesignsEnterpriseNewsSlugRoute
+  DesignsEnterpriseNewsPostRoute: typeof DesignsEnterpriseNewsPostRoute
   DesignsEnterpriseDestinationsIndexRoute: typeof DesignsEnterpriseDestinationsIndexRoute
   DesignsEnterpriseNewsIndexRoute: typeof DesignsEnterpriseNewsIndexRoute
 }
@@ -372,6 +393,7 @@ const DesignsEnterpriseRouteChildren: DesignsEnterpriseRouteChildren = {
   DesignsEnterpriseDestinationsSlugRoute:
     DesignsEnterpriseDestinationsSlugRoute,
   DesignsEnterpriseNewsSlugRoute: DesignsEnterpriseNewsSlugRoute,
+  DesignsEnterpriseNewsPostRoute: DesignsEnterpriseNewsPostRoute,
   DesignsEnterpriseDestinationsIndexRoute:
     DesignsEnterpriseDestinationsIndexRoute,
   DesignsEnterpriseNewsIndexRoute: DesignsEnterpriseNewsIndexRoute,

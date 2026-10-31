@@ -27,6 +27,8 @@ const PAGES = [
   { path: "/designs/enterprise/gallery", file: "designs/enterprise/gallery/index.html", status: 200 },
   { path: "/designs/enterprise/about", file: "designs/enterprise/about/index.html", status: 200 },
   { path: "/designs/enterprise/news", file: "designs/enterprise/news/index.html", status: 200 },
+  // One page for every post from Marketing > Blog in TribeTravel (?p=<slug>, read in the browser)
+  { path: "/designs/enterprise/news/post", file: "designs/enterprise/news/post/index.html", status: 200 },
   { path: "/designs/enterprise/news/mauritius-in-winter", file: "designs/enterprise/news/mauritius-in-winter/index.html", status: 200 },
   { path: "/designs/enterprise/news/first-safari", file: "designs/enterprise/news/first-safari/index.html", status: 200 },
   { path: "/designs/enterprise/news/greek-islands-on-a-cruise", file: "designs/enterprise/news/greek-islands-on-a-cruise/index.html", status: 200 },
