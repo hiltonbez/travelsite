@@ -1,16 +1,16 @@
 // Enterprise: Horizon with everything TribeTravel can do behind a website, for the top package ("Enterprise / App").
 // Live supplier packages (Beachcomber, bookable; Thompsons, enquire), an AI concierge talking to Tribe's chat API,
-// booking a call with a consultant (live seats), what Tribe automates after an enquiry, integrations (HubSpot built in),
-// the website's own live figures, and the site as an installable app with "your quote is ready" alerts.
+// booking a call with a consultant (live seats), what happens after an enquiry, and the site as an installable app
+// with "your quote is ready" alerts. Customer view only: the agency's figures and tools live in TribeTravel.
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
-  ArrowRight, BarChart3, Bell, Bot, CalendarClock, Check, CreditCard, Download, Eye, FileText, Loader2, MessageCircle,
-  Plug, Send, ShieldCheck, Smartphone, Sparkles, UserPlus, Webhook, X,
+  ArrowRight, Bell, Bot, CalendarClock, Check, CreditCard, Download, Eye, FileText, Loader2, MessageCircle, Send,
+  Smartphone, Sparkles, UserPlus, X,
 } from "lucide-react";
 import { BookingDialog } from "@/components/packages";
 import { Dialog, DialogContent, DialogDescription, DialogTitle } from "@/components/ui/dialog";
 import {
-  alertsSupported, bookCall, callIcs, getFigures, listSlots, turnOnAlerts, type CallBooked, type Figures, type Slots,
+  alertsSupported, bookCall, callIcs, listSlots, turnOnAlerts, type CallBooked, type Slots,
 } from "@/lib/agency-extras";
 import { sendChat, startChat } from "@/lib/chat";
 import { useEnquiry } from "@/lib/enquiry";
@@ -45,8 +45,6 @@ export function Enterprise() {
       <Concierge />
       <BookCall />
       <Automation />
-      <Integrations />
-      <Analytics />
       <InstallApp />
       <ConciergeLauncher />
     </Horizon>
@@ -561,89 +559,6 @@ function Automation() {
           </li>
         ))}
       </ol>
-    </section>
-  );
-}
-
-// ------------------------------------------------------------------ integrations
-const TOOLS = [
-  { icon: Plug, name: "Supplier connections", text: "Beachcomber, Thompsons, MSC, TBO and more, connected in TribeTravel." },
-  { icon: UserPlus, name: "HubSpot, built in", text: "Every website enquiry, chat, booking and call becomes a HubSpot lead with a note of what they asked." },
-  { icon: Webhook, name: "Your own CRM and tools", text: "Zoho, Salesforce or anything else through the TribeTravel API and signed webhooks." },
-  { icon: CreditCard, name: "Paystack payments", text: "Card payments on every invoice, matched to the booking automatically." },
-  { icon: MessageCircle, name: "WhatsApp Business", text: "Client messages land on their timeline; consultants reply from Tribe." },
-  { icon: BarChart3, name: "Google Analytics & Meta", text: "GA4 and Meta Pixel, to see which campaigns bring bookings." },
-  { icon: ShieldCheck, name: "POPIA by design", text: "Consent before saving, AI disclosure, encrypted passport details." },
-];
-
-function Integrations() {
-  return (
-    <section className="grid items-start gap-12 border-t border-[#F4F1EC]/10 px-[5vw] py-24 lg:grid-cols-[.8fr_1.2fr]">
-      <div className="reveal flex flex-col gap-5 lg:sticky lg:top-10">
-        <span className={eyebrow}>Connected</span>
-        <h2 className={h2}>Works with the tools <em className={gold}>you already use.</em></h2>
-        <p className="text-lg leading-relaxed text-[#F4F1EC]/75">Your website, suppliers, payments, messages and reports, all in one connected system.</p>
-      </div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        {TOOLS.map(({ icon: Icon, name, text }) => (
-          <div key={name} className="reveal flex gap-4 rounded-3xl border border-[#F4F1EC]/10 p-6 transition hover:border-[#E8C79A]/50">
-            <span className="flex h-12 w-12 flex-none items-center justify-center rounded-2xl bg-[#F4F1EC] text-[#0B0D10]"><Icon className="h-6 w-6" /></span>
-            <span className="flex flex-col gap-1.5"><b>{name}</b><span className="text-sm leading-relaxed text-[#F4F1EC]/65">{text}</span></span>
-          </div>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-// ------------------------------------------------------------------ analytics
-const SAMPLE: Figures = { days: 30, chats: 612, enquiries: 246, quotes: 158, bookings: 47, calls: 38, value: 1200000, currency: "ZAR", as_of: "" };
-
-const pct = (a: number, b: number) => (b ? `${Math.round((a / b) * 100)}%` : "-");
-
-function Analytics() {
-  // The agency's real figures from TribeTravel (last 30 days) when it shares them; the sample until then.
-  const [live, setLive] = useState<Figures | null>(null);
-  useEffect(() => { getFigures().then(setLive).catch(() => setLive(null)); }, []);
-  const f = live ?? SAMPLE;
-  const funnel: [string, number][] = [["AI chats", f.chats], ["Enquiries", f.enquiries], ["Calls booked", f.calls], ["Quotes", f.quotes], ["Bookings", f.bookings]];
-  const max = Math.max(1, ...funnel.map(([, n]) => n));
-  return (
-    <section className="grid items-center gap-12 bg-[#F4F1EC] px-[5vw] py-24 text-[#14161A] lg:grid-cols-[.85fr_1.15fr]">
-      <div className="reveal flex flex-col gap-5">
-        <span className="text-xs uppercase tracking-[0.4em] text-[#8A6A3C]">For the agency</span>
-        <h2 className={`${serif} text-5xl leading-none font-medium md:text-[64px]`}>See what your website earns.</h2>
-        <p className="text-lg leading-relaxed text-[#4A4D55]">
-          TribeTravel follows every website visitor from first chat to paid booking.{" "}
-          {live ? `This is this website's own record for the last ${live.days} days, straight from TribeTravel.` : "Switched on, this shows the website's own record for the last 30 days, straight from TribeTravel."}
-        </p>
-      </div>
-      <div className="reveal rounded-[28px] bg-white p-6 shadow-[0_40px_80px_-40px_rgba(20,22,26,.35)] md:p-8">
-        <div className="flex flex-wrap items-center justify-between gap-3">
-          <b className="flex items-center gap-2 text-lg"><BarChart3 className="h-5 w-5 text-[#8A6A3C]" /> Website dashboard</b>
-          {live ? (
-            <span className="flex items-center gap-2 rounded-full bg-[#ECFDF3] px-3 py-1 text-xs font-semibold text-[#15803D]"><LiveDot /> Live, last {live.days} days</span>
-          ) : (
-            <span className="rounded-full bg-[#F4F1EC] px-3 py-1 text-xs font-semibold text-[#8A6A3C]">Sample figures</span>
-          )}
-        </div>
-        <ol className="mt-6 flex flex-col gap-3.5">
-          {funnel.map(([label, n], i) => (
-            <li key={label} className="grid grid-cols-[110px_1fr_64px] items-center gap-3 text-sm">
-              <span className="font-semibold">{label}</span>
-              <span className="h-3 overflow-hidden rounded-full bg-[#F4F1EC]">
-                <span className="d-grow block h-full rounded-full bg-[linear-gradient(90deg,#8A6A3C,#E8C79A)]" style={{ width: `${Math.max(4, (n / max) * 100)}%`, animationDelay: `${i * 120}ms` }} />
-              </span>
-              <span className="text-right font-bold tabular-nums">{n.toLocaleString("en-ZA")}</span>
-            </li>
-          ))}
-        </ol>
-        <div className="mt-7 grid grid-cols-3 gap-3 border-t border-[#EDE7DD] pt-6 text-center">
-          {[["Booked from the website", rand(f.value, f.currency)], ["Enquiry to quote", pct(f.quotes, f.enquiries)], ["Quote to booking", pct(f.bookings, f.quotes)]].map(([k, v]) => (
-            <div key={k} className="flex flex-col gap-1"><b className={`${serif} text-2xl md:text-3xl`}>{v}</b><span className="text-xs text-[#4A4D55]">{k}</span></div>
-          ))}
-        </div>
-      </div>
     </section>
   );
 }

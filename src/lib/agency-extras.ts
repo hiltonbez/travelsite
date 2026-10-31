@@ -1,7 +1,6 @@
 // TribeTravel's Enterprise website extras (31 Oct 2026), each switched on by the agency in Website > Settings and
 // answered only for the agency's own sites (its allowed origins):
 //   GET/POST <tribetravel>/api/site/<slug>/appointments   call times with seats left / book a call
-//   GET      <tribetravel>/api/site/<slug>/stats          what the website brought in, last 30 days (counts only)
 //   GET      <tribetravel>/api/site/<slug>/push/key       public key for "your quote is ready" alerts
 //   POST     <tribetravel>/api/site/<slug>/push/subscribe the browser's subscription and the visitor's email
 import { AGENCY_SLUG, TRIBETRAVEL_URL } from "@/lib/site-content";
@@ -47,12 +46,6 @@ export function callIcs(c: CallBooked, title: string) {
   ].join("\r\n");
 }
 
-// ---- website figures
-export type Figures = {
-  days: number; chats: number; enquiries: number; quotes: number; bookings: number; calls: number;
-  value: number; currency: string; as_of: string;
-};
-export const getFigures = () => call<Figures>("/stats");
 
 // ---- quote alerts
 function keyBytes(key: string) {
