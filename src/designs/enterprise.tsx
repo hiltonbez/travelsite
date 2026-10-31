@@ -17,6 +17,13 @@ import { sendChat, startChat } from "@/lib/chat";
 import { useEnquiry } from "@/lib/enquiry";
 import { listPackages, rand, type Package } from "@/lib/packages";
 import { getHoliday, listHolidays, type Holiday, type HolidayFull } from "@/lib/thompsons";
+import resort1 from "@/assets/resort-1.jpg";
+import resort2 from "@/assets/resort-2.jpg";
+import resort3 from "@/assets/resort-3.jpg";
+import resort4 from "@/assets/resort-4.jpg";
+import resort5 from "@/assets/resort-5.jpg";
+import resort6 from "@/assets/resort-6.jpg";
+import resort7 from "@/assets/resort-7.jpg";
 import { FlightPath, useOnScroll } from "@/designs/flight-path";
 import { BRAND, BotTrap, FormStatus, WhatsAppIcon, contact, mailto, media, monthWords, tel } from "@/designs/shared";
 
@@ -203,6 +210,16 @@ function Departure() {
 }
 
 // ------------------------------------------------------------------ stop 1: live supplier packages
+/** Beach and resort photos (Unsplash) for Beachcomber hotels that come without a photo of their own. */
+const RESORTS = [resort1, resort2, resort3, resort4, resort5, resort6, resort7];
+
+/** Each package's photo. When suppliers send one photo for several hotels, the first keeps it and the rest get a
+ *  resort photo each, so the cards don't all look alike. */
+function variedPhotos(images: string[]) {
+  let next = 0;
+  return images.map((img, i) => (img && images.indexOf(img) === i ? img : RESORTS[next++ % RESORTS.length]));
+}
+
 function LiveSuppliers() {
   const [tab, setTab] = useState<"beachcomber" | "thompsons">("beachcomber");
   // null while loading; "error" when TribeTravel couldn't be reached (not the same as nothing to show)
@@ -216,6 +233,7 @@ function LiveSuppliers() {
     listPackages().then((r) => { setPackages(r.packages); setMinDays(r.min_days_ahead || 10); }).catch(() => setPackages("error"));
     listHolidays().then(setHolidays).catch(() => setHolidays("error"));
   }, []);
+  const photos = variedPhotos(Array.isArray(packages) ? packages.map((p) => p.image) : []);
   const unreachable = "We couldn't load live rates just now. Please try again in a moment, or ask our concierge.";
 
   const tabs: [typeof tab, string, string][] = [
@@ -250,7 +268,7 @@ function LiveSuppliers() {
         ) : (
           <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {packages.map((p, i) => (
-              <TicketCard key={p.id} onClick={() => setBook(p)} image={p.image || [media.islands, media.cruises, media.safari, media.cities][i % 4]} alt={p.hotel}
+              <TicketCard key={p.id} onClick={() => setBook(p)} image={photos[i]} alt={p.hotel}
                 badge={<><LiveDot /> Live rate</>} where={`${p.star} · ${p.location}`} name={p.hotel} detail={`${p.nights} nights · ${p.board}`}
                 price={`From ${rand(p.from_pp, p.currency)} pp`} action="Check dates" />
             ))}
