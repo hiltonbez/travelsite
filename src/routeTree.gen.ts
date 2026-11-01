@@ -10,26 +10,54 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DesignsAtlasRouteImport } from './routes/designs/atlas'
 import { Route as DesignsEnterpriseRouteImport } from './routes/designs/enterprise'
-import { Route as DesignsHorizonRouteImport } from './routes/designs/horizon'
-import { Route as DesignsItineraryRouteImport } from './routes/designs/itinerary'
-import { Route as DesignsMeetYourAgentRouteImport } from './routes/designs/meet-your-agent'
-import { Route as DesignsQuickQuoteRouteImport } from './routes/designs/quick-quote'
-import { Route as DesignsWanderlustRouteImport } from './routes/designs/wanderlust'
+import { Route as DesignsLivingMapRouteImport } from './routes/designs/living-map'
+import { Route as DesignsWindowSeatRouteImport } from './routes/designs/window-seat'
+import { Route as DesignsAtlasIndexRouteImport } from './routes/designs/atlas.index'
+import { Route as DesignsAtlasAboutRouteImport } from './routes/designs/atlas.about'
+import { Route as DesignsAtlasAutomationRouteImport } from './routes/designs/atlas.automation'
+import { Route as DesignsAtlasBookRouteImport } from './routes/designs/atlas.book'
+import { Route as DesignsAtlasContactRouteImport } from './routes/designs/atlas.contact'
+import { Route as DesignsAtlasDashboardRouteImport } from './routes/designs/atlas.dashboard'
+import { Route as DesignsAtlasPrivacyRouteImport } from './routes/designs/atlas.privacy'
+import { Route as DesignsAtlasSuppliersRouteImport } from './routes/designs/atlas.suppliers'
 import { Route as DesignsEnterpriseIndexRouteImport } from './routes/designs/enterprise.index'
 import { Route as DesignsEnterpriseAboutRouteImport } from './routes/designs/enterprise.about'
 import { Route as DesignsEnterpriseContactRouteImport } from './routes/designs/enterprise.contact'
 import { Route as DesignsEnterpriseGalleryRouteImport } from './routes/designs/enterprise.gallery'
 import { Route as DesignsEnterprisePrivacyRouteImport } from './routes/designs/enterprise.privacy'
+import { Route as DesignsLivingMapIndexRouteImport } from './routes/designs/living-map.index'
+import { Route as DesignsLivingMapAboutRouteImport } from './routes/designs/living-map.about'
+import { Route as DesignsLivingMapBookRouteImport } from './routes/designs/living-map.book'
+import { Route as DesignsLivingMapContactRouteImport } from './routes/designs/living-map.contact'
+import { Route as DesignsLivingMapDeparturesRouteImport } from './routes/designs/living-map.departures'
+import { Route as DesignsLivingMapPrivacyRouteImport } from './routes/designs/living-map.privacy'
+import { Route as DesignsLivingMapReviewsRouteImport } from './routes/designs/living-map.reviews'
+import { Route as DesignsLivingMapSpecialsRouteImport } from './routes/designs/living-map.specials'
+import { Route as DesignsWindowSeatAboutRouteImport } from './routes/designs/window-seat.about'
+import { Route as DesignsWindowSeatContactRouteImport } from './routes/designs/window-seat.contact'
+import { Route as DesignsWindowSeatDestinationsRouteImport } from './routes/designs/window-seat.destinations'
+import { Route as DesignsWindowSeatPrivacyRouteImport } from './routes/designs/window-seat.privacy'
+import { Route as DesignsWindowSeatQuoteRouteImport } from './routes/designs/window-seat.quote'
+import { Route as DesignsAtlasDestinationsIndexRouteImport } from './routes/designs/atlas.destinations.index'
+import { Route as DesignsAtlasDestinationsSlugRouteImport } from './routes/designs/atlas.destinations.$slug'
 import { Route as DesignsEnterpriseDestinationsIndexRouteImport } from './routes/designs/enterprise.destinations.index'
 import { Route as DesignsEnterpriseDestinationsSlugRouteImport } from './routes/designs/enterprise.destinations.$slug'
 import { Route as DesignsEnterpriseNewsIndexRouteImport } from './routes/designs/enterprise.news.index'
 import { Route as DesignsEnterpriseNewsSlugRouteImport } from './routes/designs/enterprise.news.$slug'
 import { Route as DesignsEnterpriseNewsPostRouteImport } from './routes/designs/enterprise.news.post'
+import { Route as DesignsLivingMapDestinationsIndexRouteImport } from './routes/designs/living-map.destinations.index'
+import { Route as DesignsLivingMapDestinationsSlugRouteImport } from './routes/designs/living-map.destinations.$slug'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsAtlasRoute = DesignsAtlasRouteImport.update({
+  id: '/designs/atlas',
+  path: '/designs/atlas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsEnterpriseRoute = DesignsEnterpriseRouteImport.update({
@@ -37,30 +65,55 @@ const DesignsEnterpriseRoute = DesignsEnterpriseRouteImport.update({
   path: '/designs/enterprise',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DesignsHorizonRoute = DesignsHorizonRouteImport.update({
-  id: '/designs/horizon',
-  path: '/designs/horizon',
+const DesignsLivingMapRoute = DesignsLivingMapRouteImport.update({
+  id: '/designs/living-map',
+  path: '/designs/living-map',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DesignsItineraryRoute = DesignsItineraryRouteImport.update({
-  id: '/designs/itinerary',
-  path: '/designs/itinerary',
+const DesignsWindowSeatRoute = DesignsWindowSeatRouteImport.update({
+  id: '/designs/window-seat',
+  path: '/designs/window-seat',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DesignsMeetYourAgentRoute = DesignsMeetYourAgentRouteImport.update({
-  id: '/designs/meet-your-agent',
-  path: '/designs/meet-your-agent',
-  getParentRoute: () => rootRouteImport,
+const DesignsAtlasIndexRoute = DesignsAtlasIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DesignsAtlasRoute,
 } as any)
-const DesignsQuickQuoteRoute = DesignsQuickQuoteRouteImport.update({
-  id: '/designs/quick-quote',
-  path: '/designs/quick-quote',
-  getParentRoute: () => rootRouteImport,
+const DesignsAtlasAboutRoute = DesignsAtlasAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => DesignsAtlasRoute,
 } as any)
-const DesignsWanderlustRoute = DesignsWanderlustRouteImport.update({
-  id: '/designs/wanderlust',
-  path: '/designs/wanderlust',
-  getParentRoute: () => rootRouteImport,
+const DesignsAtlasAutomationRoute = DesignsAtlasAutomationRouteImport.update({
+  id: '/automation',
+  path: '/automation',
+  getParentRoute: () => DesignsAtlasRoute,
+} as any)
+const DesignsAtlasBookRoute = DesignsAtlasBookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => DesignsAtlasRoute,
+} as any)
+const DesignsAtlasContactRoute = DesignsAtlasContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => DesignsAtlasRoute,
+} as any)
+const DesignsAtlasDashboardRoute = DesignsAtlasDashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
+  getParentRoute: () => DesignsAtlasRoute,
+} as any)
+const DesignsAtlasPrivacyRoute = DesignsAtlasPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => DesignsAtlasRoute,
+} as any)
+const DesignsAtlasSuppliersRoute = DesignsAtlasSuppliersRouteImport.update({
+  id: '/suppliers',
+  path: '/suppliers',
+  getParentRoute: () => DesignsAtlasRoute,
 } as any)
 const DesignsEnterpriseIndexRoute = DesignsEnterpriseIndexRouteImport.update({
   id: '/',
@@ -89,6 +142,88 @@ const DesignsEnterprisePrivacyRoute =
     id: '/privacy',
     path: '/privacy',
     getParentRoute: () => DesignsEnterpriseRoute,
+  } as any)
+const DesignsLivingMapIndexRoute = DesignsLivingMapIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => DesignsLivingMapRoute,
+} as any)
+const DesignsLivingMapAboutRoute = DesignsLivingMapAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => DesignsLivingMapRoute,
+} as any)
+const DesignsLivingMapBookRoute = DesignsLivingMapBookRouteImport.update({
+  id: '/book',
+  path: '/book',
+  getParentRoute: () => DesignsLivingMapRoute,
+} as any)
+const DesignsLivingMapContactRoute = DesignsLivingMapContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => DesignsLivingMapRoute,
+} as any)
+const DesignsLivingMapDeparturesRoute =
+  DesignsLivingMapDeparturesRouteImport.update({
+    id: '/departures',
+    path: '/departures',
+    getParentRoute: () => DesignsLivingMapRoute,
+  } as any)
+const DesignsLivingMapPrivacyRoute = DesignsLivingMapPrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => DesignsLivingMapRoute,
+} as any)
+const DesignsLivingMapReviewsRoute = DesignsLivingMapReviewsRouteImport.update({
+  id: '/reviews',
+  path: '/reviews',
+  getParentRoute: () => DesignsLivingMapRoute,
+} as any)
+const DesignsLivingMapSpecialsRoute =
+  DesignsLivingMapSpecialsRouteImport.update({
+    id: '/specials',
+    path: '/specials',
+    getParentRoute: () => DesignsLivingMapRoute,
+  } as any)
+const DesignsWindowSeatAboutRoute = DesignsWindowSeatAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
+  getParentRoute: () => DesignsWindowSeatRoute,
+} as any)
+const DesignsWindowSeatContactRoute =
+  DesignsWindowSeatContactRouteImport.update({
+    id: '/contact',
+    path: '/contact',
+    getParentRoute: () => DesignsWindowSeatRoute,
+  } as any)
+const DesignsWindowSeatDestinationsRoute =
+  DesignsWindowSeatDestinationsRouteImport.update({
+    id: '/destinations',
+    path: '/destinations',
+    getParentRoute: () => DesignsWindowSeatRoute,
+  } as any)
+const DesignsWindowSeatPrivacyRoute =
+  DesignsWindowSeatPrivacyRouteImport.update({
+    id: '/privacy',
+    path: '/privacy',
+    getParentRoute: () => DesignsWindowSeatRoute,
+  } as any)
+const DesignsWindowSeatQuoteRoute = DesignsWindowSeatQuoteRouteImport.update({
+  id: '/quote',
+  path: '/quote',
+  getParentRoute: () => DesignsWindowSeatRoute,
+} as any)
+const DesignsAtlasDestinationsIndexRoute =
+  DesignsAtlasDestinationsIndexRouteImport.update({
+    id: '/destinations/',
+    path: '/destinations/',
+    getParentRoute: () => DesignsAtlasRoute,
+  } as any)
+const DesignsAtlasDestinationsSlugRoute =
+  DesignsAtlasDestinationsSlugRouteImport.update({
+    id: '/destinations/$slug',
+    path: '/destinations/$slug',
+    getParentRoute: () => DesignsAtlasRoute,
   } as any)
 const DesignsEnterpriseDestinationsIndexRoute =
   DesignsEnterpriseDestinationsIndexRouteImport.update({
@@ -120,131 +255,275 @@ const DesignsEnterpriseNewsPostRoute =
     path: '/news/post',
     getParentRoute: () => DesignsEnterpriseRoute,
   } as any)
+const DesignsLivingMapDestinationsIndexRoute =
+  DesignsLivingMapDestinationsIndexRouteImport.update({
+    id: '/destinations/',
+    path: '/destinations/',
+    getParentRoute: () => DesignsLivingMapRoute,
+  } as any)
+const DesignsLivingMapDestinationsSlugRoute =
+  DesignsLivingMapDestinationsSlugRouteImport.update({
+    id: '/destinations/$slug',
+    path: '/destinations/$slug',
+    getParentRoute: () => DesignsLivingMapRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
-  '/designs/horizon': typeof DesignsHorizonRoute
-  '/designs/itinerary': typeof DesignsItineraryRoute
-  '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
-  '/designs/quick-quote': typeof DesignsQuickQuoteRoute
-  '/designs/wanderlust': typeof DesignsWanderlustRoute
+  '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
+  '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
+  '/designs/atlas/about': typeof DesignsAtlasAboutRoute
+  '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
+  '/designs/atlas/book': typeof DesignsAtlasBookRoute
+  '/designs/atlas/contact': typeof DesignsAtlasContactRoute
+  '/designs/atlas/dashboard': typeof DesignsAtlasDashboardRoute
+  '/designs/atlas/privacy': typeof DesignsAtlasPrivacyRoute
+  '/designs/atlas/suppliers': typeof DesignsAtlasSuppliersRoute
   '/designs/enterprise/about': typeof DesignsEnterpriseAboutRoute
   '/designs/enterprise/contact': typeof DesignsEnterpriseContactRoute
   '/designs/enterprise/gallery': typeof DesignsEnterpriseGalleryRoute
   '/designs/enterprise/privacy': typeof DesignsEnterprisePrivacyRoute
+  '/designs/living-map/about': typeof DesignsLivingMapAboutRoute
+  '/designs/living-map/book': typeof DesignsLivingMapBookRoute
+  '/designs/living-map/contact': typeof DesignsLivingMapContactRoute
+  '/designs/living-map/departures': typeof DesignsLivingMapDeparturesRoute
+  '/designs/living-map/privacy': typeof DesignsLivingMapPrivacyRoute
+  '/designs/living-map/reviews': typeof DesignsLivingMapReviewsRoute
+  '/designs/living-map/specials': typeof DesignsLivingMapSpecialsRoute
+  '/designs/window-seat/about': typeof DesignsWindowSeatAboutRoute
+  '/designs/window-seat/contact': typeof DesignsWindowSeatContactRoute
+  '/designs/window-seat/destinations': typeof DesignsWindowSeatDestinationsRoute
+  '/designs/window-seat/privacy': typeof DesignsWindowSeatPrivacyRoute
+  '/designs/window-seat/quote': typeof DesignsWindowSeatQuoteRoute
+  '/designs/atlas/': typeof DesignsAtlasIndexRoute
   '/designs/enterprise/': typeof DesignsEnterpriseIndexRoute
+  '/designs/living-map/': typeof DesignsLivingMapIndexRoute
+  '/designs/atlas/destinations/$slug': typeof DesignsAtlasDestinationsSlugRoute
   '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
   '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
   '/designs/enterprise/news/post': typeof DesignsEnterpriseNewsPostRoute
+  '/designs/living-map/destinations/$slug': typeof DesignsLivingMapDestinationsSlugRoute
+  '/designs/atlas/destinations/': typeof DesignsAtlasDestinationsIndexRoute
   '/designs/enterprise/destinations/': typeof DesignsEnterpriseDestinationsIndexRoute
   '/designs/enterprise/news/': typeof DesignsEnterpriseNewsIndexRoute
+  '/designs/living-map/destinations/': typeof DesignsLivingMapDestinationsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/designs/horizon': typeof DesignsHorizonRoute
-  '/designs/itinerary': typeof DesignsItineraryRoute
-  '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
-  '/designs/quick-quote': typeof DesignsQuickQuoteRoute
-  '/designs/wanderlust': typeof DesignsWanderlustRoute
+  '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
+  '/designs/atlas/about': typeof DesignsAtlasAboutRoute
+  '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
+  '/designs/atlas/book': typeof DesignsAtlasBookRoute
+  '/designs/atlas/contact': typeof DesignsAtlasContactRoute
+  '/designs/atlas/dashboard': typeof DesignsAtlasDashboardRoute
+  '/designs/atlas/privacy': typeof DesignsAtlasPrivacyRoute
+  '/designs/atlas/suppliers': typeof DesignsAtlasSuppliersRoute
   '/designs/enterprise/about': typeof DesignsEnterpriseAboutRoute
   '/designs/enterprise/contact': typeof DesignsEnterpriseContactRoute
   '/designs/enterprise/gallery': typeof DesignsEnterpriseGalleryRoute
   '/designs/enterprise/privacy': typeof DesignsEnterprisePrivacyRoute
+  '/designs/living-map/about': typeof DesignsLivingMapAboutRoute
+  '/designs/living-map/book': typeof DesignsLivingMapBookRoute
+  '/designs/living-map/contact': typeof DesignsLivingMapContactRoute
+  '/designs/living-map/departures': typeof DesignsLivingMapDeparturesRoute
+  '/designs/living-map/privacy': typeof DesignsLivingMapPrivacyRoute
+  '/designs/living-map/reviews': typeof DesignsLivingMapReviewsRoute
+  '/designs/living-map/specials': typeof DesignsLivingMapSpecialsRoute
+  '/designs/window-seat/about': typeof DesignsWindowSeatAboutRoute
+  '/designs/window-seat/contact': typeof DesignsWindowSeatContactRoute
+  '/designs/window-seat/destinations': typeof DesignsWindowSeatDestinationsRoute
+  '/designs/window-seat/privacy': typeof DesignsWindowSeatPrivacyRoute
+  '/designs/window-seat/quote': typeof DesignsWindowSeatQuoteRoute
+  '/designs/atlas': typeof DesignsAtlasIndexRoute
   '/designs/enterprise': typeof DesignsEnterpriseIndexRoute
+  '/designs/living-map': typeof DesignsLivingMapIndexRoute
+  '/designs/atlas/destinations/$slug': typeof DesignsAtlasDestinationsSlugRoute
   '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
   '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
   '/designs/enterprise/news/post': typeof DesignsEnterpriseNewsPostRoute
+  '/designs/living-map/destinations/$slug': typeof DesignsLivingMapDestinationsSlugRoute
+  '/designs/atlas/destinations': typeof DesignsAtlasDestinationsIndexRoute
   '/designs/enterprise/destinations': typeof DesignsEnterpriseDestinationsIndexRoute
   '/designs/enterprise/news': typeof DesignsEnterpriseNewsIndexRoute
+  '/designs/living-map/destinations': typeof DesignsLivingMapDestinationsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
-  '/designs/horizon': typeof DesignsHorizonRoute
-  '/designs/itinerary': typeof DesignsItineraryRoute
-  '/designs/meet-your-agent': typeof DesignsMeetYourAgentRoute
-  '/designs/quick-quote': typeof DesignsQuickQuoteRoute
-  '/designs/wanderlust': typeof DesignsWanderlustRoute
+  '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
+  '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
+  '/designs/atlas/about': typeof DesignsAtlasAboutRoute
+  '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
+  '/designs/atlas/book': typeof DesignsAtlasBookRoute
+  '/designs/atlas/contact': typeof DesignsAtlasContactRoute
+  '/designs/atlas/dashboard': typeof DesignsAtlasDashboardRoute
+  '/designs/atlas/privacy': typeof DesignsAtlasPrivacyRoute
+  '/designs/atlas/suppliers': typeof DesignsAtlasSuppliersRoute
   '/designs/enterprise/about': typeof DesignsEnterpriseAboutRoute
   '/designs/enterprise/contact': typeof DesignsEnterpriseContactRoute
   '/designs/enterprise/gallery': typeof DesignsEnterpriseGalleryRoute
   '/designs/enterprise/privacy': typeof DesignsEnterprisePrivacyRoute
+  '/designs/living-map/about': typeof DesignsLivingMapAboutRoute
+  '/designs/living-map/book': typeof DesignsLivingMapBookRoute
+  '/designs/living-map/contact': typeof DesignsLivingMapContactRoute
+  '/designs/living-map/departures': typeof DesignsLivingMapDeparturesRoute
+  '/designs/living-map/privacy': typeof DesignsLivingMapPrivacyRoute
+  '/designs/living-map/reviews': typeof DesignsLivingMapReviewsRoute
+  '/designs/living-map/specials': typeof DesignsLivingMapSpecialsRoute
+  '/designs/window-seat/about': typeof DesignsWindowSeatAboutRoute
+  '/designs/window-seat/contact': typeof DesignsWindowSeatContactRoute
+  '/designs/window-seat/destinations': typeof DesignsWindowSeatDestinationsRoute
+  '/designs/window-seat/privacy': typeof DesignsWindowSeatPrivacyRoute
+  '/designs/window-seat/quote': typeof DesignsWindowSeatQuoteRoute
+  '/designs/atlas/': typeof DesignsAtlasIndexRoute
   '/designs/enterprise/': typeof DesignsEnterpriseIndexRoute
+  '/designs/living-map/': typeof DesignsLivingMapIndexRoute
+  '/designs/atlas/destinations/$slug': typeof DesignsAtlasDestinationsSlugRoute
   '/designs/enterprise/destinations/$slug': typeof DesignsEnterpriseDestinationsSlugRoute
   '/designs/enterprise/news/$slug': typeof DesignsEnterpriseNewsSlugRoute
   '/designs/enterprise/news/post': typeof DesignsEnterpriseNewsPostRoute
+  '/designs/living-map/destinations/$slug': typeof DesignsLivingMapDestinationsSlugRoute
+  '/designs/atlas/destinations/': typeof DesignsAtlasDestinationsIndexRoute
   '/designs/enterprise/destinations/': typeof DesignsEnterpriseDestinationsIndexRoute
   '/designs/enterprise/news/': typeof DesignsEnterpriseNewsIndexRoute
+  '/designs/living-map/destinations/': typeof DesignsLivingMapDestinationsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/designs/atlas'
     | '/designs/enterprise'
-    | '/designs/horizon'
-    | '/designs/itinerary'
-    | '/designs/meet-your-agent'
-    | '/designs/quick-quote'
-    | '/designs/wanderlust'
+    | '/designs/living-map'
+    | '/designs/window-seat'
+    | '/designs/atlas/about'
+    | '/designs/atlas/automation'
+    | '/designs/atlas/book'
+    | '/designs/atlas/contact'
+    | '/designs/atlas/dashboard'
+    | '/designs/atlas/privacy'
+    | '/designs/atlas/suppliers'
     | '/designs/enterprise/about'
     | '/designs/enterprise/contact'
     | '/designs/enterprise/gallery'
     | '/designs/enterprise/privacy'
+    | '/designs/living-map/about'
+    | '/designs/living-map/book'
+    | '/designs/living-map/contact'
+    | '/designs/living-map/departures'
+    | '/designs/living-map/privacy'
+    | '/designs/living-map/reviews'
+    | '/designs/living-map/specials'
+    | '/designs/window-seat/about'
+    | '/designs/window-seat/contact'
+    | '/designs/window-seat/destinations'
+    | '/designs/window-seat/privacy'
+    | '/designs/window-seat/quote'
+    | '/designs/atlas/'
     | '/designs/enterprise/'
+    | '/designs/living-map/'
+    | '/designs/atlas/destinations/$slug'
     | '/designs/enterprise/destinations/$slug'
     | '/designs/enterprise/news/$slug'
     | '/designs/enterprise/news/post'
+    | '/designs/living-map/destinations/$slug'
+    | '/designs/atlas/destinations/'
     | '/designs/enterprise/destinations/'
     | '/designs/enterprise/news/'
+    | '/designs/living-map/destinations/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/designs/horizon'
-    | '/designs/itinerary'
-    | '/designs/meet-your-agent'
-    | '/designs/quick-quote'
-    | '/designs/wanderlust'
+    | '/designs/window-seat'
+    | '/designs/atlas/about'
+    | '/designs/atlas/automation'
+    | '/designs/atlas/book'
+    | '/designs/atlas/contact'
+    | '/designs/atlas/dashboard'
+    | '/designs/atlas/privacy'
+    | '/designs/atlas/suppliers'
     | '/designs/enterprise/about'
     | '/designs/enterprise/contact'
     | '/designs/enterprise/gallery'
     | '/designs/enterprise/privacy'
+    | '/designs/living-map/about'
+    | '/designs/living-map/book'
+    | '/designs/living-map/contact'
+    | '/designs/living-map/departures'
+    | '/designs/living-map/privacy'
+    | '/designs/living-map/reviews'
+    | '/designs/living-map/specials'
+    | '/designs/window-seat/about'
+    | '/designs/window-seat/contact'
+    | '/designs/window-seat/destinations'
+    | '/designs/window-seat/privacy'
+    | '/designs/window-seat/quote'
+    | '/designs/atlas'
     | '/designs/enterprise'
+    | '/designs/living-map'
+    | '/designs/atlas/destinations/$slug'
     | '/designs/enterprise/destinations/$slug'
     | '/designs/enterprise/news/$slug'
     | '/designs/enterprise/news/post'
+    | '/designs/living-map/destinations/$slug'
+    | '/designs/atlas/destinations'
     | '/designs/enterprise/destinations'
     | '/designs/enterprise/news'
+    | '/designs/living-map/destinations'
   id:
     | '__root__'
     | '/'
+    | '/designs/atlas'
     | '/designs/enterprise'
-    | '/designs/horizon'
-    | '/designs/itinerary'
-    | '/designs/meet-your-agent'
-    | '/designs/quick-quote'
-    | '/designs/wanderlust'
+    | '/designs/living-map'
+    | '/designs/window-seat'
+    | '/designs/atlas/about'
+    | '/designs/atlas/automation'
+    | '/designs/atlas/book'
+    | '/designs/atlas/contact'
+    | '/designs/atlas/dashboard'
+    | '/designs/atlas/privacy'
+    | '/designs/atlas/suppliers'
     | '/designs/enterprise/about'
     | '/designs/enterprise/contact'
     | '/designs/enterprise/gallery'
     | '/designs/enterprise/privacy'
+    | '/designs/living-map/about'
+    | '/designs/living-map/book'
+    | '/designs/living-map/contact'
+    | '/designs/living-map/departures'
+    | '/designs/living-map/privacy'
+    | '/designs/living-map/reviews'
+    | '/designs/living-map/specials'
+    | '/designs/window-seat/about'
+    | '/designs/window-seat/contact'
+    | '/designs/window-seat/destinations'
+    | '/designs/window-seat/privacy'
+    | '/designs/window-seat/quote'
+    | '/designs/atlas/'
     | '/designs/enterprise/'
+    | '/designs/living-map/'
+    | '/designs/atlas/destinations/$slug'
     | '/designs/enterprise/destinations/$slug'
     | '/designs/enterprise/news/$slug'
     | '/designs/enterprise/news/post'
+    | '/designs/living-map/destinations/$slug'
+    | '/designs/atlas/destinations/'
     | '/designs/enterprise/destinations/'
     | '/designs/enterprise/news/'
+    | '/designs/living-map/destinations/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DesignsAtlasRoute: typeof DesignsAtlasRouteWithChildren
   DesignsEnterpriseRoute: typeof DesignsEnterpriseRouteWithChildren
-  DesignsHorizonRoute: typeof DesignsHorizonRoute
-  DesignsItineraryRoute: typeof DesignsItineraryRoute
-  DesignsMeetYourAgentRoute: typeof DesignsMeetYourAgentRoute
-  DesignsQuickQuoteRoute: typeof DesignsQuickQuoteRoute
-  DesignsWanderlustRoute: typeof DesignsWanderlustRoute
+  DesignsLivingMapRoute: typeof DesignsLivingMapRouteWithChildren
+  DesignsWindowSeatRoute: typeof DesignsWindowSeatRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -256,6 +535,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/designs/atlas': {
+      id: '/designs/atlas'
+      path: '/designs/atlas'
+      fullPath: '/designs/atlas'
+      preLoaderRoute: typeof DesignsAtlasRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/designs/enterprise': {
       id: '/designs/enterprise'
       path: '/designs/enterprise'
@@ -263,40 +549,75 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsEnterpriseRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/designs/horizon': {
-      id: '/designs/horizon'
-      path: '/designs/horizon'
-      fullPath: '/designs/horizon'
-      preLoaderRoute: typeof DesignsHorizonRouteImport
+    '/designs/living-map': {
+      id: '/designs/living-map'
+      path: '/designs/living-map'
+      fullPath: '/designs/living-map'
+      preLoaderRoute: typeof DesignsLivingMapRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/designs/itinerary': {
-      id: '/designs/itinerary'
-      path: '/designs/itinerary'
-      fullPath: '/designs/itinerary'
-      preLoaderRoute: typeof DesignsItineraryRouteImport
+    '/designs/window-seat': {
+      id: '/designs/window-seat'
+      path: '/designs/window-seat'
+      fullPath: '/designs/window-seat'
+      preLoaderRoute: typeof DesignsWindowSeatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/designs/meet-your-agent': {
-      id: '/designs/meet-your-agent'
-      path: '/designs/meet-your-agent'
-      fullPath: '/designs/meet-your-agent'
-      preLoaderRoute: typeof DesignsMeetYourAgentRouteImport
-      parentRoute: typeof rootRouteImport
+    '/designs/atlas/': {
+      id: '/designs/atlas/'
+      path: '/'
+      fullPath: '/designs/atlas/'
+      preLoaderRoute: typeof DesignsAtlasIndexRouteImport
+      parentRoute: typeof DesignsAtlasRoute
     }
-    '/designs/quick-quote': {
-      id: '/designs/quick-quote'
-      path: '/designs/quick-quote'
-      fullPath: '/designs/quick-quote'
-      preLoaderRoute: typeof DesignsQuickQuoteRouteImport
-      parentRoute: typeof rootRouteImport
+    '/designs/atlas/about': {
+      id: '/designs/atlas/about'
+      path: '/about'
+      fullPath: '/designs/atlas/about'
+      preLoaderRoute: typeof DesignsAtlasAboutRouteImport
+      parentRoute: typeof DesignsAtlasRoute
     }
-    '/designs/wanderlust': {
-      id: '/designs/wanderlust'
-      path: '/designs/wanderlust'
-      fullPath: '/designs/wanderlust'
-      preLoaderRoute: typeof DesignsWanderlustRouteImport
-      parentRoute: typeof rootRouteImport
+    '/designs/atlas/automation': {
+      id: '/designs/atlas/automation'
+      path: '/automation'
+      fullPath: '/designs/atlas/automation'
+      preLoaderRoute: typeof DesignsAtlasAutomationRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
+    '/designs/atlas/book': {
+      id: '/designs/atlas/book'
+      path: '/book'
+      fullPath: '/designs/atlas/book'
+      preLoaderRoute: typeof DesignsAtlasBookRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
+    '/designs/atlas/contact': {
+      id: '/designs/atlas/contact'
+      path: '/contact'
+      fullPath: '/designs/atlas/contact'
+      preLoaderRoute: typeof DesignsAtlasContactRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
+    '/designs/atlas/dashboard': {
+      id: '/designs/atlas/dashboard'
+      path: '/dashboard'
+      fullPath: '/designs/atlas/dashboard'
+      preLoaderRoute: typeof DesignsAtlasDashboardRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
+    '/designs/atlas/privacy': {
+      id: '/designs/atlas/privacy'
+      path: '/privacy'
+      fullPath: '/designs/atlas/privacy'
+      preLoaderRoute: typeof DesignsAtlasPrivacyRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
+    '/designs/atlas/suppliers': {
+      id: '/designs/atlas/suppliers'
+      path: '/suppliers'
+      fullPath: '/designs/atlas/suppliers'
+      preLoaderRoute: typeof DesignsAtlasSuppliersRouteImport
+      parentRoute: typeof DesignsAtlasRoute
     }
     '/designs/enterprise/': {
       id: '/designs/enterprise/'
@@ -333,6 +654,111 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsEnterprisePrivacyRouteImport
       parentRoute: typeof DesignsEnterpriseRoute
     }
+    '/designs/living-map/': {
+      id: '/designs/living-map/'
+      path: '/'
+      fullPath: '/designs/living-map/'
+      preLoaderRoute: typeof DesignsLivingMapIndexRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/about': {
+      id: '/designs/living-map/about'
+      path: '/about'
+      fullPath: '/designs/living-map/about'
+      preLoaderRoute: typeof DesignsLivingMapAboutRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/book': {
+      id: '/designs/living-map/book'
+      path: '/book'
+      fullPath: '/designs/living-map/book'
+      preLoaderRoute: typeof DesignsLivingMapBookRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/contact': {
+      id: '/designs/living-map/contact'
+      path: '/contact'
+      fullPath: '/designs/living-map/contact'
+      preLoaderRoute: typeof DesignsLivingMapContactRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/departures': {
+      id: '/designs/living-map/departures'
+      path: '/departures'
+      fullPath: '/designs/living-map/departures'
+      preLoaderRoute: typeof DesignsLivingMapDeparturesRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/privacy': {
+      id: '/designs/living-map/privacy'
+      path: '/privacy'
+      fullPath: '/designs/living-map/privacy'
+      preLoaderRoute: typeof DesignsLivingMapPrivacyRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/reviews': {
+      id: '/designs/living-map/reviews'
+      path: '/reviews'
+      fullPath: '/designs/living-map/reviews'
+      preLoaderRoute: typeof DesignsLivingMapReviewsRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/specials': {
+      id: '/designs/living-map/specials'
+      path: '/specials'
+      fullPath: '/designs/living-map/specials'
+      preLoaderRoute: typeof DesignsLivingMapSpecialsRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/window-seat/about': {
+      id: '/designs/window-seat/about'
+      path: '/about'
+      fullPath: '/designs/window-seat/about'
+      preLoaderRoute: typeof DesignsWindowSeatAboutRouteImport
+      parentRoute: typeof DesignsWindowSeatRoute
+    }
+    '/designs/window-seat/contact': {
+      id: '/designs/window-seat/contact'
+      path: '/contact'
+      fullPath: '/designs/window-seat/contact'
+      preLoaderRoute: typeof DesignsWindowSeatContactRouteImport
+      parentRoute: typeof DesignsWindowSeatRoute
+    }
+    '/designs/window-seat/destinations': {
+      id: '/designs/window-seat/destinations'
+      path: '/destinations'
+      fullPath: '/designs/window-seat/destinations'
+      preLoaderRoute: typeof DesignsWindowSeatDestinationsRouteImport
+      parentRoute: typeof DesignsWindowSeatRoute
+    }
+    '/designs/window-seat/privacy': {
+      id: '/designs/window-seat/privacy'
+      path: '/privacy'
+      fullPath: '/designs/window-seat/privacy'
+      preLoaderRoute: typeof DesignsWindowSeatPrivacyRouteImport
+      parentRoute: typeof DesignsWindowSeatRoute
+    }
+    '/designs/window-seat/quote': {
+      id: '/designs/window-seat/quote'
+      path: '/quote'
+      fullPath: '/designs/window-seat/quote'
+      preLoaderRoute: typeof DesignsWindowSeatQuoteRouteImport
+      parentRoute: typeof DesignsWindowSeatRoute
+    }
+    '/designs/atlas/destinations/': {
+      id: '/designs/atlas/destinations/'
+      path: '/destinations'
+      fullPath: '/designs/atlas/destinations/'
+      preLoaderRoute: typeof DesignsAtlasDestinationsIndexRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
+    '/designs/atlas/destinations/$slug': {
+      id: '/designs/atlas/destinations/$slug'
+      path: '/destinations/$slug'
+      fullPath: '/designs/atlas/destinations/$slug'
+      preLoaderRoute: typeof DesignsAtlasDestinationsSlugRouteImport
+      parentRoute: typeof DesignsAtlasRoute
+    }
     '/designs/enterprise/destinations/': {
       id: '/designs/enterprise/destinations/'
       path: '/destinations'
@@ -368,8 +794,52 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsEnterpriseNewsPostRouteImport
       parentRoute: typeof DesignsEnterpriseRoute
     }
+    '/designs/living-map/destinations/': {
+      id: '/designs/living-map/destinations/'
+      path: '/destinations'
+      fullPath: '/designs/living-map/destinations/'
+      preLoaderRoute: typeof DesignsLivingMapDestinationsIndexRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
+    '/designs/living-map/destinations/$slug': {
+      id: '/designs/living-map/destinations/$slug'
+      path: '/destinations/$slug'
+      fullPath: '/designs/living-map/destinations/$slug'
+      preLoaderRoute: typeof DesignsLivingMapDestinationsSlugRouteImport
+      parentRoute: typeof DesignsLivingMapRoute
+    }
   }
 }
+
+interface DesignsAtlasRouteChildren {
+  DesignsAtlasAboutRoute: typeof DesignsAtlasAboutRoute
+  DesignsAtlasAutomationRoute: typeof DesignsAtlasAutomationRoute
+  DesignsAtlasBookRoute: typeof DesignsAtlasBookRoute
+  DesignsAtlasContactRoute: typeof DesignsAtlasContactRoute
+  DesignsAtlasDashboardRoute: typeof DesignsAtlasDashboardRoute
+  DesignsAtlasPrivacyRoute: typeof DesignsAtlasPrivacyRoute
+  DesignsAtlasSuppliersRoute: typeof DesignsAtlasSuppliersRoute
+  DesignsAtlasIndexRoute: typeof DesignsAtlasIndexRoute
+  DesignsAtlasDestinationsSlugRoute: typeof DesignsAtlasDestinationsSlugRoute
+  DesignsAtlasDestinationsIndexRoute: typeof DesignsAtlasDestinationsIndexRoute
+}
+
+const DesignsAtlasRouteChildren: DesignsAtlasRouteChildren = {
+  DesignsAtlasAboutRoute: DesignsAtlasAboutRoute,
+  DesignsAtlasAutomationRoute: DesignsAtlasAutomationRoute,
+  DesignsAtlasBookRoute: DesignsAtlasBookRoute,
+  DesignsAtlasContactRoute: DesignsAtlasContactRoute,
+  DesignsAtlasDashboardRoute: DesignsAtlasDashboardRoute,
+  DesignsAtlasPrivacyRoute: DesignsAtlasPrivacyRoute,
+  DesignsAtlasSuppliersRoute: DesignsAtlasSuppliersRoute,
+  DesignsAtlasIndexRoute: DesignsAtlasIndexRoute,
+  DesignsAtlasDestinationsSlugRoute: DesignsAtlasDestinationsSlugRoute,
+  DesignsAtlasDestinationsIndexRoute: DesignsAtlasDestinationsIndexRoute,
+}
+
+const DesignsAtlasRouteWithChildren = DesignsAtlasRoute._addFileChildren(
+  DesignsAtlasRouteChildren,
+)
 
 interface DesignsEnterpriseRouteChildren {
   DesignsEnterpriseAboutRoute: typeof DesignsEnterpriseAboutRoute
@@ -402,14 +872,61 @@ const DesignsEnterpriseRouteChildren: DesignsEnterpriseRouteChildren = {
 const DesignsEnterpriseRouteWithChildren =
   DesignsEnterpriseRoute._addFileChildren(DesignsEnterpriseRouteChildren)
 
+interface DesignsLivingMapRouteChildren {
+  DesignsLivingMapAboutRoute: typeof DesignsLivingMapAboutRoute
+  DesignsLivingMapBookRoute: typeof DesignsLivingMapBookRoute
+  DesignsLivingMapContactRoute: typeof DesignsLivingMapContactRoute
+  DesignsLivingMapDeparturesRoute: typeof DesignsLivingMapDeparturesRoute
+  DesignsLivingMapPrivacyRoute: typeof DesignsLivingMapPrivacyRoute
+  DesignsLivingMapReviewsRoute: typeof DesignsLivingMapReviewsRoute
+  DesignsLivingMapSpecialsRoute: typeof DesignsLivingMapSpecialsRoute
+  DesignsLivingMapIndexRoute: typeof DesignsLivingMapIndexRoute
+  DesignsLivingMapDestinationsSlugRoute: typeof DesignsLivingMapDestinationsSlugRoute
+  DesignsLivingMapDestinationsIndexRoute: typeof DesignsLivingMapDestinationsIndexRoute
+}
+
+const DesignsLivingMapRouteChildren: DesignsLivingMapRouteChildren = {
+  DesignsLivingMapAboutRoute: DesignsLivingMapAboutRoute,
+  DesignsLivingMapBookRoute: DesignsLivingMapBookRoute,
+  DesignsLivingMapContactRoute: DesignsLivingMapContactRoute,
+  DesignsLivingMapDeparturesRoute: DesignsLivingMapDeparturesRoute,
+  DesignsLivingMapPrivacyRoute: DesignsLivingMapPrivacyRoute,
+  DesignsLivingMapReviewsRoute: DesignsLivingMapReviewsRoute,
+  DesignsLivingMapSpecialsRoute: DesignsLivingMapSpecialsRoute,
+  DesignsLivingMapIndexRoute: DesignsLivingMapIndexRoute,
+  DesignsLivingMapDestinationsSlugRoute: DesignsLivingMapDestinationsSlugRoute,
+  DesignsLivingMapDestinationsIndexRoute:
+    DesignsLivingMapDestinationsIndexRoute,
+}
+
+const DesignsLivingMapRouteWithChildren =
+  DesignsLivingMapRoute._addFileChildren(DesignsLivingMapRouteChildren)
+
+interface DesignsWindowSeatRouteChildren {
+  DesignsWindowSeatAboutRoute: typeof DesignsWindowSeatAboutRoute
+  DesignsWindowSeatContactRoute: typeof DesignsWindowSeatContactRoute
+  DesignsWindowSeatDestinationsRoute: typeof DesignsWindowSeatDestinationsRoute
+  DesignsWindowSeatPrivacyRoute: typeof DesignsWindowSeatPrivacyRoute
+  DesignsWindowSeatQuoteRoute: typeof DesignsWindowSeatQuoteRoute
+}
+
+const DesignsWindowSeatRouteChildren: DesignsWindowSeatRouteChildren = {
+  DesignsWindowSeatAboutRoute: DesignsWindowSeatAboutRoute,
+  DesignsWindowSeatContactRoute: DesignsWindowSeatContactRoute,
+  DesignsWindowSeatDestinationsRoute: DesignsWindowSeatDestinationsRoute,
+  DesignsWindowSeatPrivacyRoute: DesignsWindowSeatPrivacyRoute,
+  DesignsWindowSeatQuoteRoute: DesignsWindowSeatQuoteRoute,
+}
+
+const DesignsWindowSeatRouteWithChildren =
+  DesignsWindowSeatRoute._addFileChildren(DesignsWindowSeatRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DesignsAtlasRoute: DesignsAtlasRouteWithChildren,
   DesignsEnterpriseRoute: DesignsEnterpriseRouteWithChildren,
-  DesignsHorizonRoute: DesignsHorizonRoute,
-  DesignsItineraryRoute: DesignsItineraryRoute,
-  DesignsMeetYourAgentRoute: DesignsMeetYourAgentRoute,
-  DesignsQuickQuoteRoute: DesignsQuickQuoteRoute,
-  DesignsWanderlustRoute: DesignsWanderlustRoute,
+  DesignsLivingMapRoute: DesignsLivingMapRouteWithChildren,
+  DesignsWindowSeatRoute: DesignsWindowSeatRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

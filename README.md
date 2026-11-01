@@ -11,12 +11,20 @@ as static HTML, and the Docker image serves it with nginx.
 
 ## Design gallery
 
-The demo also shows every website design TribeTravel offers. A bar along the top of each page
-(`src/components/design-bar.tsx`) switches between them: Classic (`/`, the editable site) and the
-designs under `/designs/` (Horizon, Quick Quote, Wanderlust, Meet Your Agent, Itinerary Story), each in
-`src/designs/`. Their quote forms send real enquiries to the agency's TribeTravel inbox. The list is in
-`src/lib/designs.ts`; the bar shows only on the demo agency's site (or set `VITE_SHOW_DESIGNS=true`/`false`)
-and never inside TribeTravel's visual editor.
+The demo also shows one website design for each TribeTravel website package. A bar along the top of each
+page (`src/components/design-bar.tsx`) switches between them, named by package:
+
+| Package | Design | Where | Pages |
+| --- | --- | --- | --- |
+| Tribe Site | Window Seat | `/` (the editable home page) and `/designs/window-seat/*` | 6 |
+| Tribe Site Pro | Living Map | `/designs/living-map/*` | 10 |
+| Business Platform | Atlas | `/designs/atlas/*` | 10 |
+| Enterprise | Enterprise | `/designs/enterprise/*` | 15+ |
+
+Each design is in `src/designs/<name>/` and shows only its package's features. Their forms and chat send real
+enquiries to the agency's TribeTravel inbox; anything that shows the agency's side is example data and says so.
+The list is in `src/lib/designs.ts`; the bar shows only on the demo agency's site (or set
+`VITE_SHOW_DESIGNS=true`/`false`) and never inside TribeTravel's visual editor.
 
 ## Develop
 
@@ -32,7 +40,7 @@ npm run build:static
 ```
 
 This builds the site, then `scripts/snapshot.mjs` starts the built server once
-and saves `/` and the 404 page as HTML in `.output/public`. Add new pages to
+and saves every page in its `PAGES` list (and the 404 page) as HTML in `.output/public`. Add new pages to
 `PAGES` in that script.
 
 ## Deploy (Coolify)
@@ -42,9 +50,9 @@ In Coolify: Dockerfile build pack, port 80, auto-deploy on push to `main`.
 
 ## Content
 
-- Live content (words, pictures, sections, contact details): TribeTravel, read at build time
-  and drawn by `src/components/blocks.tsx`; fallbacks in `src/lib/site-content.ts`
+- Live content for the home page (words, pictures, sections, contact details): TribeTravel, read at build time
+  and drawn by the Window Seat design (`src/designs/window-seat/`); fallbacks in `src/lib/site-content.ts`
 - Contact fallbacks and the TribeTravel enquiry link: `src/lib/contact.ts`
-- Enquiry form: `src/components/enquiry-form.tsx`. Submissions go into
+- Enquiries: `src/lib/enquiry.ts`, used by every design's forms. Submissions go into
   the agency's TribeTravel Enquiries inbox.
 - Hero video: `public/videos/hero.mp4`; images: `src/assets/`

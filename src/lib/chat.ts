@@ -1,4 +1,4 @@
-// TribeTravel's AI quote chat, called directly (the Classic page loads Tribe's quote-chat.js widget instead).
+// TribeTravel's AI quote chat, called directly by every design's chat (Enterprise's concierge is its paid upgrade).
 // POST <tribetravel>/api/chat/<slug>/start, then /message per visitor message. Tribe only answers the agency's own
 // sites (its allowed origins), counts each turn against the agency's AI allowance, and when the brief is complete
 // ("done") creates the client, enquiry and a draft quote in Tribe.

@@ -1,0 +1,174 @@
+/* The Living Map design's own styles: the three looks (CSS variables), the paper, the ink animations and the booking
+   pop-up. Linked from the layout route (routes/designs/living-map.tsx). Every page renders as Parchment first; the
+   look the visitor picked is applied after load. */
+
+/* ---------------------------------------------------------------- the three looks */
+.lm-look-parchment {
+  --lm-paper: #F2E6C9;
+  --lm-card: #FBF4E2;
+  --lm-field: #FFFBF1;
+  --lm-ink: #2A1C10;
+  --lm-soft: #5A4430;
+  --lm-line: rgb(42 28 16 / .24);
+  --lm-accent: #9E2A1E;
+  --lm-on-accent: #FFF8EC;
+  --lm-sea: #E8DCBC;
+  --lm-land: #DCC594;
+  --lm-coast: #3B2A1A;
+  --lm-route: #9E2A1E;
+  --lm-gold: #9A6F1E;
+  --lm-shadow: rgb(70 45 10 / .6);
+  --lm-grain: .55;
+  color-scheme: light;
+}
+.lm-look-night {
+  --lm-paper: #0E1630;
+  --lm-card: #16214A;
+  --lm-field: #0B1228;
+  --lm-ink: #EEF0FF;
+  --lm-soft: #B9C1E6;
+  --lm-line: rgb(238 240 255 / .2);
+  --lm-accent: #F2C14E;
+  --lm-on-accent: #0E1630;
+  --lm-sea: #0B1229;
+  --lm-land: #1D2959;
+  --lm-coast: #C9D2FF;
+  --lm-route: #F2C14E;
+  --lm-gold: #F2C14E;
+  --lm-shadow: rgb(0 0 0 / .8);
+  --lm-grain: .18;
+  color-scheme: dark;
+}
+.lm-look-watercolour {
+  --lm-paper: #FBFAF6;
+  --lm-card: #FFFFFF;
+  --lm-field: #FFFFFF;
+  --lm-ink: #1E3442;
+  --lm-soft: #46606F;
+  --lm-line: rgb(30 52 66 / .18);
+  --lm-accent: #B53A27;
+  --lm-on-accent: #FFFFFF;
+  --lm-sea: #CFE6EC;
+  --lm-land: #E9F0D5;
+  --lm-coast: #2B4A5A;
+  --lm-route: #B53A27;
+  --lm-gold: #2E7D8C;
+  --lm-shadow: rgb(30 60 80 / .45);
+  --lm-grain: .25;
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------- the page and its paper */
+.lm-root {
+  background-color: var(--lm-paper);
+  color: var(--lm-ink);
+  transition: background-color .6s ease, color .6s ease;
+}
+/* Paper grain: SVG noise, painted once as an image so it costs nothing to scroll. */
+.lm-paper::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--lm-grain);
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .35 0 0 0 0 .25 0 0 0 0 .1 0 0 0 .32 0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+.lm-look-parchment.lm-paper::after,
+.lm-look-watercolour.lm-paper::after,
+.lm-look-night.lm-paper::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+}
+/* Parchment: the edges of old paper, browned. */
+.lm-look-parchment.lm-paper::after {
+  background: radial-gradient(ellipse at center, transparent 55%, rgb(120 80 20 / .22) 100%);
+}
+/* Night Sky: a field of stars. */
+.lm-look-night.lm-paper::after {
+  background-image:
+    radial-gradient(1.5px 1.5px at 20px 30px, #fff 50%, transparent 51%),
+    radial-gradient(1px 1px at 120px 80px, #fff 50%, transparent 51%),
+    radial-gradient(1.2px 1.2px at 200px 160px, #F2C14E 50%, transparent 51%),
+    radial-gradient(1px 1px at 60px 220px, #fff 50%, transparent 51%),
+    radial-gradient(1.4px 1.4px at 260px 40px, #fff 50%, transparent 51%);
+  background-size: 300px 260px;
+  opacity: .55;
+  animation: lm-twinkle 6s ease-in-out infinite alternate;
+}
+.lm-look-night.lm-paper::before { mix-blend-mode: screen; }
+/* Watercolour: soft washes of sea and sand behind everything. */
+.lm-look-watercolour.lm-paper::after {
+  background:
+    radial-gradient(40% 30% at 12% 18%, rgb(130 196 210 / .28), transparent 70%),
+    radial-gradient(35% 28% at 88% 40%, rgb(240 190 140 / .22), transparent 70%),
+    radial-gradient(45% 30% at 30% 85%, rgb(170 210 150 / .2), transparent 70%);
+}
+.lm-root :focus-visible {
+  outline: 3px solid var(--lm-accent);
+  outline-offset: 3px;
+}
+.lm-root ::selection { background: var(--lm-accent); color: var(--lm-on-accent); }
+
+/* Ruled sea hatching for the map's water. */
+.lm-hatch { stroke: var(--lm-coast); stroke-opacity: .12; }
+
+/* ---------------------------------------------------------------- motion */
+@keyframes lm-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes lm-rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: none; } }
+@keyframes lm-ink-in { from { opacity: 0; transform: scale(.6) rotate(-8deg); } to { opacity: 1; transform: none; } }
+@keyframes lm-spin { to { transform: rotate(360deg); } }
+@keyframes lm-sway { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg); } }
+@keyframes lm-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
+@keyframes lm-twinkle { from { opacity: .35; } to { opacity: .7; } }
+@keyframes lm-msg { from { opacity: 0; transform: translateY(14px) scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes lm-marquee { to { transform: translateX(-50%); } }
+@keyframes lm-pulse { 0% { r: 6; opacity: .7; } 100% { r: 22; opacity: 0; } }
+@keyframes lm-stamp { 0% { opacity: 0; transform: scale(1.6) rotate(-18deg); } 70% { opacity: 1; transform: scale(.94) rotate(-10deg); } 100% { opacity: 1; transform: scale(1) rotate(-10deg); } }
+
+/* A path with pathLength="1" that inks itself in on load. */
+.lm-draw { stroke-dasharray: 1; animation: lm-draw 2.4s cubic-bezier(.45, 0, .2, 1) both; }
+.lm-rise { animation: lm-rise 1s cubic-bezier(.2, .7, .2, 1) both; }
+.lm-ink-in { animation: lm-ink-in .5s cubic-bezier(.2, .9, .3, 1.3) both; }
+.lm-spin { animation: lm-spin 60s linear infinite; transform-box: fill-box; transform-origin: center; }
+.lm-sway { animation: lm-sway 5s ease-in-out infinite; transform-origin: top center; }
+.lm-bob { animation: lm-bob 4s ease-in-out infinite; }
+.lm-msg { animation: lm-msg .6s cubic-bezier(.2, .8, .2, 1.15) both; }
+.lm-marquee { animation: lm-marquee 48s linear infinite; }
+.lm-marquee:hover { animation-play-state: paused; }
+.lm-pulse { animation: lm-pulse 2.2s ease-out infinite; }
+.lm-stamp { animation: lm-stamp .7s cubic-bezier(.2, .8, .3, 1) both; }
+/* A seat filling up, one after another (see departures.tsx). */
+.lm-seat-fill { transition: background-color .35s ease, color .35s ease, transform .35s ease; }
+
+/* ---------------------------------------------------------------- the booking pop-up (components/packages.tsx) */
+.lm-dialog {
+  --background: var(--lm-card);
+  --foreground: var(--lm-ink);
+  --primary: var(--lm-accent);
+  --primary-foreground: var(--lm-on-accent);
+  --muted-foreground: var(--lm-soft);
+  --accent: var(--lm-line);
+  --border: var(--lm-line);
+  --input: var(--lm-line);
+  --ring: var(--lm-accent);
+  --destructive: #C0392B;
+  font-family: "Literata", Georgia, serif;
+  background: var(--background);
+  color: var(--foreground);
+  border-color: var(--border);
+}
+.lm-dialog option { background: var(--lm-card); color: var(--lm-ink); }
+.lm-dialog .font-display { font-family: "IM Fell English", Georgia, serif; font-weight: 400; letter-spacing: 0; }
+
+@media (prefers-reduced-motion: reduce) {
+  .lm-draw, .lm-rise, .lm-ink-in, .lm-spin, .lm-sway, .lm-bob, .lm-msg, .lm-marquee, .lm-pulse, .lm-stamp,
+  .lm-look-night.lm-paper::after { animation: none; }
+  .lm-draw { stroke-dashoffset: 0; }
+  .lm-root, .lm-seat-fill { transition: none; }
+  .lm-vehicle { display: none; }
+}
