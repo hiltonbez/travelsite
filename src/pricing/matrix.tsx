@@ -1,6 +1,6 @@
 // The feature matrix: every package side by side, what it includes and what it costs. A table from laptop width up; on
 // a phone or tablet, one package at a time with tabs, so nothing scrolls sideways.
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Check, Minus, Sparkles } from "lucide-react";
 import { MATRIX, ORDER, PACKAGES, rand, type Package, type PackageId } from "@/pricing/data";
 import { eyebrow, h2, muted, soft, wrap } from "@/pricing/theme";
@@ -48,10 +48,30 @@ function Head({ p, tribe, onPick }: { p: Package; tribe: boolean; onPick: (id: P
   );
 }
 
+/** The slim package names that stay at the top of the screen once the big package cards scroll away. */
+function StuckHead({ p, tribe }: { p: Package; tribe: boolean }) {
+  return (
+    <div className={`flex h-full flex-col items-center justify-center rounded-b-2xl px-2 py-2 shadow-[0_10px_24px_-14px_rgba(11,29,58,.45)] ${p.popular ? "bg-[#0B1D3A] text-white" : "bg-white text-[#0B1D3A] ring-1 ring-[#E4E9F1]"}`}>
+      <span className="text-[15px] font-extrabold leading-tight">{p.name}</span>
+      <span className={`text-[12px] font-semibold ${p.popular ? "text-[#8FE3C3]" : "text-[#6b7b93]"}`}>{p.from ? "from " : ""}{rand(tribe ? p.tribe : p.other)}</span>
+    </div>
+  );
+}
+
 export function Matrix({ tribe, onPick }: { tribe: boolean; onPick: (id: PackageId) => void }) {
   const [focus, setFocus] = useState<PackageId>("pro");
   const fi = ORDER.indexOf(focus);
   const fp = PACKAGES[fi]!;
+  // The slim names show only once the package cards have scrolled off the top
+  const heads = useRef<HTMLTableRowElement>(null);
+  const [stuck, setStuck] = useState(false);
+  useEffect(() => {
+    const el = heads.current;
+    if (!el) return;
+    const io = new IntersectionObserver(([e]) => setStuck(!e!.isIntersecting && e!.boundingClientRect.top < 0), { rootMargin: "-90px 0px 0px 0px" });
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
   return (
     <section id="compare" className={`${wrap} flex scroll-mt-20 flex-col gap-8`}>
       <div className="flex flex-col gap-3">
@@ -62,7 +82,7 @@ export function Matrix({ tribe, onPick }: { tribe: boolean; onPick: (id: Package
 
       {/* Phone and tablet: one package at a time */}
       <div className="flex flex-col gap-4 lg:hidden">
-        <div role="tablist" aria-label="Package" className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <div role="tablist" aria-label="Package" className="sticky top-0 z-20 -mx-1 grid grid-cols-2 gap-2 bg-[#F5F8FB] px-1 py-2 sm:grid-cols-4">
           {PACKAGES.map((p) => (
             <button key={p.id} type="button" role="tab" aria-selected={focus === p.id} onClick={() => setFocus(p.id)}
               className={`min-h-11 rounded-xl px-3 text-[13px] font-bold transition ${focus === p.id ? "bg-[#0B1D3A] text-white" : "bg-[#F5F8FB] text-[#0B1D3A]"}`}>
@@ -90,11 +110,20 @@ export function Matrix({ tribe, onPick }: { tribe: boolean; onPick: (id: Package
           <caption className="sr-only">Features and prices of each website package</caption>
           <colgroup><col className="w-[30%]" /><col /><col /><col /><col /></colgroup>
           <thead>
-            <tr>
+            <tr ref={heads}>
               <th scope="col" className="align-bottom"><span className="sr-only">Feature</span>
                 <div className="flex flex-col gap-2 pb-2 text-left text-[13px] font-medium text-[#6b7b93]"><Sparkles className="h-5 w-5 text-[#00B5C8]" />Prices are once-off. Monthly costs are in the quote builder below.</div>
               </th>
               {PACKAGES.map((p) => <th key={p.id} scope="col" className="pt-4 align-top font-normal"><Head p={p} tribe={tribe} onPick={onPick} /></th>)}
+            </tr>
+            {/* No height of its own: it floats over the rows while the table scrolls */}
+            <tr aria-hidden="true">
+              <td className="sticky top-0 z-20 h-0 p-0" />
+              {PACKAGES.map((p) => (
+                <td key={p.id} className="sticky top-0 z-20 h-0 p-0">
+                  <div className={`absolute inset-x-0 top-0 h-[58px] transition-opacity duration-200 ${stuck ? "opacity-100" : "pointer-events-none opacity-0"}`}><StuckHead p={p} tribe={tribe} /></div>
+                </td>
+              ))}
             </tr>
           </thead>
           {MATRIX.map((g) => (
