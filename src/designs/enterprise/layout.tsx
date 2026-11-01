@@ -2,7 +2,8 @@
 // sign-up, and the floating concierge and WhatsApp buttons. Pages link to each other with plain links because each
 // one is its own prerendered page (scripts/snapshot.mjs).
 import { useEffect, useState, type ReactNode } from "react";
-import { Menu, X } from "lucide-react";
+import { Menu, UserRound, X } from "lucide-react";
+import { ACCOUNT_URL } from "@/lib/site-content";
 import { useEnquiry } from "@/lib/enquiry";
 import { BRAND, BotTrap, WhatsAppIcon, contact, mailto, tel } from "@/designs/shared";
 import { ConciergeLauncher } from "@/designs/enterprise/concierge";
@@ -42,7 +43,7 @@ export function EnterpriseLayout({ current, children }: { current: string; child
 }
 
 function Logo() {
-  return <a href={BASE} className={`${display} text-lg leading-none`}>{BRAND.short}<span className={orange}>/</span></a>;
+  return <a href={BASE} className={`${display} text-lg leading-none whitespace-nowrap`}>{BRAND.short}<span className={orange}>/</span></a>;
 }
 
 function Header({ current }: { current: string }) {
@@ -59,7 +60,11 @@ function Header({ current }: { current: string }) {
         ))}
       </nav>
       <div className="flex items-center gap-2">
-        <a href={`${BASE}#quote`} className={`${btn} min-h-11 px-5 text-sm`}>Plan my trip</a>
+        <a href={`${ACCOUNT_URL}/login`} aria-label="Sign in to your account"
+          className="flex min-h-11 items-center gap-2 rounded-full border border-[#EDE6D8]/25 px-4 text-sm font-semibold hover:border-[#FF6A2E]">
+          <UserRound className="h-4 w-4" /><span className="whitespace-nowrap">Sign in</span>
+        </a>
+        <a href={`${BASE}#quote`} className={`${btn} min-h-11 px-5 text-sm whitespace-nowrap max-sm:hidden`}>Plan my trip</a>
         <button type="button" onClick={() => setOpen(true)} aria-label="Open the menu" aria-expanded={open}
           className="flex h-11 w-11 items-center justify-center rounded-full border border-[#EDE6D8]/25 lg:hidden">
           <Menu className="h-5 w-5" />
@@ -81,6 +86,10 @@ function Header({ current }: { current: string }) {
               </a>
             ))}
           </nav>
+          <div className="mt-8 flex flex-wrap gap-3">
+            <a href={`${ACCOUNT_URL}/login`} className={`${btn} min-h-12 px-6`}>Sign in</a>
+            <a href={`${ACCOUNT_URL}/register`} className="flex min-h-12 items-center rounded-full border border-[#EDE6D8]/40 px-6 font-bold">Create my account</a>
+          </div>
           <p className={`mt-auto ${mono} text-sm ${soft}`}>{contact.phoneDisplay} · {contact.email}</p>
         </div>
       )}

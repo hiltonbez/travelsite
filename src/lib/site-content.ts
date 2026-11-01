@@ -11,6 +11,8 @@ import { contact } from "@/lib/contact";
 const env = (import.meta as { env?: Record<string, string | undefined> }).env ?? {};
 export const TRIBETRAVEL_URL = (env["VITE_TRIBETRAVEL_URL"] || "https://tribetravel.io").replace(/\/$/, "");
 export const AGENCY_SLUG = env["VITE_AGENCY_SLUG"] || "sunset-travel";
+/** The client login on the agency's TribeTravel address (<slug>.tribetravel.io/my-trips): sign in, register, account. */
+export const ACCOUNT_URL = `https://${AGENCY_SLUG}.${new URL(TRIBETRAVEL_URL).host}/my-trips`;
 
 /** The agency's name on the page (header, footer, page title). */
 export const BRAND = { name: "Sun-Set Travel", short: "SUN-SET", tagline: "Travel & Tours" };

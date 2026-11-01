@@ -6,6 +6,7 @@ import { ArrowRight, Clock, Loader2, Mail, MapPin, Phone, Plane, Sun } from "luc
 import { getPost, listPosts, type Post, type PostItem } from "@/lib/blog";
 import { FlightPath } from "@/designs/flight-path";
 import { BRAND, WhatsAppIcon, contact, mailto, tel } from "@/designs/shared";
+import { YourAccount } from "@/designs/enterprise/account";
 import { BehindTheScenes } from "@/designs/enterprise/agency";
 import { InstallApp } from "@/designs/enterprise/app";
 import { Automation } from "@/designs/enterprise/automation";
@@ -33,6 +34,7 @@ export function EnterpriseHome() {
       <BookCall />
       <Automation />
       <AcceptAndPay />
+      <YourAccount />
       <BehindTheScenes />
       <InstallApp />
       <LatestNews />
