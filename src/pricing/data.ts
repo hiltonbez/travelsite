@@ -29,7 +29,7 @@ export const PACKAGES: Package[] = [
     tribe: 7000, other: 12500, monthly: 0, market: "R35k – R60k", pages: 6 },
   { id: "pro", name: "Tribe Site Pro", design: "Living Map", href: "/designs/living-map", tagline: "More looks, bookings and automated follow-ups.",
     tribe: 16500, other: 24500, monthly: 250, market: "R60k – R120k", popular: true, pages: 10 },
-  { id: "platform", name: "Business Platform", design: "Atlas", href: "/designs/atlas", tagline: "Several suppliers, your own dashboard and workflows that run themselves.",
+  { id: "platform", name: "Business Platform", design: "Atlas", href: "/designs/atlas", tagline: "Your own dashboard and reports, and workflows that run themselves.",
     tribe: 29500, other: 45000, from: true, monthly: 250, market: "R150k – R400k", pages: 10 },
   { id: "enterprise", name: "Enterprise", design: "Enterprise", href: "/designs/enterprise", tagline: "Everything: AI concierge, online deposits, client login and an app.",
     tribe: 60000, other: 90000, monthly: 700, market: "R400k – R1.5m", pages: 15 },
@@ -54,12 +54,13 @@ export const MATRIX: Group[] = [
     { label: "Quote request and contact forms into Tribe", hint: "Every lead lands in your Enquiries inbox.", cells: [true, true, true, true] },
     { label: "AI web chat", hint: "Takes the trip brief and creates the client and a draft quote.", cells: [true, true, true, "AI concierge"] },
     { label: "Newsletter sign-up", hint: "Straight into Tribe.", cells: [true, true, true, true] },
+    { label: "Live supplier feeds, bookable online", hint: "Your suppliers' APIs: live rates, clients book, it lands in Tribe. More suppliers: R500 each.",
+      cells: ["2 suppliers", "2 suppliers", "3 suppliers", "3 suppliers"] },
   ] },
   { title: "Bookings and follow-ups", rows: [
     { label: "Bookings with seat limits", hint: "Group trips and call times; when full, the next date.", cells: [false, true, true, true] },
     { label: "Lead reminders", hint: "Your consultant is nudged when a quote goes quiet.", cells: [false, true, true, true] },
     { label: "WhatsApp and email updates to clients", hint: "Quote ready, deposit due, documents.", cells: [false, true, true, true] },
-    { label: "Live supplier feeds, bookable online", hint: "Live rates; clients book, it lands in Tribe.", cells: [false, "1 supplier", "Up to 3", "3 suppliers"] },
   ] },
   { title: "Running your agency", rows: [
     { label: "Custom dashboard and advanced reports", hint: "Conversion, booked value, consultants, lead sources.", cells: [false, false, true, true] },
@@ -98,8 +99,10 @@ export const ADD_ONS: AddOn[] = [
   { id: "pages", name: "Extra page", hint: "One more page on the site.", once: 450, kind: "count", included: none, max: 30, unit: "page" },
   { id: "copy", name: "Copywriting and content loading", hint: "We write and load one page's words and pictures.", once: 350,
     kind: "count", included: none, max: 30, unit: "page" },
-  { id: "feeds", name: "Live supplier feed, bookable online", hint: "Per supplier. You supply the supplier's API contract.",
-    once: 4500, kind: "count", included: { site: 0, pro: 1, platform: 3, enterprise: 3 }, max: 6, unit: "supplier" },
+  // Every package includes live feeds (Hilton, 1 Nov 2026): 2 supplier APIs as standard (3 on Business Platform and
+  // Enterprise), R500 for each more, to build it into the site's look. The price book's Modules sheet still says R4,500.
+  { id: "feeds", name: "Extra supplier API (live feed)", hint: "Each supplier API beyond what your package includes, built into your site's look. You supply the supplier's API contract.",
+    once: 500, kind: "count", included: { site: 2, pro: 2, platform: 3, enterprise: 3 }, max: 10, unit: "supplier" },
   { id: "booking", name: "Bookings with seat limits", hint: "Group trips and call times with seats left.", once: 3500,
     kind: "toggle", included: { site: 0, pro: 1, platform: 1, enterprise: 1 } },
   { id: "reminders", name: "Lead reminders", hint: "Your consultant is told when a quote goes quiet.", once: 2500,
