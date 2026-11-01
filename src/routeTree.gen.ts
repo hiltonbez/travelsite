@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PackagesRouteImport } from './routes/packages'
 import { Route as DesignsAtlasRouteImport } from './routes/designs/atlas'
 import { Route as DesignsEnterpriseRouteImport } from './routes/designs/enterprise'
 import { Route as DesignsLivingMapRouteImport } from './routes/designs/living-map'
@@ -53,6 +54,11 @@ import { Route as DesignsLivingMapDestinationsSlugRouteImport } from './routes/d
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PackagesRoute = PackagesRouteImport.update({
+  id: '/packages',
+  path: '/packages',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsAtlasRoute = DesignsAtlasRouteImport.update({
@@ -270,6 +276,7 @@ const DesignsLivingMapDestinationsSlugRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/packages': typeof PackagesRoute
   '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
   '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
@@ -312,6 +319,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/packages': typeof PackagesRoute
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
@@ -352,6 +360,7 @@ export interface FileRoutesByTo {
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/packages': typeof PackagesRoute
   '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
   '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
@@ -396,6 +405,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/packages'
     | '/designs/atlas'
     | '/designs/enterprise'
     | '/designs/living-map'
@@ -438,6 +448,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/packages'
     | '/designs/window-seat'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
@@ -477,6 +488,7 @@ export interface FileRouteTypes {
   id:
     | '__root__'
     | '/'
+    | '/packages'
     | '/designs/atlas'
     | '/designs/enterprise'
     | '/designs/living-map'
@@ -520,6 +532,7 @@ export interface FileRouteTypes {
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  PackagesRoute: typeof PackagesRoute
   DesignsAtlasRoute: typeof DesignsAtlasRouteWithChildren
   DesignsEnterpriseRoute: typeof DesignsEnterpriseRouteWithChildren
   DesignsLivingMapRoute: typeof DesignsLivingMapRouteWithChildren
@@ -533,6 +546,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/packages': {
+      id: '/packages'
+      path: '/packages'
+      fullPath: '/packages'
+      preLoaderRoute: typeof PackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/designs/atlas': {
@@ -923,6 +943,7 @@ const DesignsWindowSeatRouteWithChildren =
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  PackagesRoute: PackagesRoute,
   DesignsAtlasRoute: DesignsAtlasRouteWithChildren,
   DesignsEnterpriseRoute: DesignsEnterpriseRouteWithChildren,
   DesignsLivingMapRoute: DesignsLivingMapRouteWithChildren,

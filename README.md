@@ -23,6 +23,9 @@ page (`src/components/design-bar.tsx`) switches between them, named by package:
 
 Each design is in `src/designs/<name>/` and shows only its package's features. Their forms and chat send real
 enquiries to the agency's TribeTravel inbox; anything that shows the agency's side is example data and says so.
+The bar also links to **Packages & pricing** (`/packages`, `src/pricing/`): the feature matrix with TribeTravel and
+non-TribeTravel prices, a quote builder, and a request form that TribeTravel emails to Hilton (`/api/website-quote`).
+Its prices are a copy of the price book in `src/pricing/data.ts`; change both together.
 The list is in `src/lib/designs.ts`; the bar shows only on the demo agency's site (or set
 `VITE_SHOW_DESIGNS=true`/`false`) and never inside TribeTravel's visual editor.
 

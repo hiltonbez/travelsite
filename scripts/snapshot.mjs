@@ -9,6 +9,8 @@ import { dirname, join } from "node:path";
 
 const PAGES = [
   { path: "/", file: "index.html", status: 200 },
+  // TribeTravel's Packages & pricing page (src/pricing/), linked from the gallery bar
+  { path: "/packages", file: "packages/index.html", status: 200 },
   // The design gallery (src/lib/designs.ts), one design per package. Tribe Site: Window Seat, whose home page is /
   { path: "/designs/window-seat/destinations", file: "designs/window-seat/destinations/index.html", status: 200 },
   { path: "/designs/window-seat/about", file: "designs/window-seat/about/index.html", status: 200 },

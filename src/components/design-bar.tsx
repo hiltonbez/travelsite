@@ -1,5 +1,8 @@
 import { DESIGNS, SHOW_DESIGNS } from "@/lib/designs";
 
+/** The Packages & pricing page (routes/packages.tsx): the matrix, quote builder and request form. */
+const PRICING = "/packages";
+
 /** The design gallery bar along the top of the demo site: one button per package's design, the current one highlighted.
  *  `current` is the design's path in DESIGNS (the home page's for every Window Seat page). */
 export function DesignBar({ current }: { current: string }) {
@@ -30,7 +33,17 @@ export function DesignBar({ current }: { current: string }) {
           );
         })}
       </div>
-      <span className="ml-auto hidden shrink-0 text-white/50 lg:inline">Each package, shown as its own design</span>
+      <span className="ml-auto hidden shrink-0 text-white/50 xl:inline">Each package, shown as its own design</span>
+      <a
+        href={PRICING}
+        aria-current={current === PRICING ? "page" : undefined}
+        className={
+          "inline-flex min-h-9 shrink-0 items-center gap-1.5 whitespace-nowrap rounded-full px-3.5 font-semibold transition max-xl:ml-auto " +
+          (current === PRICING ? "bg-white text-[#0B1D3A]" : "bg-[#1E6FE6] text-white hover:bg-[#3b82f6]")
+        }
+      >
+        Compare &amp; price packages
+      </a>
     </nav>
   );
 }
