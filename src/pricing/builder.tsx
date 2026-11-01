@@ -19,7 +19,8 @@ function Stepper({ value, max, onChange, name }: { value: number; max: number; o
 
 function AddOnRow({ a, pkg, qty, onChange }: { a: AddOn; pkg: PackageId; qty: number; onChange: (n: number) => void }) {
   const inc = a.included[pkg];
-  const price = <span className="text-[13px] font-semibold text-[#0B1D3A]">{rand(a.once)}{a.unit ? ` per ${a.unit}` : ""}{a.monthly ? <span className={muted}> + {rand(a.monthly)}/month</span> : null}</span>;
+  const price = a.onRequest ? <span className="text-[13px] font-semibold text-[#1E6FE6]">Price on request</span>
+    : <span className="text-[13px] font-semibold text-[#0B1D3A]">{rand(a.once)}{a.unit ? ` per ${a.unit}` : ""}{a.monthly ? <span className={muted}> + {rand(a.monthly)}/month</span> : null}</span>;
   if (a.kind === "toggle") {
     const on = inc > 0 || qty > 0;
     return (
@@ -135,7 +136,7 @@ export function Builder({ choice, setChoice }: { choice: Choice; setChoice: (c: 
               <li key={l.label} className="flex justify-between gap-3">
                 <span className={soft}>{l.label}{l.qty > 1 ? ` × ${l.qty}` : ""}</span>
                 <span className="shrink-0 text-right font-semibold tabular-nums text-[#16233B]">
-                  {l.once ? rand(l.once) : ""}{l.once && l.monthly ? " + " : ""}{l.monthly ? `${rand(l.monthly)}/m` : ""}
+                  {l.onRequest ? "On request" : <>{l.once ? rand(l.once) : ""}{l.once && l.monthly ? " + " : ""}{l.monthly ? `${rand(l.monthly)}/m` : ""}</>}
                 </span>
               </li>
             ))}

@@ -31,7 +31,7 @@ export const PACKAGES: Package[] = [
     tribe: 16500, other: 24500, monthly: 250, market: "R60k – R120k", popular: true, pages: 10 },
   { id: "platform", name: "Business Platform", design: "Atlas", href: "/designs/atlas", tagline: "Your own dashboard and reports, and workflows that run themselves.",
     tribe: 29500, other: 45000, from: true, monthly: 250, market: "R150k – R400k", pages: 10 },
-  { id: "enterprise", name: "Enterprise", design: "Enterprise", href: "/designs/enterprise", tagline: "Everything: AI concierge, online deposits, client login and an app.",
+  { id: "enterprise", name: "Enterprise", design: "Enterprise", href: "/designs/enterprise", tagline: "Everything: AI concierge, online deposits, client login and a blog.",
     tribe: 60000, other: 90000, monthly: 700, market: "R400k – R1.5m", pages: 15 },
 ];
 
@@ -73,7 +73,6 @@ export const MATRIX: Group[] = [
     { label: "Client login", hint: "Clients see quotes, payments, messages and documents.", cells: [false, false, false, true] },
     { label: "Blog and travel news", hint: "Written in TribeTravel, sent as a newsletter too.", cells: [false, false, false, true] },
     { label: "Outside CRM sync", hint: "HubSpot, Zoho or Salesforce.", cells: [false, false, false, true] },
-    { label: "Installable app", hint: "On your client's home screen, with quote alerts.", cells: [false, false, false, true] },
   ] },
 ];
 
@@ -89,6 +88,8 @@ export type AddOn = {
   included: Record<PackageId, number>;
   max?: number;
   unit?: string;
+  /** Quoted per agency: shown as "Price on request" and added to the request without a price. */
+  onRequest?: boolean;
 };
 
 const none = { site: 0, pro: 0, platform: 0, enterprise: 0 };
@@ -121,10 +122,9 @@ export const ADD_ONS: AddOn[] = [
     kind: "toggle", included: { site: 0, pro: 0, platform: 0, enterprise: 1 } },
   { id: "crm", name: "Outside CRM sync", hint: "HubSpot, Zoho or Salesforce kept in step.", once: 5000, kind: "toggle",
     included: { site: 0, pro: 0, platform: 0, enterprise: 1 } },
-  { id: "app", name: "Installable app", hint: "Your site on the client's home screen, with alerts.", once: 18000, kind: "toggle",
-    included: { site: 0, pro: 0, platform: 0, enterprise: 1 } },
-  { id: "store", name: "Store app (iOS and Android)", hint: "A real app in the app stores. Store fees are yours.", once: 60000,
-    kind: "toggle", included: none },
+  // No set price: each agency's store app is quoted on its own (Apple's US$99 a year and its own developer account).
+  { id: "store", name: "Store app (iOS and Android)", hint: "Your own app in the App Store and Google Play. Apple and Google's fees are yours.",
+    once: 0, onRequest: true, kind: "toggle", included: none },
 ];
 
 export type CarePlan = { id: string; name: string; monthly: number; hint: string };

@@ -3,7 +3,7 @@ import { ADD_ONS, CARE_PLANS, MAILBOX, PACKAGES, type PackageId } from "@/pricin
 
 export type Choice = { tribe: boolean; pkg: PackageId; care: string; extras: Record<string, number>; mailboxes: number };
 
-export type Line = { label: string; qty: number; once: number; monthly: number };
+export type Line = { label: string; qty: number; once: number; monthly: number; onRequest?: boolean };
 
 export const START: Choice = { tribe: true, pkg: "pro", care: "plus", extras: {}, mailboxes: 0 };
 
@@ -14,7 +14,8 @@ export function quoteLines(c: Choice): Line[] {
   for (const a of ADD_ONS) {
     const qty = c.extras[a.id] ?? 0;
     if (qty > 0 && !(a.kind === "toggle" && a.included[c.pkg] > 0)) {
-      lines.push({ label: a.name, qty, once: a.once * qty, monthly: (a.monthly ?? 0) * qty });
+      lines.push(a.onRequest ? { label: `${a.name} (price on request)`, qty, once: 0, monthly: 0, onRequest: true }
+        : { label: a.name, qty, once: a.once * qty, monthly: (a.monthly ?? 0) * qty });
     }
   }
   const care = CARE_PLANS.find((x) => x.id === c.care) ?? CARE_PLANS[1]!;
