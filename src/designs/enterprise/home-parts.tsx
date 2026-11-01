@@ -7,13 +7,6 @@ import { LiveDot, StopLabel } from "@/designs/enterprise/parts";
 import { btn, display, ghost, gutter, h2, input, label, mono, orange, panel, soft } from "@/designs/enterprise/theme";
 
 export function Departure() {
-  const [more, setMore] = useState(false);
-  const { status, onSubmit, sending } = useEnquiry((fd) => ({ travel_dates: monthWords(String(fd.get("travel_dates") ?? "")) }));
-
-  const field = "flex min-w-0 flex-col gap-1.5";
-  const fieldLabel = `${label} text-[#0B1424]/60`;
-  const fieldInput = "min-h-9 w-full border-0 border-b-2 border-[#0B1424]/15 bg-transparent p-0 text-[17px] font-semibold text-[#0B1424] outline-none [color-scheme:light] focus:border-[#FF6A2E]";
-
   return (
     <section className={`relative z-10 flex flex-col gap-8 ${gutter} pt-16 pb-28 md:pt-24`}>
       <p className={`d-rise flex flex-wrap gap-x-7 gap-y-2 ${label} ${soft}`}>
@@ -25,17 +18,33 @@ export function Departure() {
       <p className={`d-rise max-w-[54ch] text-lg leading-relaxed ${soft} [animation-delay:.25s] md:text-xl`}>
         Live prices from our suppliers, a concierge that answers at midnight and a consultant on your schedule. Tell us where you're headed and your quote follows within 24 hours.
       </p>
+      <BoardingPass />
+    </section>
+  );
+}
 
+/** The quote form as a boarding pass. On a destination page `place` fills in "Where to" (and its airport code). */
+export function BoardingPass({ place, code }: { place?: string; code?: string }) {
+  const [more, setMore] = useState(false);
+  const { status, onSubmit, sending } = useEnquiry((fd) => ({ travel_dates: monthWords(String(fd.get("travel_dates") ?? "")) }));
+
+  const field = "flex min-w-0 flex-col gap-1.5";
+  const fieldLabel = `${label} text-[#0B1424]/60`;
+  const fieldInput = "min-h-9 w-full border-0 border-b-2 border-[#0B1424]/15 bg-transparent p-0 text-[17px] font-semibold text-[#0B1424] outline-none [color-scheme:light] focus:border-[#FF6A2E]";
+
+  return (
+    <>
       <form id="quote" onSubmit={onSubmit} className="d-rise relative grid max-w-[1080px] scroll-mt-24 rounded-[22px] bg-[#EDE6D8] text-[#0B1424] shadow-[0_40px_80px_-40px_rgba(0,0,0,.9)] [animation-delay:.4s] md:grid-cols-[1fr_250px]">
         <div className="flex flex-col gap-6 p-6 md:p-8">
           <div className={`flex flex-wrap items-center justify-between gap-3 ${label} text-[#0B1424]/60`}>
             <span>Boarding pass · {BRAND.name}</span>
-            <span className="font-semibold text-[#0B1424]">JNB → <span className="text-[#C2410C]">anywhere</span></span>
+            <span className="font-semibold text-[#0B1424]">JNB → <span className="text-[#C2410C]">{code ?? "anywhere"}</span></span>
           </div>
           <div className="grid gap-6 sm:grid-cols-3">
             <label className={field}>
               <span className={fieldLabel}>Where to</span>
               <select name="destination" className={fieldInput}>
+                {place && <option>{place}</option>}
                 <option>Mauritius &amp; islands</option>
                 <option>An African safari</option>
                 <option>A cruise</option>
@@ -94,7 +103,7 @@ export function Departure() {
       <FormStatus status={status} className={orange} />
       {status.kind === "sent" && <WhatHappensNow />}
       {!status.message && <p className={`text-[13px] ${soft}`}>Free, no obligation. A real person prices every quote.</p>}
-    </section>
+    </>
   );
 }
 

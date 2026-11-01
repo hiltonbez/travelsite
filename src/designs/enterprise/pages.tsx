@@ -12,7 +12,7 @@ import { Automation } from "@/designs/enterprise/automation";
 import { BookCall } from "@/designs/enterprise/call";
 import { Concierge } from "@/designs/enterprise/concierge";
 import { ARTICLES, DESTINATIONS, GALLERY, article, destination, type Article, type Destination } from "@/designs/enterprise/content";
-import { Contact, Departure } from "@/designs/enterprise/home-parts";
+import { BoardingPass, Contact, Departure } from "@/designs/enterprise/home-parts";
 import { EnterpriseLayout, PageTitle } from "@/designs/enterprise/layout";
 import { LiveSuppliers } from "@/designs/enterprise/live";
 import { StopLabel } from "@/designs/enterprise/parts";
@@ -174,7 +174,7 @@ export function DestinationPage({ slug }: { slug: string }) {
             <span className={`${label} ${orange}`}>Good for</span>
             <div className="flex flex-wrap gap-2">{d.goodFor.map((g) => <span key={g} className="rounded-full border border-[#EDE6D8]/20 px-3 py-1.5 text-sm">{g}</span>)}</div>
           </div>
-          <a href={`${BASE}#quote`} className={`${btn} min-h-14 self-start px-8`}>Plan my {d.name} trip <ArrowRight className="h-4 w-4" /></a>
+          <a href="#quote" className={`${btn} min-h-14 self-start px-8`}>Plan my {d.name} trip <ArrowRight className="h-4 w-4" /></a>
         </div>
         <div className="flex flex-col gap-5">
           <StopLabel>A sample itinerary</StopLabel>
@@ -189,6 +189,11 @@ export function DestinationPage({ slug }: { slug: string }) {
           </ol>
           <p className={`text-sm ${soft}`}>Every trip is tailor-made: we change the days, the hotels and the pace to suit you.</p>
         </div>
+      </section>
+
+      <section className={`relative z-10 flex flex-col gap-6 ${gutter} pb-20`}>
+        <StopLabel>Plan my {d.name} trip</StopLabel>
+        <BoardingPass place={d.name} code={d.code} />
       </section>
 
       {d.supplier === "beachcomber" ? <LiveSuppliers /> : (
