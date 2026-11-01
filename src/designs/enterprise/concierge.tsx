@@ -1,15 +1,17 @@
 // Stop 2: the AI concierge, talking to TribeTravel's chat API, in its section and as a floating panel.
 import { useEffect, useRef, useState, type FormEvent } from "react";
-import { Bot, Check, Loader2, Send, Sparkles, X } from "lucide-react";
-import { sendChat, startChat } from "@/lib/chat";
+import { ArrowRight, Bot, CalendarCheck, Check, Loader2, MessageCircle, Send, Sparkles, X } from "lucide-react";
+import { sendChat, startChat, type ChatCall, type ChatCard, type ChatHandover } from "@/lib/chat";
+import { rand } from "@/lib/packages";
 import { BRAND } from "@/designs/shared";
 import { LiveDot, StopLabel } from "@/designs/enterprise/parts";
-import { OPEN_EVENT } from "@/designs/enterprise/theme";
+import { OPEN_EVENT, PACKAGE_EVENT } from "@/designs/enterprise/theme";
 import { btn, display, ghost, gutter, h2, input, label, mono, orange, panel, soft } from "@/designs/enterprise/theme";
 
-type Msg = { from: "ai" | "me"; text: string };
+/** A message, with what the AI Concierge may attach: package cards, a booked call, the WhatsApp handover. */
+type Msg = { from: "ai" | "me"; text: string; cards?: ChatCard[]; call?: ChatCall; handover?: ChatHandover };
 
-const STARTERS = ["A honeymoon in Mauritius", "A family safari in the school holidays", "Somewhere warm for 2 in December"];
+const STARTERS = ["What's on special in Mauritius?", "A honeymoon in Mauritius", "Book a call with a consultant", "Can I talk to a person?"];
 
 function useConcierge() {
   const [msgs, setMsgs] = useState<Msg[]>([]);
@@ -41,7 +43,7 @@ function useConcierge() {
     setError("");
     try {
       const r = await sendChat(token, t);
-      setMsgs((m) => [...m, { from: "ai", text: r.reply }]);
+      setMsgs((m) => [...m, { from: "ai", text: r.reply, ...(r.cards ? { cards: r.cards } : {}), ...(r.call ? { call: r.call } : {}), ...(r.handover ? { handover: r.handover } : {}) }]);
       setDone(r.done);
     } catch (e) {
       setError((e as Error).message);
@@ -50,7 +52,8 @@ function useConcierge() {
     }
   }
 
-  return { msgs, busy, done, error, ready: !!token, begin, say };
+  const handedOver = msgs.some((m) => m.handover);
+  return { msgs, busy, done, handedOver, error, ready: !!token, begin, say };
 }
 
 function ChatWindow({ compact = false, onClose }: { compact?: boolean; onClose?: () => void }) {
@@ -73,7 +76,7 @@ function ChatWindow({ compact = false, onClose }: { compact?: boolean; onClose?:
         <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#FF6A2E] text-[#0B1424]"><Bot className="h-5 w-5" /></span>
         <div className="flex flex-col">
           <b className="text-[15px]">{BRAND.name} concierge</b>
-          <span className={`flex items-center gap-1.5 ${label} ${soft}`}><LiveDot /> AI · a consultant prices every quote</span>
+          <span className={`flex items-center gap-1.5 ${label} ${soft}`}><LiveDot /> AI · a consultant confirms every price</span>
         </div>
         {onClose && (
           <button type="button" onClick={onClose} aria-label="Close the chat" className="ml-auto flex h-10 w-10 items-center justify-center rounded-full hover:bg-[#EDE6D8]/10"><X className="h-5 w-5" /></button>
@@ -81,9 +84,26 @@ function ChatWindow({ compact = false, onClose }: { compact?: boolean; onClose?:
       </div>
       <div ref={scroller} className="flex flex-1 flex-col gap-3 overflow-y-auto px-5 py-5" aria-live="polite">
         {chat.msgs.map((m, i) => (
-          <p key={i} className={`d-slide max-w-[85%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed whitespace-pre-line ${m.from === "ai" ? "self-start rounded-tl-sm bg-[#EDE6D8]/8" : "self-end rounded-tr-sm bg-[#EDE6D8] text-[#0B1424]"}`}>
-            {m.text}
-          </p>
+          <div key={i} className={`flex flex-col gap-2 ${m.from === "ai" ? "items-start" : "items-end"}`}>
+            <p className={`d-slide max-w-[85%] rounded-2xl px-4 py-3 text-[15px] leading-relaxed whitespace-pre-line ${m.from === "ai" ? "rounded-tl-sm bg-[#EDE6D8]/8" : "rounded-tr-sm bg-[#EDE6D8] text-[#0B1424]"}`}>
+              {m.text}
+            </p>
+            {m.cards && <PackageCards cards={m.cards} />}
+            {m.call && (
+              <div className="d-slide flex max-w-[85%] items-start gap-3 rounded-2xl border border-[#4ADE80]/40 bg-[#4ADE80]/10 px-4 py-3 text-sm">
+                <CalendarCheck className="mt-0.5 h-4 w-4 flex-none text-[#4ADE80]" />
+                <span>Call booked for <b>{m.call.label}</b> ({m.call.minutes} minutes). It's in TribeTravel's calendar and a confirmation is on its way.</span>
+              </div>
+            )}
+            {m.handover && (m.handover.whatsapp_url ? (
+              <a href={m.handover.whatsapp_url} target="_blank" rel="noopener noreferrer"
+                className="d-slide flex min-h-12 items-center gap-2 rounded-full bg-[#25D366] px-5 font-bold text-[#0B1424]">
+                <MessageCircle className="h-5 w-5" /> Continue on WhatsApp <span className={`${mono} text-xs font-normal`}>ref {m.handover.ref}</span>
+              </a>
+            ) : (
+              <span className={`${mono} text-xs ${soft}`}>Reference {m.handover.ref}</span>
+            ))}
+          </div>
         ))}
         {chat.busy && (
           <span className={`flex items-center gap-2 self-start rounded-2xl bg-[#EDE6D8]/8 px-4 py-3 text-sm ${soft}`}><Loader2 className="h-4 w-4 animate-spin" /> Typing…</span>
@@ -91,7 +111,9 @@ function ChatWindow({ compact = false, onClose }: { compact?: boolean; onClose?:
         {chat.done && (
           <div className="d-slide flex items-start gap-3 rounded-2xl border border-[#4ADE80]/40 bg-[#4ADE80]/10 px-4 py-3 text-sm">
             <Check className="mt-0.5 h-4 w-4 flex-none text-[#4ADE80]" />
-            <span>Your request is in TribeTravel: a new client, an enquiry and a draft quote for your consultant to price and send.</span>
+            <span>{chat.handedOver
+              ? "You're with a consultant now: the chat so far is in TribeTravel with a new client and enquiry, and they'll carry on with you on WhatsApp."
+              : "Your request is in TribeTravel: a new client, an enquiry and a draft quote for your consultant to price and send."}</span>
           </div>
         )}
         {chat.error && <p role="alert" className="rounded-2xl bg-[#B42318]/25 px-4 py-3 text-sm">{chat.error}</p>}
@@ -106,12 +128,34 @@ function ChatWindow({ compact = false, onClose }: { compact?: boolean; onClose?:
       <form onSubmit={submit} className="flex gap-2 border-t border-[#EDE6D8]/10 p-3">
         <label className="sr-only" htmlFor={compact ? "chat-text-pop" : "chat-text"}>Your message</label>
         <input id={compact ? "chat-text-pop" : "chat-text"} value={text} onChange={(e) => setText(e.target.value)} disabled={!chat.ready || chat.done} maxLength={1000}
-          placeholder={chat.done ? "Your request has been sent" : "Tell me about your dream trip…"}
+          placeholder={chat.done ? "Your request has been sent" : "Ask anything, or tell me your dream trip…"}
           className={`${input} flex-1 rounded-full px-5`} />
         <button type="submit" aria-label="Send" disabled={!chat.ready || chat.busy || chat.done || !text.trim()} className="flex h-12 w-12 flex-none items-center justify-center rounded-full bg-[#FF6A2E] text-[#0B1424] disabled:opacity-40">
           <Send className="h-5 w-5" />
         </button>
       </form>
+    </div>
+  );
+}
+
+/** Live packages the concierge found, as small cards; a tap opens the package's dialog in Stop 1. */
+function PackageCards({ cards }: { cards: ChatCard[] }) {
+  return (
+    <div className="d-slide flex w-full gap-3 overflow-x-auto pb-1">
+      {cards.map((c) => (
+        <button key={`${c.kind}-${c.id}`} type="button" onClick={() => window.dispatchEvent(new CustomEvent(PACKAGE_EVENT, { detail: { kind: c.kind, id: c.id } }))}
+          className="flex w-[190px] flex-none flex-col overflow-hidden rounded-2xl border border-[#EDE6D8]/12 bg-[#0B1424] text-left transition hover:border-[#FF6A2E]">
+          {c.image ? <img src={c.image} alt="" loading="lazy" className="h-24 w-full object-cover" />
+            : <span className="flex h-24 w-full items-center justify-center bg-[#FF6A2E]/15"><Sparkles className={`h-6 w-6 ${orange}`} /></span>}
+          <span className="flex flex-col gap-1 p-3">
+            <span className={`${mono} text-[11px] ${soft}`}>{c.place}{c.nights ? ` · ${c.nights} nights` : ""}</span>
+            <b className="text-sm leading-snug">{c.title}</b>
+            <span className={`flex items-center justify-between text-sm ${orange}`}>
+              {c.from_pp ? `From ${rand(c.from_pp, c.currency)} pp` : "Ask for a price"} <ArrowRight className="h-4 w-4" />
+            </span>
+          </span>
+        </button>
+      ))}
     </div>
   );
 }
@@ -124,10 +168,10 @@ export function Concierge() {
         <StopLabel><Sparkles className="h-4 w-4" /> Stop 2 · AI concierge, 24/7</StopLabel>
         <h2 className={h2}>Plan it <span className={orange}>mid-air.</span></h2>
         <p className={`text-lg leading-relaxed ${soft}`}>
-          Our AI concierge asks the right questions, suggests ideas from our packages and passes your complete brief to a consultant, who prices it and sends your quote. Day or night.
+          Our AI concierge knows our trips and specials, shows you live packages with today's prices, books a call with a consultant, or hands you to a real person on WhatsApp. Or it builds your brief so a consultant can send your quote. Day or night.
         </p>
         <ul className="flex flex-col gap-3 text-[15px]">
-          {["Answers in seconds, any time", "Never guesses a price: your consultant quotes", "Says it's an AI, and asks before saving your details (POPIA)"].map((x) => (
+          {["Answers questions about us, any time", "Live packages and prices, right in the chat", "Books your call, or hands you to a consultant on WhatsApp", "Says it's an AI, and asks before saving your details (POPIA)"].map((x) => (
             <li key={x} className="flex items-center gap-3"><Check className={`h-4 w-4 flex-none ${orange}`} />{x}</li>
           ))}
         </ul>

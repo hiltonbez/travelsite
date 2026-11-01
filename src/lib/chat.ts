@@ -6,7 +6,12 @@ import { AGENCY_SLUG, TRIBETRAVEL_URL } from "@/lib/site-content";
 
 const base = `${TRIBETRAVEL_URL}/api/chat/${encodeURIComponent(AGENCY_SLUG)}`;
 
-export type ChatTurn = { reply: string; done: boolean };
+/** The AI Concierge (TribeTravel's paid upgrade of the chat, P17.229) can also send package cards, a booked call and
+ *  a WhatsApp handover. The standard chat sends none of these. */
+export type ChatCard = { kind: "beachcomber" | "thompsons"; id: string; title: string; place: string; nights: number | null; from_pp: number | null; currency: string; image: string };
+export type ChatCall = { start: string; end: string; label: string; minutes: number };
+export type ChatHandover = { whatsapp_url: string; ref: string };
+export type ChatTurn = { reply: string; done: boolean; cards?: ChatCard[]; call?: ChatCall; handover?: ChatHandover };
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   let res: Response;
@@ -26,5 +31,5 @@ async function post<T>(path: string, body: unknown): Promise<T> {
   return data as T;
 }
 
-export const startChat = () => post<ChatTurn & { token: string }>("/start", {});
+export const startChat = () => post<ChatTurn & { token: string; concierge?: boolean }>("/start", {});
 export const sendChat = (token: string, text: string) => post<ChatTurn>("/message", { token, text });

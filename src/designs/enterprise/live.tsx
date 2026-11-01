@@ -15,7 +15,7 @@ import { listPackages, rand, type Package } from "@/lib/packages";
 import { getHoliday, listHolidays, type Holiday, type HolidayFull } from "@/lib/thompsons";
 import { BotTrap, FormStatus, media } from "@/designs/shared";
 import { Consent, LiveDot, StopLabel } from "@/designs/enterprise/parts";
-import { btn, display, ghost, gutter, h2, input, label, mono, orange, panel, soft } from "@/designs/enterprise/theme";
+import { PACKAGE_EVENT, btn, display, ghost, gutter, h2, input, label, mono, orange, panel, soft } from "@/designs/enterprise/theme";
 
 /** Beach and resort photos (Unsplash) for Beachcomber hotels that come without a photo of their own. */
 const RESORTS = [resort1, resort2, resort3, resort4, resort5, resort6, resort7];
@@ -40,6 +40,21 @@ export function LiveSuppliers() {
     listPackages().then((r) => { setPackages(r.packages); setMinDays(r.min_days_ahead || 10); }).catch(() => setPackages("error"));
     listHolidays().then(setHolidays).catch(() => setHolidays("error"));
   }, []);
+  // A package card in the concierge chat opens the same dialog as its card here.
+  useEffect(() => {
+    const open = (e: Event) => {
+      const { kind, id } = (e as CustomEvent<{ kind: string; id: string }>).detail || {};
+      if (kind === "beachcomber" && Array.isArray(packages)) {
+        const p = packages.find((x) => x.id === id);
+        if (p) { setTab("beachcomber"); setBook(p); }
+      } else if (kind === "thompsons" && Array.isArray(holidays)) {
+        const h = holidays.find((x) => x.id === id);
+        if (h) { setTab("thompsons"); setHoliday(h); }
+      }
+    };
+    window.addEventListener(PACKAGE_EVENT, open);
+    return () => window.removeEventListener(PACKAGE_EVENT, open);
+  }, [packages, holidays]);
   const photos = variedPhotos(Array.isArray(packages) ? packages.map((p) => p.image) : []);
   const unreachable = "We couldn't load live rates just now. Please try again in a moment, or ask our concierge.";
 

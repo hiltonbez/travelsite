@@ -28,3 +28,5 @@ export const MENU: [string, string][] = [
 
 /** The concierge panel opens from its section and from the floating button; this keeps them in step. */
 export const OPEN_EVENT = "tt-concierge-open";
+/** A package card in the concierge chat opens that package's dialog in Stop 1 (detail: { kind, id }). */
+export const PACKAGE_EVENT = "tt-open-package";
