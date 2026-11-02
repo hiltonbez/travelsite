@@ -159,7 +159,7 @@ function Featured({ d, anchor }: { d: Data<"featured">; anchor?: string | undefi
       </div>
       <div className="grid gap-x-6 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
         {d.cards.map((c, i) => (
-          <a key={c.name + i} href={quoteTo(c.name)} className="ws-reveal group flex flex-col items-center gap-5 text-center" style={{ transitionDelay: `${(i % 4) * 110}ms` }}>
+          <a key={c.name + i} href={c.href || quoteTo(c.name)} className="ws-reveal group flex flex-col items-center gap-5 text-center" style={{ transitionDelay: `${(i % 4) * 110}ms` }}>
             <Porthole shade="reveal" className="aspect-[3/4] w-[min(70vw,260px)] transition duration-500 group-hover:-translate-y-2">
               {c.img && <Scene img={c.img} alt={c.name} className="h-full" />}
             </Porthole>

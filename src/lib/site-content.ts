@@ -17,7 +17,14 @@ export const ACCOUNT_URL = `https://${AGENCY_SLUG}.${new URL(TRIBETRAVEL_URL).ho
 /** The agency's name on the page (header, footer, page title). */
 export const BRAND = { name: "Sun-Set Travel", short: "SUN-SET", tagline: "Travel & Tours" };
 
-export type Card = { tag: string; name: string; line: string; img: string; price: string };
+/** `href`: the trip's own page (/trips/<slug>) when TribeTravel sent one, else the card opens the quote. */
+export type Card = { tag: string; name: string; line: string; img: string; price: string; href?: string };
+/** A special with its own page, /trips/<slug> (2 Nov 2026, SEO Agent phase 2). */
+export type Trip = { slug: string; name: string; destination: string; destinationSlug: string; summary: string;
+  price: string; fromPrice: number | null; nights: number | null; travelFrom: string; travelTo: string; validUntil: string;
+  img: string; gallery: string[]; inclusions: string[]; exclusions: string[] };
+/** A destination of the agency's specials, /destinations/<slug>: TribeTravel's description and the trips there. */
+export type Destination = { slug: string; name: string; blurb: string; trips: string[] };
 export type Post = { title: string; tag: string; img: string; link: string };
 
 export type SiteContent = {
@@ -37,6 +44,9 @@ export type SiteContent = {
   agencyName: string;
   /** The site's title, description and business details for Google, set by TribeTravel's SEO Agent (2 Nov 2026). */
   seo: Seo;
+  /** The agency's live specials and their destinations, each with its own page (empty without TribeTravel). */
+  trips: Trip[];
+  destinations: Destination[];
 };
 
 export type Seo = {
@@ -123,6 +133,8 @@ export const FALLBACK: SiteContent = {
   blocks: [],
   agencyName: BRAND.name,
   seo: { title: "", description: "", keywords: [], business: { name: BRAND.name, area: "", email: "", phone: "", googleProfile: "" } },
+  trips: [],
+  destinations: [],
 };
 FALLBACK.blocks = defaultBlocks(FALLBACK, false);
 
@@ -151,11 +163,14 @@ const PACKAGES_HEAD: PackagesHead = {
 };
 
 type Sections = Record<string, Record<string, unknown>>;
-type Special = { name: string; destination?: string; summary?: string; from_price?: number | null; nights?: number | null; image?: string };
+type Special = { name: string; destination?: string; summary?: string; from_price?: number | null; nights?: number | null; image?: string;
+  slug?: string; travel_from?: string | null; travel_to?: string | null; valid_until?: string | null; gallery?: unknown;
+  inclusions?: unknown; exclusions?: unknown };
+type ApiDestination = { slug?: string; name?: string; blurb?: string; specials?: unknown };
 type ApiBlock = { id?: string; type?: string; fields?: Record<string, unknown>; items?: Record<string, unknown>[] };
 type ApiSeo = { title?: string; description?: string; keywords?: unknown; business?: Record<string, unknown> };
 export type Payload = { sections?: Sections; featured?: Special[]; chat?: boolean; packages?: boolean; blocks?: ApiBlock[];
-  agency?: { name?: string }; seo?: ApiSeo };
+  agency?: { name?: string }; seo?: ApiSeo; destinations?: ApiDestination[] };
 
 const str = (v: unknown, fb: string) => (typeof v === "string" && v.trim() ? v.trim() : fb);
 
@@ -163,12 +178,41 @@ function rand(n: number) {
   return "R" + Math.round(n).toLocaleString("en-ZA").replace(/[\s,]/g, " ");
 }
 
+function priceOf(s: Special) {
+  return s.from_price ? `${s.nights ? `${s.nights} nights ` : ""}from ${rand(s.from_price)} pp` : "Ask us for a quote";
+}
+
 function card(s: Special, i: number): Card {
-  const price = s.from_price
-    ? `${s.nights ? `${s.nights} nights ` : ""}from ${rand(s.from_price)} pp`
-    : "Ask us for a quote";
   const line = ((s.summary || "").split(/(?<=[.!?])\s/)[0] ?? "").slice(0, 90);
-  return { tag: s.destination || "Featured", name: s.name, line, img: s.image || fallbackImages[i % 4] || islands, price };
+  return { tag: s.destination || "Featured", name: s.name, line, img: s.image || fallbackImages[i % 4] || islands, price: priceOf(s),
+    ...(validSlug(s.slug) ? { href: `/trips/${s.slug}` } : {}) };
+}
+
+const SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+/** A slug that is safe in a page's path (TribeTravel's website_content.special_slugs makes them like this). */
+export const validSlug = (v: unknown): v is string => typeof v === "string" && v.length <= 100 && SLUG.test(v);
+const strings = (v: unknown, max = 30) =>
+  (Array.isArray(v) ? v.filter((x): x is string => typeof x === "string" && !!x.trim()).slice(0, max) : []);
+const day = (v: unknown) => (typeof v === "string" && /^\d{4}-\d{2}-\d{2}$/.test(v) ? v : "");
+
+/** The specials with a page, and the destinations that have at least one of them. */
+function tripsFrom(p: Payload): Pick<SiteContent, "trips" | "destinations"> {
+  const dests = (p.destinations ?? []).filter((d) => validSlug(d.slug) && typeof d.name === "string" && d.name.trim());
+  const destOf = (name: string) => dests.find((d) => (d.name ?? "").trim().toLowerCase() === name.trim().toLowerCase());
+  const trips: Trip[] = (p.featured ?? []).filter((s) => validSlug(s.slug) && s.name).map((s, i) => ({
+    slug: s.slug as string, name: s.name, destination: (s.destination || "").trim(),
+    destinationSlug: destOf(s.destination || "")?.slug ?? "", summary: s.summary || "", price: priceOf(s),
+    fromPrice: typeof s.from_price === "number" ? s.from_price : null, nights: typeof s.nights === "number" ? s.nights : null,
+    travelFrom: day(s.travel_from), travelTo: day(s.travel_to), validUntil: day(s.valid_until),
+    img: s.image || fallbackImages[i % 4] || islands, gallery: strings(s.gallery, 12),
+    inclusions: strings(s.inclusions), exclusions: strings(s.exclusions),
+  }));
+  const known = new Set(trips.map((t) => t.slug));
+  const destinations = dests
+    .map((d) => ({ slug: d.slug as string, name: (d.name as string).trim(), blurb: typeof d.blurb === "string" ? d.blurb : "",
+      trips: strings(d.specials, 50).filter((x) => known.has(x)) }))
+    .filter((d) => d.trips.length);
+  return { trips, destinations };
 }
 
 type Get = (key: string, fb: string) => string;
@@ -270,6 +314,7 @@ export function merge(p: Payload): SiteContent {
     blocks: [],
     agencyName: str(p.agency?.name, BRAND.name),
     seo: seoFrom(p.seo, str(p.agency?.name, BRAND.name)),
+    ...tripsFrom(p),
   };
   if (Array.isArray(p.blocks) && p.blocks.length) {
     c.blocks = p.blocks.map((b, i) => blockFrom(b, p, i)).filter((b): b is Block => b !== null)

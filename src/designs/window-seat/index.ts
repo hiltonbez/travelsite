@@ -3,3 +3,4 @@
 export { WINDOW_SEAT_FONTS } from "@/designs/window-seat/theme";
 export { WindowSeatHome } from "@/designs/window-seat/home";
 export { AboutPage, ContactPage, DestinationsPage, PrivacyPage, QuotePage } from "@/designs/window-seat/pages";
+export { DestinationTripsPage, TripPage } from "@/designs/window-seat/trips";

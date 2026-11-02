@@ -1,7 +1,7 @@
 // What search engines read about the agency's site (2 Nov 2026, TribeTravel's SEO Agent): the home page's title and
 // description, the schema.org TravelAgency block and the site's own address (canonical, sitemap). See
 // docs/superpowers/specs/2026-11-02-seo-agent-design.md in the TribeTravel repo.
-import { AGENCY_SLUG, BRAND, type SiteContent } from "@/lib/site-content";
+import { AGENCY_SLUG, BRAND, type Destination, type SiteContent, type Trip } from "@/lib/site-content";
 
 const env = (import.meta as { env?: Record<string, string | undefined> }).env ?? {};
 
@@ -45,4 +45,87 @@ export function agencySchema(c: SiteContent) {
       : {}),
   };
 }
+
+// ------------------------------------------------------------------ trip and destination pages (phase 2)
+/** Cut at a word, with an ellipsis, so Google shows it whole. */
+export function clip(text: string, max: number) {
+  const t = text.replace(/\s+/g, " ").trim();
+  return t.length <= max ? t : `${t.slice(0, max - 1).replace(/[\s,;:.-]+\S*$/, "")}…`;
+}
+
+/** A picture's full address for link previews and Google: as it is when it's a web link, on the site's own address
+ *  when it's one of the site's files (/assets/...), else "". */
+export function absolute(src: string) {
+  if (/^https:\/\//.test(src)) return src;
+  const url = siteUrl();
+  return url && src.startsWith("/") && !src.startsWith("//") ? `${url}${src}` : "";
+}
+
+/** The <head> tags of an inner page: title, description, canonical and the link preview. */
+export function pageHead(title: string, description: string, path: string, image = "") {
+  const url = siteUrl();
+  return {
+    meta: [
+      { title },
+      { name: "description", content: description },
+      { property: "og:title", content: title },
+      { property: "og:description", content: description },
+      { property: "og:type", content: "website" },
+      ...(url ? [{ property: "og:url", content: `${url}${path}` }] : []),
+      ...(absolute(image) ? [{ property: "og:image", content: absolute(image) }] : []),
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: url ? [{ rel: "canonical", href: `${url}${path}` }] : [],
+  };
+}
+
+const agencyOf = (c: SiteContent | undefined) => c?.agencyName || BRAND.name;
+
+/** "Mauritius Easter escape | GET Travel" and the trip's own words (or its price and the agency's offer). */
+export function tripTitle(t: Trip, c: SiteContent) {
+  const name = agencyOf(c);
+  const own = t.summary.replace(/\s+/g, " ").trim();
+  const fill = `${t.name}${t.destination && !t.name.includes(t.destination) ? ` in ${t.destination}` : ""}: ${t.price}. `
+    + `Tailor-made by ${name}, ask us for a quote.`;
+  return { title: clip(`${t.name} | ${name}`, 65), description: clip(own.length >= 70 ? own : `${own ? `${own} ` : ""}${fill}`, 160) };
+}
+
+export function destinationTitle(d: Destination, c: SiteContent) {
+  const name = agencyOf(c);
+  const fill = `Holidays to ${d.name}, planned personally by ${name}. See our ${d.name} specials and ask us for a quote.`;
+  return { title: clip(`${d.name} holidays | ${name}`, 65), description: clip(d.blurb.length >= 70 ? d.blurb : fill, 160) };
+}
+
+/** What Google is told about a special: a TouristTrip with its price as an Offer, sold by the agency. */
+export function tripSchema(t: Trip, c: SiteContent) {
+  const url = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristTrip",
+    name: t.name,
+    description: tripTitle(t, c).description,
+    ...(url ? { url: `${url}/trips/${t.slug}` } : {}),
+    ...(absolute(t.img) ? { image: absolute(t.img) } : {}),
+    ...(t.destination ? { itinerary: { "@type": "Place", name: t.destination } } : {}),
+    provider: { "@type": "TravelAgency", name: agencyOf(c), ...(url ? { url: `${url}/` } : {}) },
+    ...(t.fromPrice
+      ? { offers: { "@type": "Offer", price: t.fromPrice, priceCurrency: "ZAR", ...(t.validUntil ? { validThrough: t.validUntil } : {}),
+          ...(url ? { url: `${url}/trips/${t.slug}` } : {}) } }
+      : {}),
+  };
+}
+
+export function destinationSchema(d: Destination, c: SiteContent) {
+  const url = siteUrl();
+  return {
+    "@context": "https://schema.org",
+    "@type": "TouristDestination",
+    name: d.name,
+    description: destinationTitle(d, c).description,
+    ...(url ? { url: `${url}/destinations/${d.slug}` } : {}),
+  };
+}
+
+/** A JSON-LD block's text: "<" escaped so nothing in it can close the script tag. */
+export const ldJson = (data: unknown) => JSON.stringify(data).replace(/</g, "\\u003c");
 

@@ -64,3 +64,6 @@ In Coolify: Dockerfile build pack, port 80, auto-deploy on push to `main`.
   `VITE_SITE_URL` (e.g. `https://www.gettravel.global`) in Coolify for each agency's site: it is the canonical address
   and `scripts/snapshot.mjs` writes `sitemap.xml` and `robots.txt` from it (the demo agency defaults to
   travelsite.aifundi.io).
+- A page for every special (`/trips/<slug>`) and every destination of the specials (`/destinations/<slug>`)
+  (SEO Agent phase 2, `src/designs/window-seat/trips.tsx`): `scripts/snapshot.mjs` reads the same content feed and
+  prerenders one page each, and lists them in every agency's sitemap. The home page's trip cards link to them.

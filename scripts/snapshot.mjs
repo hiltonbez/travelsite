@@ -82,10 +82,64 @@ const SITE_URL = ((process.env.VITE_SITE_URL || "").trim().replace(/\/$/, "")
 
 function sitemapXml(siteUrl, slug, pages = PAGES, today = new Date().toISOString().slice(0, 10)) {
   const listed = pages.filter((p) => p.status === 200 && !p.path.endsWith("/news/post")
-    && (slug === "sunset-travel" || p.path === "/"));
+    && (slug === "sunset-travel" || p.path === "/" || p.feed));
   const urls = listed.map((p) => `  <url><loc>${siteUrl}${p.path}</loc><lastmod>${today}</lastmod>`
-    + `<changefreq>${p.path === "/" ? "weekly" : "monthly"}</changefreq></url>`);
+    + `<changefreq>${p.path === "/" || p.feed ? "weekly" : "monthly"}</changefreq></url>`);
   return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
+}
+
+// A page for each of the agency's specials and their destinations (2 Nov 2026, SEO Agent phase 2), read from the same
+// TribeTravel content feed the pages use (src/lib/site-content.ts). Every agency's sitemap lists them. Without the feed
+// the build carries on with the fixed pages; a page the site can't find is skipped, never a failed build.
+const TRIBETRAVEL_URL = (process.env.VITE_TRIBETRAVEL_URL || "https://tribetravel.io").replace(/\/$/, "");
+const SAFE_SLUG = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
+/** GET JSON with Node's https module: Cloudflare in front of TribeTravel refuses Node's fetch as a bot (as in site-content.ts). */
+async function getJson(url) {
+  const mod = url.startsWith("https:") ? await import("node:https") : await import("node:http");
+  return new Promise((resolve, reject) => {
+    const req = mod.get(url, { headers: { Accept: "application/json", "User-Agent": "TribeTravelSite/1.0 (+https://tribetravel.io)" }, timeout: 8000 }, (res) => {
+      if ((res.statusCode ?? 500) >= 300) {
+        res.resume();
+        reject(new Error(`HTTP ${res.statusCode}`));
+        return;
+      }
+      let body = "";
+      res.setEncoding("utf8");
+      res.on("data", (c) => (body += c));
+      res.on("end", () => {
+        try {
+          resolve(JSON.parse(body));
+        } catch (e) {
+          reject(e);
+        }
+      });
+    });
+    req.on("timeout", () => req.destroy(new Error("timeout")));
+    req.on("error", reject);
+  });
+}
+
+function feedPages(payload) {
+  const out = [];
+  const add = (kind, slug) => {
+    if (typeof slug === "string" && slug.length <= 100 && SAFE_SLUG.test(slug) && !out.some((x) => x.path === `/${kind}/${slug}`)) {
+      out.push({ path: `/${kind}/${slug}`, file: `${kind}/${slug}/index.html`, status: 200, feed: true });
+    }
+  };
+  for (const s of Array.isArray(payload?.featured) ? payload.featured : []) add("trips", s?.slug);
+  for (const d of Array.isArray(payload?.destinations) ? payload.destinations : []) add("destinations", d?.slug);
+  return out;
+}
+
+async function loadFeedPages() {
+  const url = `${TRIBETRAVEL_URL}/api/site/${encodeURIComponent(SLUG)}/content`;
+  try {
+    return feedPages(await getJson(url));
+  } catch (e) {
+    console.warn(`snapshot: no trip or destination pages (${e.message})`);
+    return [];
+  }
 }
 
 function robotsTxt(siteUrl) {
@@ -115,11 +169,17 @@ async function waitForServer() {
 
 try {
   await waitForServer();
-  for (const page of PAGES) {
+  const written = [];
+  for (const page of [...PAGES, ...(await loadFeedPages())]) {
     const res = await fetch(base + page.path);
+    if (page.feed && res.status !== 200) {
+      console.warn(`snapshot: skipped ${page.path} (${res.status})`);
+      continue;
+    }
     if (res.status !== page.status) {
       throw new Error(`${page.path} returned ${res.status}, expected ${page.status}`);
     }
+    written.push(page);
     const html = await res.text();
     const target = join(outDir, page.file);
     await mkdir(dirname(target), { recursive: true });
@@ -128,7 +188,7 @@ try {
   }
   await writeFile(join(outDir, "robots.txt"), robotsTxt(SITE_URL));
   if (SITE_URL) {
-    await writeFile(join(outDir, "sitemap.xml"), sitemapXml(SITE_URL, SLUG));
+    await writeFile(join(outDir, "sitemap.xml"), sitemapXml(SITE_URL, SLUG, written));
     console.log(`snapshot: sitemap.xml and robots.txt for ${SITE_URL}`);
   } else {
     console.log("snapshot: no VITE_SITE_URL, so no sitemap.xml (robots.txt allows everything)");
