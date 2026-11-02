@@ -5,24 +5,28 @@ import windowSeatCss from "@/designs/window-seat/window-seat.css?url";
 import { designHead } from "@/designs/shared";
 import { loadSiteContent } from "@/lib/site-content";
 import { usePreview } from "@/lib/preview";
+import { agencySchema, homeTitle, siteUrl } from "@/lib/seo";
 
 // The home page: Window Seat, the Tribe Site package's design. Its words and pictures are the agency's own, edited in
 // TribeTravel's visual editor (which shows this page in a frame, see lib/preview.ts).
 export const Route = createFileRoute("/")({
   // Runs when the page is built (scripts/snapshot.mjs), so the HTML carries the agency's latest saved content.
   loader: () => loadSiteContent(),
-  head: () => {
+  head: ({ loaderData }) => {
     const h = designHead("Window Seat", "Tailor-made holidays to Mauritius, Zanzibar, the Kruger and beyond, planned personally for you.", WINDOW_SEAT_FONTS);
+    const { title, description } = homeTitle(loaderData);
+    const url = siteUrl();
     return {
       meta: [
-        { title: "Sun-Set Travel — Oh, the places you'll go" },
-        { name: "description", content: "A small South African travel agency planning islands, safaris, city breaks and cruises, for business or pleasure, at the best possible price." },
-        { property: "og:title", content: "Sun-Set Travel — Some places change everything" },
-        { property: "og:description", content: "Tailor-made holidays to Madagascar, Mauritius, Zanzibar, Thailand and beyond, planned personally for you." },
+        { title },
+        { name: "description", content: description },
+        { property: "og:title", content: title },
+        { property: "og:description", content: description },
         { property: "og:type", content: "website" },
+        ...(url ? [{ property: "og:url", content: `${url}/` }] : []),
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: [...h.links, { rel: "stylesheet", href: windowSeatCss }],
+      links: [...h.links, { rel: "stylesheet", href: windowSeatCss }, ...(url ? [{ rel: "canonical", href: `${url}/` }] : [])],
     };
   },
   component: Index,
@@ -35,6 +39,9 @@ function Index() {
       {/* Not in TribeTravel's visual editor, where the agency is editing this design. */}
       {!preview && <DesignBar current="/" />}
       <WindowSeatHome content={content} />
+      {/* JSON-LD in the body is read by Google like the head; "<" is escaped so no text can close the script tag. */}
+      <script type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(agencySchema(content)).replace(/</g, "\\u003c") }} />
     </>
   );
 }

@@ -33,6 +33,17 @@ export type SiteContent = {
   packages: boolean;
   /** The page as ordered sections (TribeTravel's visual editor, P17.150). */
   blocks: Block[];
+  /** The agency's name from TribeTravel (BRAND.name when TribeTravel can't be reached). */
+  agencyName: string;
+  /** The site's title, description and business details for Google, set by TribeTravel's SEO Agent (2 Nov 2026). */
+  seo: Seo;
+};
+
+export type Seo = {
+  title: string;
+  description: string;
+  keywords: string[];
+  business: { name: string; area: string; email: string; phone: string; googleProfile: string };
 };
 
 export type TextPhoto = { eyebrow: string; heading: string; text: string; photo: string; side: "left" | "right"; buttonLabel: string };
@@ -110,6 +121,8 @@ export const FALLBACK: SiteContent = {
   chat: false,
   packages: false,
   blocks: [],
+  agencyName: BRAND.name,
+  seo: { title: "", description: "", keywords: [], business: { name: BRAND.name, area: "", email: "", phone: "", googleProfile: "" } },
 };
 FALLBACK.blocks = defaultBlocks(FALLBACK, false);
 
@@ -140,7 +153,9 @@ const PACKAGES_HEAD: PackagesHead = {
 type Sections = Record<string, Record<string, unknown>>;
 type Special = { name: string; destination?: string; summary?: string; from_price?: number | null; nights?: number | null; image?: string };
 type ApiBlock = { id?: string; type?: string; fields?: Record<string, unknown>; items?: Record<string, unknown>[] };
-export type Payload = { sections?: Sections; featured?: Special[]; chat?: boolean; packages?: boolean; blocks?: ApiBlock[] };
+type ApiSeo = { title?: string; description?: string; keywords?: unknown; business?: Record<string, unknown> };
+export type Payload = { sections?: Sections; featured?: Special[]; chat?: boolean; packages?: boolean; blocks?: ApiBlock[];
+  agency?: { name?: string }; seo?: ApiSeo };
 
 const str = (v: unknown, fb: string) => (typeof v === "string" && v.trim() ? v.trim() : fb);
 
@@ -196,6 +211,14 @@ function contactFrom(g: Get): SiteContent["contact"] {
 
 const getter = (fields: Record<string, unknown> | undefined): Get => (key, fb) => str(fields?.[key], fb);
 
+function seoFrom(s: ApiSeo | undefined, name: string): Seo {
+  const b = s?.business ?? {};
+  const kws = Array.isArray(s?.keywords) ? s.keywords.filter((k): k is string => typeof k === "string" && !!k) : [];
+  return { title: str(s?.title, ""), description: str(s?.description, ""), keywords: kws.slice(0, 10),
+    business: { name: str(b["name"], name), area: str(b["area"], ""), email: str(b["email"], ""), phone: str(b["phone"], ""),
+      googleProfile: str(b["google_profile"], "") } };
+}
+
 /** One section from TribeTravel, or null for a kind this site doesn't know (newer than the site). */
 function blockFrom(b: ApiBlock, p: Payload, i: number): Block | null {
   const id = typeof b.id === "string" && b.id ? b.id : `b${i}`;
@@ -245,6 +268,8 @@ export function merge(p: Payload): SiteContent {
     chat: p.chat === true,
     packages: p.packages === true,
     blocks: [],
+    agencyName: str(p.agency?.name, BRAND.name),
+    seo: seoFrom(p.seo, str(p.agency?.name, BRAND.name)),
   };
   if (Array.isArray(p.blocks) && p.blocks.length) {
     c.blocks = p.blocks.map((b, i) => blockFrom(b, p, i)).filter((b): b is Block => b !== null)

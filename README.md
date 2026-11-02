@@ -59,3 +59,8 @@ In Coolify: Dockerfile build pack, port 80, auto-deploy on push to `main`.
 - Enquiries: `src/lib/enquiry.ts`, used by every design's forms. Submissions go into
   the agency's TribeTravel Enquiries inbox.
 - Hero video: `public/videos/hero.mp4`; images: `src/assets/`
+- Search engines (TribeTravel's SEO Agent, 2 Nov 2026, `src/lib/seo.ts`): the home page's title and description come
+  from `seo` in the TribeTravel content (else the agency's own name), with a TravelAgency JSON-LD block. Set
+  `VITE_SITE_URL` (e.g. `https://www.gettravel.global`) in Coolify for each agency's site: it is the canonical address
+  and `scripts/snapshot.mjs` writes `sitemap.xml` and `robots.txt` from it (the demo agency defaults to
+  travelsite.aifundi.io).

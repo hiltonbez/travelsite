@@ -73,6 +73,25 @@ const PAGES = [
   { path: "/__not-found__", file: "404.html", status: 404 },
 ];
 
+// sitemap.xml and robots.txt (2 Nov 2026, TribeTravel's SEO Agent): Google reads the sitemap to find every page.
+// The site's address is VITE_SITE_URL (set it in Coolify for each agency's site); the demo agency's site defaults to
+// travelsite.aifundi.io. Only the demo agency's site lists the design gallery; an agency's own site is its home page.
+const SLUG = process.env.VITE_AGENCY_SLUG || "sunset-travel";
+const SITE_URL = ((process.env.VITE_SITE_URL || "").trim().replace(/\/$/, "")
+  || (SLUG === "sunset-travel" ? "https://travelsite.aifundi.io" : ""));
+
+function sitemapXml(siteUrl, slug, pages = PAGES, today = new Date().toISOString().slice(0, 10)) {
+  const listed = pages.filter((p) => p.status === 200 && !p.path.endsWith("/news/post")
+    && (slug === "sunset-travel" || p.path === "/"));
+  const urls = listed.map((p) => `  <url><loc>${siteUrl}${p.path}</loc><lastmod>${today}</lastmod>`
+    + `<changefreq>${p.path === "/" ? "weekly" : "monthly"}</changefreq></url>`);
+  return `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join("\n")}\n</urlset>\n`;
+}
+
+function robotsTxt(siteUrl) {
+  return "User-agent: *\nAllow: /\n" + (siteUrl ? `\nSitemap: ${siteUrl}/sitemap.xml\n` : "");
+}
+
 const PORT = 4173;
 const base = `http://127.0.0.1:${PORT}`;
 const outDir = ".output/public";
@@ -106,6 +125,13 @@ try {
     await mkdir(dirname(target), { recursive: true });
     await writeFile(target, html);
     console.log(`snapshot: ${page.path} -> ${target} (${html.length} bytes)`);
+  }
+  await writeFile(join(outDir, "robots.txt"), robotsTxt(SITE_URL));
+  if (SITE_URL) {
+    await writeFile(join(outDir, "sitemap.xml"), sitemapXml(SITE_URL, SLUG));
+    console.log(`snapshot: sitemap.xml and robots.txt for ${SITE_URL}`);
+  } else {
+    console.log("snapshot: no VITE_SITE_URL, so no sitemap.xml (robots.txt allows everything)");
   }
 } finally {
   server.kill();
