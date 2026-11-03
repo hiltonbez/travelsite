@@ -19,7 +19,7 @@ export const Route = createFileRoute("/destinations/$slug")({
     if (!loaderData) return { links: fonts };
     const { title, description } = destinationTitle(loaderData.dest, loaderData.content);
     const first = loaderData.content.trips.find((t) => loaderData.dest.trips.includes(t.slug));
-    const h = pageHead(title, description, `/destinations/${loaderData.dest.slug}`, first?.img ?? "");
+    const h = pageHead(title, description, `/destinations/${loaderData.dest.slug}`, first?.img ?? "", loaderData.content);
     return { meta: h.meta, links: [...fonts, { rel: "stylesheet", href: windowSeatCss }, ...h.links] };
   },
   component: DestinationRoute,

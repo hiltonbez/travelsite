@@ -50,6 +50,9 @@ export type SiteContent = {
 };
 
 export type Seo = {
+  /** The site's own address and Google's ownership tag, from TribeTravel (3 Nov 2026). */
+  siteUrl?: string;
+  googleVerification?: string;
   title: string;
   description: string;
   keywords: string[];
@@ -168,7 +171,7 @@ type Special = { name: string; destination?: string; summary?: string; from_pric
   inclusions?: unknown; exclusions?: unknown };
 type ApiDestination = { slug?: string; name?: string; blurb?: string; specials?: unknown };
 type ApiBlock = { id?: string; type?: string; fields?: Record<string, unknown>; items?: Record<string, unknown>[] };
-type ApiSeo = { title?: string; description?: string; keywords?: unknown; business?: Record<string, unknown> };
+type ApiSeo = { site_url?: string; google_verification?: string; title?: string; description?: string; keywords?: unknown; business?: Record<string, unknown> };
 export type Payload = { sections?: Sections; featured?: Special[]; chat?: boolean; packages?: boolean; blocks?: ApiBlock[];
   agency?: { name?: string }; seo?: ApiSeo; destinations?: ApiDestination[] };
 
@@ -258,7 +261,10 @@ const getter = (fields: Record<string, unknown> | undefined): Get => (key, fb) =
 function seoFrom(s: ApiSeo | undefined, name: string): Seo {
   const b = s?.business ?? {};
   const kws = Array.isArray(s?.keywords) ? s.keywords.filter((k): k is string => typeof k === "string" && !!k) : [];
-  return { title: str(s?.title, ""), description: str(s?.description, ""), keywords: kws.slice(0, 10),
+  const site = str(s?.site_url, "").replace(/\/$/, "");
+  const tag = str(s?.google_verification, "");
+  return { siteUrl: /^https:\/\/[^/\s]+$/.test(site) ? site : "", googleVerification: /^[\w-]{10,100}$/.test(tag) ? tag : "",
+    title: str(s?.title, ""), description: str(s?.description, ""), keywords: kws.slice(0, 10),
     business: { name: str(b["name"], name), area: str(b["area"], ""), email: str(b["email"], ""), phone: str(b["phone"], ""),
       googleProfile: str(b["google_profile"], "") } };
 }

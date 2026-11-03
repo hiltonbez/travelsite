@@ -15,7 +15,8 @@ export const Route = createFileRoute("/")({
   head: ({ loaderData }) => {
     const h = designHead("Window Seat", "Tailor-made holidays to Mauritius, Zanzibar, the Kruger and beyond, planned personally for you.", WINDOW_SEAT_FONTS);
     const { title, description } = homeTitle(loaderData);
-    const url = siteUrl();
+    const url = siteUrl(loaderData);
+    const tag = loaderData?.seo.googleVerification;
     return {
       meta: [
         { title },
@@ -25,6 +26,8 @@ export const Route = createFileRoute("/")({
         { property: "og:type", content: "website" },
         ...(url ? [{ property: "og:url", content: `${url}/` }] : []),
         { name: "twitter:card", content: "summary_large_image" },
+        // Google's ownership tag: the SEO Agent sets Search Console up with it (seo_agent.gsc_autosetup in TribeTravel).
+        ...(tag ? [{ name: "google-site-verification", content: tag }] : []),
       ],
       links: [...h.links, { rel: "stylesheet", href: windowSeatCss }, ...(url ? [{ rel: "canonical", href: `${url}/` }] : [])],
     };

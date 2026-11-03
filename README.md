@@ -60,10 +60,12 @@ In Coolify: Dockerfile build pack, port 80, auto-deploy on push to `main`.
   the agency's TribeTravel Enquiries inbox.
 - Hero video: `public/videos/hero.mp4`; images: `src/assets/`
 - Search engines (TribeTravel's SEO Agent, 2 Nov 2026, `src/lib/seo.ts`): the home page's title and description come
-  from `seo` in the TribeTravel content (else the agency's own name), with a TravelAgency JSON-LD block. Set
-  `VITE_SITE_URL` (e.g. `https://www.gettravel.global`) in Coolify for each agency's site: it is the canonical address
-  and `scripts/snapshot.mjs` writes `sitemap.xml` and `robots.txt` from it (the demo agency defaults to
-  travelsite.aifundi.io).
+  from `seo` in the TribeTravel content (else the agency's own name), with a TravelAgency JSON-LD block. The site's
+  address comes from `seo.site_url` in the content (the first address under the agency's allowed website origins in
+  TribeTravel), so nothing needs setting per site; `VITE_SITE_URL` overrides it if ever needed. It is the canonical
+  address and `scripts/snapshot.mjs` writes `sitemap.xml` and `robots.txt` from it (the demo agency defaults to
+  travelsite.aifundi.io). `seo.google_verification` is Google's ownership tag on the home page: the SEO Agent uses it
+  to set up Search Console by itself.
 - A page for every special (`/trips/<slug>`) and every destination of the specials (`/destinations/<slug>`)
   (SEO Agent phase 2, `src/designs/window-seat/trips.tsx`): `scripts/snapshot.mjs` reads the same content feed and
   prerenders one page each, and lists them in every agency's sitemap. The home page's trip cards link to them.

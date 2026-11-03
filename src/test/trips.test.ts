@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { merge } from "@/lib/site-content";
-import { destinationSchema, destinationTitle, tripSchema, tripTitle } from "@/lib/seo";
+import { destinationSchema, destinationTitle, pageHead, siteUrl, tripSchema, tripTitle } from "@/lib/seo";
 
 // 2 Nov 2026: a page for every special and destination (TribeTravel's SEO Agent, phase 2), from the content feed.
 const feed = {
@@ -60,5 +60,28 @@ describe("trip and destination pages", () => {
   it("has no trip pages without TribeTravel", () => {
     expect(merge({}).trips).toEqual([]);
     expect(merge({}).destinations).toEqual([]);
+  });
+});
+
+// 3 Nov 2026: the site's address and Google's ownership tag come from TribeTravel, so nobody sets them per site.
+describe("the site's address from TribeTravel", () => {
+  const withSeo = (seo: Record<string, unknown>) => merge({ agency: { name: "GET Travel" }, seo });
+
+  it("uses the feed's address for the canonical and schema", () => {
+    const c = withSeo({ site_url: "https://www.gettravel.global/" });
+    expect(c.seo.siteUrl).toBe("https://www.gettravel.global");
+    expect(siteUrl(c)).toBe("https://www.gettravel.global");
+    expect(pageHead("T", "D", "/trips/x", "", c).links[0]?.href).toBe("https://www.gettravel.global/trips/x");
+  });
+
+  it("ignores an address that isn't a whole https site", () => {
+    expect(withSeo({ site_url: "https://tribetravel.io/site/get-travel" }).seo.siteUrl).toBe("");
+    expect(withSeo({ site_url: "http://www.gettravel.global" }).seo.siteUrl).toBe("");
+    expect(withSeo({ site_url: 5 }).seo.siteUrl).toBe("");
+  });
+
+  it("keeps only a well-formed Google tag", () => {
+    expect(withSeo({ google_verification: "abc_DEF-1234567" }).seo.googleVerification).toBe("abc_DEF-1234567");
+    expect(withSeo({ google_verification: '"><script>' }).seo.googleVerification).toBe("");
   });
 });

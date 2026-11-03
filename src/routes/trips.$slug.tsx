@@ -18,7 +18,7 @@ export const Route = createFileRoute("/trips/$slug")({
     const fonts = designHead("Window Seat", "", WINDOW_SEAT_FONTS).links;
     if (!loaderData) return { links: fonts };
     const { title, description } = tripTitle(loaderData.trip, loaderData.content);
-    const h = pageHead(title, description, `/trips/${loaderData.trip.slug}`, loaderData.trip.img);
+    const h = pageHead(title, description, `/trips/${loaderData.trip.slug}`, loaderData.trip.img, loaderData.content);
     return { meta: h.meta, links: [...fonts, { rel: "stylesheet", href: windowSeatCss }, ...h.links] };
   },
   component: Trip,

@@ -74,11 +74,11 @@ const PAGES = [
 ];
 
 // sitemap.xml and robots.txt (2 Nov 2026, TribeTravel's SEO Agent): Google reads the sitemap to find every page.
-// The site's address is VITE_SITE_URL (set it in Coolify for each agency's site); the demo agency's site defaults to
-// travelsite.aifundi.io. Only the demo agency's site lists the design gallery; an agency's own site is its home page.
+// The site's address is VITE_SITE_URL if it's set, else what TribeTravel's feed says (seo.site_url, 3 Nov 2026, so nobody
+// has to set it per site); the demo agency's site defaults to travelsite.aifundi.io. Only the demo agency's site lists the design gallery; an agency's own site is its home page.
 const SLUG = process.env.VITE_AGENCY_SLUG || "sunset-travel";
-const SITE_URL = ((process.env.VITE_SITE_URL || "").trim().replace(/\/$/, "")
-  || (SLUG === "sunset-travel" ? "https://travelsite.aifundi.io" : ""));
+let SITE_URL = (process.env.VITE_SITE_URL || "").trim().replace(/\/$/, "");
+const DEMO_SITE_URL = SLUG === "sunset-travel" ? "https://travelsite.aifundi.io" : "";
 
 function sitemapXml(siteUrl, slug, pages = PAGES, today = new Date().toISOString().slice(0, 10)) {
   const listed = pages.filter((p) => p.status === 200 && !p.path.endsWith("/news/post")
@@ -135,7 +135,10 @@ function feedPages(payload) {
 async function loadFeedPages() {
   const url = `${TRIBETRAVEL_URL}/api/site/${encodeURIComponent(SLUG)}/content`;
   try {
-    return feedPages(await getJson(url));
+    const payload = await getJson(url);
+    const own = String(payload?.seo?.site_url || "").replace(/\/$/, "");
+    if (!SITE_URL && /^https:\/\/[^/\s]+$/.test(own)) SITE_URL = own;
+    return feedPages(payload);
   } catch (e) {
     console.warn(`snapshot: no trip or destination pages (${e.message})`);
     return [];
@@ -186,12 +189,13 @@ try {
     await writeFile(target, html);
     console.log(`snapshot: ${page.path} -> ${target} (${html.length} bytes)`);
   }
+  SITE_URL = SITE_URL || DEMO_SITE_URL;
   await writeFile(join(outDir, "robots.txt"), robotsTxt(SITE_URL));
   if (SITE_URL) {
     await writeFile(join(outDir, "sitemap.xml"), sitemapXml(SITE_URL, SLUG, written));
     console.log(`snapshot: sitemap.xml and robots.txt for ${SITE_URL}`);
   } else {
-    console.log("snapshot: no VITE_SITE_URL, so no sitemap.xml (robots.txt allows everything)");
+    console.log("snapshot: no site address (VITE_SITE_URL or TribeTravel's feed), so no sitemap.xml (robots.txt allows everything)");
   }
 } finally {
   server.kill();

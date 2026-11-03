@@ -5,10 +5,12 @@ import { AGENCY_SLUG, BRAND, type Destination, type SiteContent, type Trip } fro
 
 const env = (import.meta as { env?: Record<string, string | undefined> }).env ?? {};
 
-/** The site's public address without a trailing slash: VITE_SITE_URL, else the demo site for the demo agency, else "". */
-export function siteUrl(): string {
+/** The site's public address without a trailing slash: VITE_SITE_URL if it's set, else the address TribeTravel knows for
+ *  this agency (3 Nov 2026, so nobody has to set it per site), else the demo site for the demo agency, else "". */
+export function siteUrl(c?: SiteContent): string {
   const v = (env["VITE_SITE_URL"] || "").trim().replace(/\/$/, "");
   if (/^https?:\/\/[^/]+$/.test(v)) return v;
+  if (c?.seo.siteUrl) return c.seo.siteUrl;
   return AGENCY_SLUG === "sunset-travel" ? "https://travelsite.aifundi.io" : "";
 }
 
@@ -28,7 +30,7 @@ export function homeTitle(c: SiteContent | undefined) {
 /** What Google is told about the agency (schema.org TravelAgency), from TribeTravel's contact and SEO details. */
 export function agencySchema(c: SiteContent) {
   const b = c.seo.business;
-  const url = siteUrl();
+  const url = siteUrl(c);
   const sameAs = [b.googleProfile, c.contact.facebook, c.contact.instagram].filter((x) => /^https?:\/\//.test(x));
   return {
     "@context": "https://schema.org",
@@ -55,15 +57,15 @@ export function clip(text: string, max: number) {
 
 /** A picture's full address for link previews and Google: as it is when it's a web link, on the site's own address
  *  when it's one of the site's files (/assets/...), else "". */
-export function absolute(src: string) {
+export function absolute(src: string, c?: SiteContent) {
   if (/^https:\/\//.test(src)) return src;
-  const url = siteUrl();
+  const url = siteUrl(c);
   return url && src.startsWith("/") && !src.startsWith("//") ? `${url}${src}` : "";
 }
 
 /** The <head> tags of an inner page: title, description, canonical and the link preview. */
-export function pageHead(title: string, description: string, path: string, image = "") {
-  const url = siteUrl();
+export function pageHead(title: string, description: string, path: string, image = "", c?: SiteContent) {
+  const url = siteUrl(c);
   return {
     meta: [
       { title },
@@ -72,7 +74,7 @@ export function pageHead(title: string, description: string, path: string, image
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
       ...(url ? [{ property: "og:url", content: `${url}${path}` }] : []),
-      ...(absolute(image) ? [{ property: "og:image", content: absolute(image) }] : []),
+      ...(absolute(image, c) ? [{ property: "og:image", content: absolute(image, c) }] : []),
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: url ? [{ rel: "canonical", href: `${url}${path}` }] : [],
@@ -98,14 +100,14 @@ export function destinationTitle(d: Destination, c: SiteContent) {
 
 /** What Google is told about a special: a TouristTrip with its price as an Offer, sold by the agency. */
 export function tripSchema(t: Trip, c: SiteContent) {
-  const url = siteUrl();
+  const url = siteUrl(c);
   return {
     "@context": "https://schema.org",
     "@type": "TouristTrip",
     name: t.name,
     description: tripTitle(t, c).description,
     ...(url ? { url: `${url}/trips/${t.slug}` } : {}),
-    ...(absolute(t.img) ? { image: absolute(t.img) } : {}),
+    ...(absolute(t.img, c) ? { image: absolute(t.img, c) } : {}),
     ...(t.destination ? { itinerary: { "@type": "Place", name: t.destination } } : {}),
     provider: { "@type": "TravelAgency", name: agencyOf(c), ...(url ? { url: `${url}/` } : {}) },
     ...(t.fromPrice
@@ -116,7 +118,7 @@ export function tripSchema(t: Trip, c: SiteContent) {
 }
 
 export function destinationSchema(d: Destination, c: SiteContent) {
-  const url = siteUrl();
+  const url = siteUrl(c);
   return {
     "@context": "https://schema.org",
     "@type": "TouristDestination",
