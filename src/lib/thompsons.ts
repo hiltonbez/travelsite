@@ -31,5 +31,9 @@ async function get<T>(path: string): Promise<T> {
   return data as T;
 }
 
-export const listHolidays = () => get<{ packages: Holiday[] }>("").then((r) => r.packages);
+// unavailable: the login is there but the supplier didn't answer, so the pages say "try again", not "connect your login"
+export const listHolidays = () => get<{ packages: Holiday[]; unavailable?: boolean }>("").then((r) => {
+  if (r.unavailable) throw new Error("Live packages aren't available right now.");
+  return r.packages;
+});
 export const getHoliday = (id: string) => get<{ package: HolidayFull }>(`/${encodeURIComponent(id)}`).then((r) => r.package);
