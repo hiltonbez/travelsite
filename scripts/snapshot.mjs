@@ -69,18 +69,6 @@ const PAGES = [
   { path: "/designs/enterprise/news/greek-islands-on-a-cruise", file: "designs/enterprise/news/greek-islands-on-a-cruise/index.html", status: 200 },
   { path: "/designs/enterprise/contact", file: "designs/enterprise/contact/index.html", status: 200 },
   { path: "/designs/enterprise/privacy", file: "designs/enterprise/privacy/index.html", status: 200 },
-  // The ten samples for choosing the next designs (src/concepts/list.ts): built, but not in the sitemap until chosen
-  { path: "/concepts", file: "concepts/index.html", status: 200, unlisted: true },
-  { path: "/concepts/holiday-mix", file: "concepts/holiday-mix/index.html", status: 200, unlisted: true },
-  { path: "/concepts/pack-your-bag", file: "concepts/pack-your-bag/index.html", status: 200, unlisted: true },
-  { path: "/concepts/scratch-the-world", file: "concepts/scratch-the-world/index.html", status: 200, unlisted: true },
-  { path: "/concepts/the-trailer", file: "concepts/the-trailer/index.html", status: 200, unlisted: true },
-  { path: "/concepts/tune-in", file: "concepts/tune-in/index.html", status: 200, unlisted: true },
-  { path: "/concepts/the-lift", file: "concepts/the-lift/index.html", status: 200, unlisted: true },
-  { path: "/concepts/pop-up-book", file: "concepts/pop-up-book/index.html", status: 200, unlisted: true },
-  { path: "/concepts/holiday-bar", file: "concepts/holiday-bar/index.html", status: 200, unlisted: true },
-  { path: "/concepts/chase-the-sun", file: "concepts/chase-the-sun/index.html", status: 200, unlisted: true },
-  { path: "/concepts/cover-story", file: "concepts/cover-story/index.html", status: 200, unlisted: true },
   // Any unknown path renders the not-found page; nginx serves it for 404s.
   { path: "/__not-found__", file: "404.html", status: 404 },
 ];
@@ -93,7 +81,7 @@ let SITE_URL = (process.env.VITE_SITE_URL || "").trim().replace(/\/$/, "");
 const DEMO_SITE_URL = SLUG === "sunset-travel" ? "https://travelsite.aifundi.io" : "";
 
 function sitemapXml(siteUrl, slug, pages = PAGES, today = new Date().toISOString().slice(0, 10)) {
-  const listed = pages.filter((p) => p.status === 200 && !p.unlisted && !p.path.endsWith("/news/post")
+  const listed = pages.filter((p) => p.status === 200 && !p.path.endsWith("/news/post")
     && (slug === "sunset-travel" || p.path === "/" || p.feed));
   const urls = listed.map((p) => `  <url><loc>${siteUrl}${p.path}</loc><lastmod>${today}</lastmod>`
     + `<changefreq>${p.path === "/" || p.feed ? "weekly" : "monthly"}</changefreq></url>`);

@@ -3,7 +3,6 @@ import { createRouter, rootRouteId } from "@tanstack/react-router";
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 
-import { CONCEPTS } from "@/concepts/list";
 import { DESIGNS } from "@/lib/designs";
 import { routeTree } from "@/routeTree.gen";
 
@@ -31,17 +30,6 @@ describe("App routing", () => {
 
     for (const d of DESIGNS.filter((d) => d.path !== "/")) {
       expect(snapshot, d.path).toContain(`path: "${d.path}"`);
-    }
-  });
-
-  it("has a page and a snapshot entry for every sample in /concepts", () => {
-    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
-    const snapshot = readFileSync("scripts/snapshot.mjs", "utf8");
-
-    for (const c of CONCEPTS) {
-      const path = `/concepts/${c.slug}`;
-      expect(router.matchRoutes(path).at(-1)?.routeId, path).not.toBe(rootRouteId);
-      expect(snapshot, path).toContain(`path: "${path}"`);
     }
   });
 });

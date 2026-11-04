@@ -11,17 +11,6 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackagesRouteImport } from './routes/packages'
-import { Route as ConceptsIndexRouteImport } from './routes/concepts.index'
-import { Route as ConceptsChaseTheSunRouteImport } from './routes/concepts.chase-the-sun'
-import { Route as ConceptsCoverStoryRouteImport } from './routes/concepts.cover-story'
-import { Route as ConceptsHolidayBarRouteImport } from './routes/concepts.holiday-bar'
-import { Route as ConceptsHolidayMixRouteImport } from './routes/concepts.holiday-mix'
-import { Route as ConceptsPackYourBagRouteImport } from './routes/concepts.pack-your-bag'
-import { Route as ConceptsPopUpBookRouteImport } from './routes/concepts.pop-up-book'
-import { Route as ConceptsScratchTheWorldRouteImport } from './routes/concepts.scratch-the-world'
-import { Route as ConceptsTheLiftRouteImport } from './routes/concepts.the-lift'
-import { Route as ConceptsTheTrailerRouteImport } from './routes/concepts.the-trailer'
-import { Route as ConceptsTuneInRouteImport } from './routes/concepts.tune-in'
 import { Route as DesignsAtlasRouteImport } from './routes/designs/atlas'
 import { Route as DesignsEnterpriseRouteImport } from './routes/designs/enterprise'
 import { Route as DesignsLivingMapRouteImport } from './routes/designs/living-map'
@@ -72,61 +61,6 @@ const IndexRoute = IndexRouteImport.update({
 const PackagesRoute = PackagesRouteImport.update({
   id: '/packages',
   path: '/packages',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsIndexRoute = ConceptsIndexRouteImport.update({
-  id: '/concepts/',
-  path: '/concepts/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsChaseTheSunRoute = ConceptsChaseTheSunRouteImport.update({
-  id: '/concepts/chase-the-sun',
-  path: '/concepts/chase-the-sun',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsCoverStoryRoute = ConceptsCoverStoryRouteImport.update({
-  id: '/concepts/cover-story',
-  path: '/concepts/cover-story',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsHolidayBarRoute = ConceptsHolidayBarRouteImport.update({
-  id: '/concepts/holiday-bar',
-  path: '/concepts/holiday-bar',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsHolidayMixRoute = ConceptsHolidayMixRouteImport.update({
-  id: '/concepts/holiday-mix',
-  path: '/concepts/holiday-mix',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsPackYourBagRoute = ConceptsPackYourBagRouteImport.update({
-  id: '/concepts/pack-your-bag',
-  path: '/concepts/pack-your-bag',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsPopUpBookRoute = ConceptsPopUpBookRouteImport.update({
-  id: '/concepts/pop-up-book',
-  path: '/concepts/pop-up-book',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsScratchTheWorldRoute = ConceptsScratchTheWorldRouteImport.update({
-  id: '/concepts/scratch-the-world',
-  path: '/concepts/scratch-the-world',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsTheLiftRoute = ConceptsTheLiftRouteImport.update({
-  id: '/concepts/the-lift',
-  path: '/concepts/the-lift',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsTheTrailerRoute = ConceptsTheTrailerRouteImport.update({
-  id: '/concepts/the-trailer',
-  path: '/concepts/the-trailer',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ConceptsTuneInRoute = ConceptsTuneInRouteImport.update({
-  id: '/concepts/tune-in',
-  path: '/concepts/tune-in',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsAtlasRoute = DesignsAtlasRouteImport.update({
@@ -355,23 +289,12 @@ const DesignsLivingMapDestinationsSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/packages': typeof PackagesRoute
-  '/concepts/chase-the-sun': typeof ConceptsChaseTheSunRoute
-  '/concepts/cover-story': typeof ConceptsCoverStoryRoute
-  '/concepts/holiday-bar': typeof ConceptsHolidayBarRoute
-  '/concepts/holiday-mix': typeof ConceptsHolidayMixRoute
-  '/concepts/pack-your-bag': typeof ConceptsPackYourBagRoute
-  '/concepts/pop-up-book': typeof ConceptsPopUpBookRoute
-  '/concepts/scratch-the-world': typeof ConceptsScratchTheWorldRoute
-  '/concepts/the-lift': typeof ConceptsTheLiftRoute
-  '/concepts/the-trailer': typeof ConceptsTheTrailerRoute
-  '/concepts/tune-in': typeof ConceptsTuneInRoute
   '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
   '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/destinations/$slug': typeof DestinationsSlugRoute
   '/trips/$slug': typeof TripsSlugRoute
-  '/concepts/': typeof ConceptsIndexRoute
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
   '/designs/atlas/book': typeof DesignsAtlasBookRoute
@@ -411,20 +334,9 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/packages': typeof PackagesRoute
-  '/concepts/chase-the-sun': typeof ConceptsChaseTheSunRoute
-  '/concepts/cover-story': typeof ConceptsCoverStoryRoute
-  '/concepts/holiday-bar': typeof ConceptsHolidayBarRoute
-  '/concepts/holiday-mix': typeof ConceptsHolidayMixRoute
-  '/concepts/pack-your-bag': typeof ConceptsPackYourBagRoute
-  '/concepts/pop-up-book': typeof ConceptsPopUpBookRoute
-  '/concepts/scratch-the-world': typeof ConceptsScratchTheWorldRoute
-  '/concepts/the-lift': typeof ConceptsTheLiftRoute
-  '/concepts/the-trailer': typeof ConceptsTheTrailerRoute
-  '/concepts/tune-in': typeof ConceptsTuneInRoute
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/destinations/$slug': typeof DestinationsSlugRoute
   '/trips/$slug': typeof TripsSlugRoute
-  '/concepts': typeof ConceptsIndexRoute
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
   '/designs/atlas/book': typeof DesignsAtlasBookRoute
@@ -465,23 +377,12 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/packages': typeof PackagesRoute
-  '/concepts/chase-the-sun': typeof ConceptsChaseTheSunRoute
-  '/concepts/cover-story': typeof ConceptsCoverStoryRoute
-  '/concepts/holiday-bar': typeof ConceptsHolidayBarRoute
-  '/concepts/holiday-mix': typeof ConceptsHolidayMixRoute
-  '/concepts/pack-your-bag': typeof ConceptsPackYourBagRoute
-  '/concepts/pop-up-book': typeof ConceptsPopUpBookRoute
-  '/concepts/scratch-the-world': typeof ConceptsScratchTheWorldRoute
-  '/concepts/the-lift': typeof ConceptsTheLiftRoute
-  '/concepts/the-trailer': typeof ConceptsTheTrailerRoute
-  '/concepts/tune-in': typeof ConceptsTuneInRoute
   '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
   '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/destinations/$slug': typeof DestinationsSlugRoute
   '/trips/$slug': typeof TripsSlugRoute
-  '/concepts/': typeof ConceptsIndexRoute
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
   '/designs/atlas/book': typeof DesignsAtlasBookRoute
@@ -523,23 +424,12 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/packages'
-    | '/concepts/chase-the-sun'
-    | '/concepts/cover-story'
-    | '/concepts/holiday-bar'
-    | '/concepts/holiday-mix'
-    | '/concepts/pack-your-bag'
-    | '/concepts/pop-up-book'
-    | '/concepts/scratch-the-world'
-    | '/concepts/the-lift'
-    | '/concepts/the-trailer'
-    | '/concepts/tune-in'
     | '/designs/atlas'
     | '/designs/enterprise'
     | '/designs/living-map'
     | '/designs/window-seat'
     | '/destinations/$slug'
     | '/trips/$slug'
-    | '/concepts/'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
     | '/designs/atlas/book'
@@ -579,20 +469,9 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/packages'
-    | '/concepts/chase-the-sun'
-    | '/concepts/cover-story'
-    | '/concepts/holiday-bar'
-    | '/concepts/holiday-mix'
-    | '/concepts/pack-your-bag'
-    | '/concepts/pop-up-book'
-    | '/concepts/scratch-the-world'
-    | '/concepts/the-lift'
-    | '/concepts/the-trailer'
-    | '/concepts/tune-in'
     | '/designs/window-seat'
     | '/destinations/$slug'
     | '/trips/$slug'
-    | '/concepts'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
     | '/designs/atlas/book'
@@ -632,23 +511,12 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/packages'
-    | '/concepts/chase-the-sun'
-    | '/concepts/cover-story'
-    | '/concepts/holiday-bar'
-    | '/concepts/holiday-mix'
-    | '/concepts/pack-your-bag'
-    | '/concepts/pop-up-book'
-    | '/concepts/scratch-the-world'
-    | '/concepts/the-lift'
-    | '/concepts/the-trailer'
-    | '/concepts/tune-in'
     | '/designs/atlas'
     | '/designs/enterprise'
     | '/designs/living-map'
     | '/designs/window-seat'
     | '/destinations/$slug'
     | '/trips/$slug'
-    | '/concepts/'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
     | '/designs/atlas/book'
@@ -689,23 +557,12 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PackagesRoute: typeof PackagesRoute
-  ConceptsChaseTheSunRoute: typeof ConceptsChaseTheSunRoute
-  ConceptsCoverStoryRoute: typeof ConceptsCoverStoryRoute
-  ConceptsHolidayBarRoute: typeof ConceptsHolidayBarRoute
-  ConceptsHolidayMixRoute: typeof ConceptsHolidayMixRoute
-  ConceptsPackYourBagRoute: typeof ConceptsPackYourBagRoute
-  ConceptsPopUpBookRoute: typeof ConceptsPopUpBookRoute
-  ConceptsScratchTheWorldRoute: typeof ConceptsScratchTheWorldRoute
-  ConceptsTheLiftRoute: typeof ConceptsTheLiftRoute
-  ConceptsTheTrailerRoute: typeof ConceptsTheTrailerRoute
-  ConceptsTuneInRoute: typeof ConceptsTuneInRoute
   DesignsAtlasRoute: typeof DesignsAtlasRouteWithChildren
   DesignsEnterpriseRoute: typeof DesignsEnterpriseRouteWithChildren
   DesignsLivingMapRoute: typeof DesignsLivingMapRouteWithChildren
   DesignsWindowSeatRoute: typeof DesignsWindowSeatRouteWithChildren
   DestinationsSlugRoute: typeof DestinationsSlugRoute
   TripsSlugRoute: typeof TripsSlugRoute
-  ConceptsIndexRoute: typeof ConceptsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -722,83 +579,6 @@ declare module '@tanstack/react-router' {
       path: '/packages'
       fullPath: '/packages'
       preLoaderRoute: typeof PackagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/': {
-      id: '/concepts/'
-      path: '/concepts'
-      fullPath: '/concepts/'
-      preLoaderRoute: typeof ConceptsIndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/chase-the-sun': {
-      id: '/concepts/chase-the-sun'
-      path: '/concepts/chase-the-sun'
-      fullPath: '/concepts/chase-the-sun'
-      preLoaderRoute: typeof ConceptsChaseTheSunRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/cover-story': {
-      id: '/concepts/cover-story'
-      path: '/concepts/cover-story'
-      fullPath: '/concepts/cover-story'
-      preLoaderRoute: typeof ConceptsCoverStoryRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/holiday-bar': {
-      id: '/concepts/holiday-bar'
-      path: '/concepts/holiday-bar'
-      fullPath: '/concepts/holiday-bar'
-      preLoaderRoute: typeof ConceptsHolidayBarRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/holiday-mix': {
-      id: '/concepts/holiday-mix'
-      path: '/concepts/holiday-mix'
-      fullPath: '/concepts/holiday-mix'
-      preLoaderRoute: typeof ConceptsHolidayMixRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/pack-your-bag': {
-      id: '/concepts/pack-your-bag'
-      path: '/concepts/pack-your-bag'
-      fullPath: '/concepts/pack-your-bag'
-      preLoaderRoute: typeof ConceptsPackYourBagRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/pop-up-book': {
-      id: '/concepts/pop-up-book'
-      path: '/concepts/pop-up-book'
-      fullPath: '/concepts/pop-up-book'
-      preLoaderRoute: typeof ConceptsPopUpBookRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/scratch-the-world': {
-      id: '/concepts/scratch-the-world'
-      path: '/concepts/scratch-the-world'
-      fullPath: '/concepts/scratch-the-world'
-      preLoaderRoute: typeof ConceptsScratchTheWorldRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/the-lift': {
-      id: '/concepts/the-lift'
-      path: '/concepts/the-lift'
-      fullPath: '/concepts/the-lift'
-      preLoaderRoute: typeof ConceptsTheLiftRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/the-trailer': {
-      id: '/concepts/the-trailer'
-      path: '/concepts/the-trailer'
-      fullPath: '/concepts/the-trailer'
-      preLoaderRoute: typeof ConceptsTheTrailerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/concepts/tune-in': {
-      id: '/concepts/tune-in'
-      path: '/concepts/tune-in'
-      fullPath: '/concepts/tune-in'
-      preLoaderRoute: typeof ConceptsTuneInRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/designs/atlas': {
@@ -1204,23 +984,12 @@ const DesignsWindowSeatRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PackagesRoute: PackagesRoute,
-  ConceptsChaseTheSunRoute: ConceptsChaseTheSunRoute,
-  ConceptsCoverStoryRoute: ConceptsCoverStoryRoute,
-  ConceptsHolidayBarRoute: ConceptsHolidayBarRoute,
-  ConceptsHolidayMixRoute: ConceptsHolidayMixRoute,
-  ConceptsPackYourBagRoute: ConceptsPackYourBagRoute,
-  ConceptsPopUpBookRoute: ConceptsPopUpBookRoute,
-  ConceptsScratchTheWorldRoute: ConceptsScratchTheWorldRoute,
-  ConceptsTheLiftRoute: ConceptsTheLiftRoute,
-  ConceptsTheTrailerRoute: ConceptsTheTrailerRoute,
-  ConceptsTuneInRoute: ConceptsTuneInRoute,
   DesignsAtlasRoute: DesignsAtlasRouteWithChildren,
   DesignsEnterpriseRoute: DesignsEnterpriseRouteWithChildren,
   DesignsLivingMapRoute: DesignsLivingMapRouteWithChildren,
   DesignsWindowSeatRoute: DesignsWindowSeatRouteWithChildren,
   DestinationsSlugRoute: DestinationsSlugRoute,
   TripsSlugRoute: TripsSlugRoute,
-  ConceptsIndexRoute: ConceptsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
