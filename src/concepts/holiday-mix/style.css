@@ -1,0 +1,449 @@
+/* The Holiday Mix: a club booth at night. Matte black hardware, knurled caps, LEDs in hot coral and acid yellow. */
+.c-holiday-mix {
+  --black: #070708;
+  --panel: #111113;
+  --panel-2: #18181b;
+  --edge: #2a2a2e;
+  --silk: #d9d6cc;
+  --dim: #8b8880;
+  --coral: #ff4b33;
+  --acid: #dcff1e;
+  --display: "Anton", "Arial Narrow", Impact, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Consolas, monospace;
+  --matte: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .06 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  min-height: 100vh;
+  min-height: 100svh;
+  background: var(--black);
+  color: var(--silk);
+  font-family: var(--mono);
+  font-size: 14px;
+  line-height: 1.5;
+  overflow-x: clip;
+}
+.c-holiday-mix a { color: inherit; text-decoration: none; }
+.c-holiday-mix button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.c-holiday-mix :focus-visible { outline: 2px solid var(--acid); outline-offset: 2px; }
+.c-holiday-mix .hm-sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.c-holiday-mix .hm-clip { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+
+/* Top plate */
+.c-holiday-mix .hm-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  height: 48px; padding: 0 16px;
+  background: var(--panel) var(--matte);
+  border-bottom: 1px solid #000;
+  position: relative; z-index: 5;
+}
+.c-holiday-mix .hm-brand { display: flex; align-items: baseline; gap: 10px; min-height: 40px; align-items: center; white-space: nowrap; }
+.c-holiday-mix .hm-brand-name { font-family: var(--display); font-size: 20px; letter-spacing: .03em; text-transform: uppercase; color: #fff; }
+.c-holiday-mix .hm-brand-model { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.c-holiday-mix .hm-links { display: flex; align-items: center; gap: 4px; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+.c-holiday-mix .hm-links a { display: inline-flex; align-items: center; min-height: 40px; padding: 0 10px; white-space: nowrap; transition: color .15s; }
+.c-holiday-mix .hm-links a:hover { color: var(--acid); }
+.c-holiday-mix .hm-tel { color: var(--coral); }
+
+/* The desk fills the first screen: footage above, hardware below */
+.c-holiday-mix .hm-desk {
+  position: relative; display: flex; flex-direction: column;
+  min-height: calc(100vh - 48px); min-height: calc(100svh - 48px);
+  overflow: hidden;
+}
+.c-holiday-mix .hm-stage {
+  position: relative; flex: 1 1 auto; min-height: 330px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  background: #000; overflow: hidden;
+}
+.c-holiday-mix .hm-decks { position: absolute; inset: 0; transition: transform 1.3s cubic-bezier(.5, 0, 1, .5); }
+.c-holiday-mix .hm-deck { position: absolute; inset: 0; }
+.c-holiday-mix .hm-deck-b { mix-blend-mode: screen; }
+.c-holiday-mix .hm-shade {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .16) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(0, 0, 0, .55), rgba(0, 0, 0, .05) 34%, rgba(0, 0, 0, .1) 55%, rgba(0, 0, 0, .78));
+}
+.c-holiday-mix .hm-dim { position: absolute; inset: 0; background: #000; pointer-events: none; }
+.c-holiday-mix .hm-flash { position: absolute; inset: 0; background: var(--acid); mix-blend-mode: overlay; pointer-events: none; }
+
+.c-holiday-mix .hm-over {
+  position: relative; flex: 1 1 auto;
+  display: flex; flex-direction: column; justify-content: space-between; gap: 12px;
+  padding: 16px clamp(16px, 2.4vw, 36px) 12px;
+  pointer-events: none;
+  text-shadow: 0 1px 14px rgba(0, 0, 0, .55);
+}
+.c-holiday-mix .hm-intro { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 18px; }
+.c-holiday-mix h1 {
+  font-family: var(--display); font-weight: 400; color: var(--acid);
+  font-size: clamp(26px, min(3.4vw, 5vh), 50px); line-height: 1.05; letter-spacing: .015em; text-transform: uppercase;
+}
+.c-holiday-mix .hm-intro p { max-width: 58ch; font-size: 12.5px; line-height: 1.45; color: #fff; }
+.c-holiday-mix .hm-name-more { font-family: var(--display); font-size: clamp(20px, 3vw, 44px); line-height: 1.1; text-transform: uppercase; letter-spacing: .02em; color: var(--acid); animation: hm-fade .4s .2s both; }
+.c-holiday-mix .hm-chip {
+  display: inline-flex; align-items: center; gap: 8px; width: fit-content;
+  font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: #fff;
+}
+.c-holiday-mix .hm-chip-led { width: 9px; height: 9px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 10px 2px var(--coral); animation: hm-blink 1.1s steps(2, jump-none) infinite; }
+.c-holiday-mix .hm-chip-led.is-off { background: #3a2320; box-shadow: none; animation: none; }
+@keyframes hm-blink { from { opacity: 1; } to { opacity: .35; } }
+.c-holiday-mix .hm-name {
+  display: flex; flex-wrap: wrap; gap: 0 .2em;
+  font-family: var(--display); color: #fff; text-transform: uppercase;
+  font-size: clamp(58px, min(12.5vw, 16vh), 200px); line-height: 1.04; letter-spacing: .005em;
+  text-shadow: none;
+}
+.c-holiday-mix .hm-word { display: inline-flex; overflow: hidden; }
+.c-holiday-mix .hm-roll { display: inline-block; animation: hm-roll .5s cubic-bezier(.2, 1.3, .4, 1) both; }
+@keyframes hm-roll { from { transform: translateY(105%); } to { transform: none; } }
+.c-holiday-mix .hm-blurb { font-size: clamp(13px, 1.3vw, 16px); color: #fff; animation: hm-fade .5s both; }
+.c-holiday-mix .hm-with { font-size: 12px; color: var(--acid); letter-spacing: .02em; }
+.c-holiday-mix .hm-with b { font-weight: 700; }
+@keyframes hm-fade { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* Waveform strip */
+.c-holiday-mix .hm-wave { position: relative; background: rgba(4, 4, 5, .8); border-top: 1px solid rgba(255, 255, 255, .1); }
+.c-holiday-mix .hm-wave-screen { position: relative; height: clamp(64px, 11vh, 110px); }
+.c-holiday-mix .hm-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.c-holiday-mix .hm-peaks { position: absolute; inset: 0; }
+.c-holiday-mix .hm-peak {
+  position: absolute; top: 0; bottom: 0; width: 44px; transform: translateX(-50%);
+  display: flex; align-items: flex-start; justify-content: center; padding-top: 2px;
+  font-size: 10px; font-weight: 700; letter-spacing: .05em; color: rgba(255, 255, 255, .75);
+  transition: color .15s;
+}
+.c-holiday-mix .hm-peak:hover { color: var(--acid); }
+.c-holiday-mix .hm-peak.is-on { color: #000; }
+.c-holiday-mix .hm-peak.is-on::before { content: ""; position: absolute; top: 2px; left: 50%; width: 24px; height: 15px; margin-left: -12px; background: var(--acid); z-index: -1; }
+.c-holiday-mix .hm-peaks { isolation: isolate; }
+.c-holiday-mix .hm-lcd {
+  display: flex; gap: 10px; align-items: baseline;
+  min-height: 30px; padding: 6px clamp(16px, 2.4vw, 36px);
+  background: #0a0b05; border-top: 1px solid #000;
+  color: var(--acid); font-size: 12px; line-height: 1.35;
+  animation: hm-lcd .3s steps(4) both;
+}
+.c-holiday-mix .hm-lcd b { white-space: nowrap; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.c-holiday-mix .hm-lcd span { color: rgba(220, 255, 30, .72); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+@keyframes hm-lcd { from { opacity: .2; } to { opacity: 1; } }
+
+/* Hardware */
+.c-holiday-mix .hm-console {
+  position: relative; flex: 0 0 auto;
+  display: grid; grid-template-columns: minmax(170px, 250px) minmax(0, 1fr) minmax(170px, 250px); gap: clamp(10px, 1.6vw, 26px);
+  padding: 14px clamp(22px, 2.4vw, 38px) 14px;
+  background: linear-gradient(180deg, #1b1b1e, #101012 40%) , var(--panel);
+  background-image: var(--matte), linear-gradient(180deg, #1b1b1e, #101012 40%);
+  border-top: 2px solid #000;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, .07);
+  transition: transform .9s cubic-bezier(.6, 0, 1, .4);
+}
+.c-holiday-mix .hm-screw {
+  position: absolute; width: 11px; height: 11px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 30%, #5a5a5f, #1a1a1c 70%);
+  box-shadow: 0 0 0 1px #000;
+}
+.c-holiday-mix .hm-screw::after { content: ""; position: absolute; left: 2px; right: 2px; top: 5px; height: 1px; background: #000; transform: rotate(35deg); }
+.c-holiday-mix .hm-s1 { left: 6px; top: 6px; } .c-holiday-mix .hm-s2 { right: 6px; top: 6px; }
+.c-holiday-mix .hm-s3 { left: 6px; bottom: 6px; } .c-holiday-mix .hm-s4 { right: 6px; bottom: 6px; }
+
+/* Jog wheels */
+.c-holiday-mix .hm-jogbox { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; min-width: 0; }
+.c-holiday-mix .hm-jog-label { display: flex; gap: 8px; align-items: baseline; font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--dim); white-space: nowrap; transition: color .2s; }
+.c-holiday-mix .hm-jog-label b { font-weight: 700; color: var(--silk); }
+.c-holiday-mix .is-live .hm-jog-label span { color: var(--acid); }
+.c-holiday-mix .hm-jog {
+  position: relative; width: min(100%, 220px); aspect-ratio: 1; border-radius: 50%;
+  background: conic-gradient(from 20deg, #2c2c30, #0d0d0f 25%, #2c2c30 50%, #0d0d0f 75%, #2c2c30);
+  box-shadow: 0 0 0 1px #000, 0 10px 24px rgba(0, 0, 0, .7), inset 0 0 0 5px #1a1a1d;
+  touch-action: none; cursor: grab; user-select: none;
+}
+.c-holiday-mix .hm-jog:active { cursor: grabbing; }
+.c-holiday-mix .hm-platter {
+  position: absolute; inset: 7%; border-radius: 50%; overflow: hidden; will-change: transform;
+  background: repeating-radial-gradient(circle, #151517 0 2px, #09090a 2px 4px);
+  box-shadow: inset 0 0 0 1px #000;
+}
+.c-holiday-mix .hm-platter img { position: absolute; left: 25%; top: 25%; width: 50%; height: 50%; object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 2px #000; pointer-events: none; }
+.c-holiday-mix .hm-jog-mark { position: absolute; left: 50%; top: 3%; width: 3px; height: 16%; margin-left: -1.5px; background: var(--coral); box-shadow: 0 0 6px var(--coral); }
+.c-holiday-mix .is-live .hm-jog-mark { background: var(--acid); box-shadow: 0 0 8px var(--acid); }
+.c-holiday-mix .hm-jog-hub { position: absolute; left: 50%; top: 50%; width: 11%; height: 11%; transform: translate(-50%, -50%); border-radius: 50%; background: radial-gradient(circle at 35% 30%, #6a6a70, #101012 72%); box-shadow: 0 0 0 1px #000; pointer-events: none; }
+
+/* Mixer */
+.c-holiday-mix .hm-mixer {
+  display: grid; min-width: 0;
+  grid-template-columns: minmax(0, 1fr) 272px;
+  grid-template-areas: "ch master" "xf act";
+  gap: 10px 16px;
+}
+.c-holiday-mix .hm-channels { grid-area: ch; display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2px; min-width: 0; }
+.c-holiday-mix .hm-ch {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0;
+  padding: 2px 2px 4px;
+  border-left: 1px solid rgba(255, 255, 255, .05);
+  color: var(--dim);
+  transition: color .2s;
+}
+.c-holiday-mix .hm-ch:first-child { border-left: 0; }
+.c-holiday-mix .hm-ch.is-hot { color: var(--silk); }
+.c-holiday-mix .hm-ch-icon { display: flex; height: 18px; color: inherit; }
+.c-holiday-mix .hm-ch.is-hot .hm-ch-icon { color: var(--acid); }
+.c-holiday-mix .hm-strip { display: flex; justify-content: center; gap: 8px; height: clamp(130px, 19vh, 210px); width: 100%; }
+.c-holiday-mix .hm-ch-label { font-size: 10.5px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; text-align: center; white-space: nowrap; }
+.c-holiday-mix .hm-ch-val { font-size: 10px; color: var(--coral); letter-spacing: .08em; }
+
+/* LED segment meters: a lit gradient, an unlit shutter scaled over it, a grille cutting it into segments */
+.c-holiday-mix .hm-meter {
+  position: relative; flex: 0 0 10px; width: 10px; height: 100%; overflow: hidden;
+  background: linear-gradient(0deg, var(--acid) 0 62%, #ff9b1e 74%, var(--coral) 84%);
+  box-shadow: 0 0 0 1px #000;
+}
+.c-holiday-mix .hm-meter::after {
+  content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(0deg, #060607 0 2px, transparent 2px 9px);
+}
+.c-holiday-mix .hm-meter-off { position: absolute; inset: 0; background: #1e1d17; transform-origin: top; will-change: transform; }
+
+/* Faders */
+.c-holiday-mix .hm-fader {
+  position: relative; flex: 0 1 62px; width: 62px; min-width: 40px; height: 100%;
+  touch-action: none; cursor: ns-resize; user-select: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(217, 214, 204, .4) 0 1px, transparent 1px calc((100% - 1px) / 10)) left center / 7px 100% no-repeat,
+    repeating-linear-gradient(0deg, rgba(217, 214, 204, .4) 0 1px, transparent 1px calc((100% - 1px) / 10)) right center / 7px 100% no-repeat;
+}
+.c-holiday-mix .hm-slot { position: absolute; left: 50%; top: 0; bottom: 0; width: 6px; margin-left: -3px; background: #000; border-radius: 1px; box-shadow: 0 0 0 1px #2c2c30, inset 0 0 3px #000; }
+.c-holiday-mix .hm-rider { position: absolute; left: 8px; right: 8px; top: 0; height: calc(100% - 38px); will-change: transform; pointer-events: none; }
+.c-holiday-mix .hm-cap {
+  position: absolute; left: 0; right: 0; top: 0; height: 38px; border-radius: 3px;
+  background:
+    linear-gradient(90deg, rgba(255, 255, 255, .2), transparent 14%, transparent 86%, rgba(0, 0, 0, .65)),
+    linear-gradient(180deg, rgba(255, 255, 255, .16), transparent 30%, transparent 62%, rgba(0, 0, 0, .55)),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, .15) 0 1px, transparent 1px 3px),
+    repeating-linear-gradient(-45deg, rgba(0, 0, 0, .7) 0 1px, transparent 1px 3px),
+    #2a2a2e;
+  box-shadow: 0 0 0 1px #000, 0 6px 8px rgba(0, 0, 0, .75);
+}
+.c-holiday-mix .hm-cap::after { content: ""; position: absolute; left: 0; right: 0; top: 50%; height: 3px; margin-top: -1.5px; background: var(--silk); box-shadow: 0 0 0 1px rgba(0, 0, 0, .6); }
+.c-holiday-mix .hm-fader:focus-visible .hm-cap::after,
+.c-holiday-mix .hm-fader:active .hm-cap::after { background: var(--acid); box-shadow: 0 0 8px var(--acid); }
+.c-holiday-mix .hm-fader:focus-visible { outline-offset: 0; }
+
+/* Master section */
+.c-holiday-mix .hm-master { grid-area: master; display: flex; gap: 14px; align-items: stretch; min-width: 0; padding-top: 22px; }
+.c-holiday-mix .hm-master-meters { display: flex; gap: 5px; }
+.c-holiday-mix .hm-meter-big { flex-basis: 16px; width: 16px; height: 100%; }
+.c-holiday-mix .hm-readout { flex: 1; min-width: 0; display: flex; flex-direction: column; justify-content: center; padding: 8px 12px; background: #0a0b05; box-shadow: inset 0 0 0 1px #000, 0 0 0 1px #2a2a2e; }
+.c-holiday-mix .hm-readout span { font-size: 9.5px; letter-spacing: .14em; text-transform: uppercase; color: rgba(220, 255, 30, .6); }
+.c-holiday-mix .hm-readout b { font-family: var(--display); font-weight: 400; font-size: 25px; line-height: 1.15; color: var(--acid); margin-bottom: 3px; }
+.c-holiday-mix .hm-readout-price { color: var(--coral) !important; white-space: nowrap; }
+
+/* Crossfader */
+.c-holiday-mix .hm-xfade { grid-area: xf; display: flex; align-items: center; gap: 10px; min-width: 0; }
+.c-holiday-mix .hm-x-end { font-size: 10.5px; color: var(--silk); white-space: nowrap; letter-spacing: .04em; }
+.c-holiday-mix .hm-x-end span { color: var(--acid); }
+.c-holiday-mix .hm-x { position: relative; flex: 1; height: 48px; min-width: 0; touch-action: none; cursor: ew-resize; user-select: none; }
+.c-holiday-mix .hm-x-slot { position: absolute; left: 0; right: 0; top: 50%; height: 6px; margin-top: -3px; background: #000; box-shadow: 0 0 0 1px #2c2c30; }
+.c-holiday-mix .hm-x-rider { position: absolute; top: 5px; bottom: 5px; left: 0; width: calc(100% - 56px); will-change: transform; pointer-events: none; }
+.c-holiday-mix .hm-cap-x { left: 0; right: auto; width: 56px; height: 100%; }
+.c-holiday-mix .hm-cap-x::after { left: 50%; right: auto; top: 0; width: 3px; height: 100%; margin: 0 0 0 -1.5px; background: var(--coral); }
+
+/* Buttons */
+.c-holiday-mix .hm-actions { grid-area: act; display: flex; gap: 8px; min-width: 0; }
+.c-holiday-mix .hm-beat {
+  display: inline-flex; align-items: center; justify-content: center; gap: 7px; flex: 0 0 auto;
+  min-height: 48px; padding: 0 11px;
+  background: #1d1d20; box-shadow: 0 0 0 1px #000, inset 0 1px 0 rgba(255, 255, 255, .1);
+  font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap;
+  transition: transform .08s;
+}
+.c-holiday-mix .hm-beat:active { transform: translateY(1px); }
+.c-holiday-mix .hm-beat-led { width: 8px; height: 8px; border-radius: 50%; background: #3a2320; }
+.c-holiday-mix .hm-beat.is-on { color: var(--coral); }
+.c-holiday-mix .hm-beat.is-on .hm-beat-led { background: var(--coral); box-shadow: 0 0 9px 2px var(--coral); }
+.c-holiday-mix .hm-drop {
+  position: relative; flex: 1; min-height: 48px; padding: 0 8px; overflow: hidden;
+  background: #b9d80f; color: #000;
+  box-shadow: 0 0 0 1px #000, 0 3px 0 #5a6a06;
+  transition: transform .07s, box-shadow .07s;
+}
+.c-holiday-mix .hm-drop:hover { background: var(--acid); }
+.c-holiday-mix .hm-drop:active { transform: translateY(3px); box-shadow: 0 0 0 1px #000; }
+.c-holiday-mix .hm-drop-glow { position: absolute; inset: 0; background: radial-gradient(ellipse at center, #fbffc7, transparent 72%); pointer-events: none; }
+.c-holiday-mix .hm-drop-text { position: relative; font-family: var(--display); font-size: 20px; letter-spacing: .03em; text-transform: uppercase; white-space: nowrap; }
+
+/* The drop itself */
+.c-holiday-mix .is-dropping .hm-decks { transform: scale(1.18); }
+.c-holiday-mix .is-dropping .hm-console { transform: translateY(100%); }
+.c-holiday-mix .hm-count { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; background: rgba(0, 0, 0, .35); pointer-events: none; }
+.c-holiday-mix .hm-count span {
+  grid-area: 1 / 1; font-family: var(--display); color: var(--acid);
+  font-size: min(60vw, 80vh); line-height: 1; opacity: 0;
+  animation: hm-count .44s cubic-bezier(.1, .8, .3, 1) both;
+}
+.c-holiday-mix .hm-count span:nth-child(2) { animation-delay: .46s; color: #fff; }
+.c-holiday-mix .hm-count span:nth-child(3) { animation-delay: .92s; color: var(--coral); }
+@keyframes hm-count { 0% { opacity: 0; transform: scale(1.5); } 25% { opacity: 1; } 75% { opacity: 1; transform: scale(.94); } 100% { opacity: 0; transform: scale(.9); } }
+
+/* The track */
+.c-holiday-mix .hm-track { position: relative; animation: hm-hit .5s cubic-bezier(.2, 1.6, .4, 1) both; }
+@keyframes hm-hit { from { transform: translateY(16px) scale(1.02); } to { transform: none; } }
+.c-holiday-mix .hm-track-hero { position: relative; min-height: min(74svh, 780px); display: flex; align-items: flex-end; overflow: hidden; background: #000; }
+.c-holiday-mix .hm-track-shade {
+  position: absolute; inset: 0;
+  background:
+    repeating-linear-gradient(0deg, rgba(0, 0, 0, .15) 0 1px, transparent 1px 3px),
+    linear-gradient(180deg, rgba(0, 0, 0, .15), rgba(0, 0, 0, .1) 40%, var(--black));
+}
+.c-holiday-mix .hm-track-head { position: relative; padding: 24px clamp(16px, 3vw, 44px) 10px; width: 100%; }
+.c-holiday-mix .hm-title {
+  display: block; margin-top: 6px;
+  font-family: var(--display); font-weight: 400; color: #fff; text-transform: uppercase;
+  font-size: clamp(62px, min(14.5vw, 27vh), 260px); line-height: 1.02; letter-spacing: .004em;
+  outline: none;
+}
+.c-holiday-mix .hm-title .hm-word { overflow: visible; margin-right: .2em; }
+.c-holiday-mix .hm-slam { display: inline-block; animation: hm-slam .32s cubic-bezier(.2, .9, .3, 1.25) both; }
+@keyframes hm-slam { from { opacity: 0; transform: scale(2.4) translateY(-12%); } to { opacity: 1; transform: none; } }
+.c-holiday-mix .hm-version { font-family: var(--display); font-size: clamp(22px, 3.6vw, 52px); line-height: 1.1; color: var(--acid); text-transform: uppercase; letter-spacing: .02em; animation: hm-fade .5s .6s both; }
+
+.c-holiday-mix .hm-sleeve {
+  display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, .85fr); gap: clamp(20px, 3vw, 48px);
+  padding: 24px clamp(16px, 3vw, 44px) 56px;
+  background: var(--black);
+}
+.c-holiday-mix .hm-specs { display: flex; flex-wrap: wrap; gap: 8px 26px; }
+.c-holiday-mix .hm-specs dt { font-size: 10px; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.c-holiday-mix .hm-specs dd { font-size: 15px; font-weight: 700; color: #fff; }
+.c-holiday-mix .hm-print { display: flex; gap: 14px; margin-top: 18px; }
+.c-holiday-mix .hm-print > div { display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.c-holiday-mix .hm-print-bar { position: relative; display: block; width: 18px; height: 56px; background: #1e1d17; overflow: hidden; }
+.c-holiday-mix .hm-print-bar span { position: absolute; inset: 0; transform-origin: bottom; background: linear-gradient(0deg, var(--acid), var(--coral)); }
+.c-holiday-mix .hm-print-bar::after { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, var(--black) 0 2px, transparent 2px 7px); }
+.c-holiday-mix .hm-print-label { font-size: 9px; letter-spacing: .05em; text-transform: uppercase; color: var(--dim); }
+.c-holiday-mix .hm-tl-head { margin-top: 26px; font-family: var(--display); font-weight: 400; font-size: 34px; color: var(--coral); text-transform: uppercase; letter-spacing: .02em; }
+.c-holiday-mix .hm-tl-head small { margin-left: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0; color: var(--dim); text-transform: none; white-space: nowrap; }
+.c-holiday-mix .hm-tracklist { margin-top: 8px; list-style: none; padding: 0; }
+.c-holiday-mix .hm-tracklist li {
+  display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; gap: 8px; align-items: baseline;
+  padding: 12px 0; border-top: 1px solid var(--edge);
+  animation: hm-row-in .4s cubic-bezier(.2, .9, .3, 1) both;
+  transition: background .15s, padding .15s;
+}
+.c-holiday-mix .hm-tracklist li:hover { background: #141416; padding-left: 8px; }
+@keyframes hm-row-in { from { opacity: 0; transform: translateX(-22px); } to { opacity: 1; transform: none; } }
+.c-holiday-mix .hm-tl-n { color: var(--coral); font-size: 12px; }
+.c-holiday-mix .hm-tracklist b { font-family: var(--display); font-weight: 400; font-size: 25px; line-height: 1.15; color: #fff; text-transform: uppercase; letter-spacing: .015em; }
+.c-holiday-mix .hm-tracklist p { color: var(--silk); font-size: 13px; line-height: 1.45; max-width: 60ch; }
+.c-holiday-mix .hm-tl-t { color: var(--acid); font-size: 12px; }
+
+.c-holiday-mix .hm-press { align-self: start; position: sticky; top: 14px; padding: 20px; background: var(--panel) var(--matte); box-shadow: 0 0 0 1px #000, inset 0 1px 0 rgba(255, 255, 255, .07); }
+.c-holiday-mix .hm-press-label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); }
+.c-holiday-mix .hm-price { font-family: var(--display); font-size: clamp(56px, 7vw, 96px); line-height: 1.1; color: var(--coral); animation: hm-fade .4s both; }
+.c-holiday-mix .hm-press-note { margin-bottom: 14px; color: var(--silk); font-size: 13px; }
+.c-holiday-mix .hm-form { display: grid; gap: 10px; }
+.c-holiday-mix .hm-field { display: grid; gap: 4px; }
+.c-holiday-mix .hm-field-label { font-size: 10.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--silk); }
+.c-holiday-mix .hm-input { width: 100%; min-height: 44px; padding: 0 12px; background: #0a0b05; color: var(--acid); font: 500 15px var(--mono); border: 0; box-shadow: inset 0 0 0 1px #000, 0 0 0 1px var(--edge); border-radius: 0; }
+.c-holiday-mix .hm-input:focus { outline: 2px solid var(--acid); outline-offset: 0; }
+.c-holiday-mix .hm-submit { min-height: 54px; margin-top: 4px; background: #b9d80f !important; color: #000 !important; font-family: var(--display) !important; font-size: 23px !important; letter-spacing: .03em; text-transform: uppercase; box-shadow: 0 0 0 1px #000, 0 3px 0 #5a6a06; transition: transform .07s, box-shadow .07s, background .15s; }
+.c-holiday-mix .hm-submit:hover { background: var(--acid) !important; }
+.c-holiday-mix .hm-submit:active { transform: translateY(3px); box-shadow: 0 0 0 1px #000; }
+.c-holiday-mix .hm-done { padding: 14px; background: #0a0b05; color: var(--acid); box-shadow: inset 0 0 0 1px var(--acid); animation: hm-fade .4s both; }
+.c-holiday-mix .hm-done-note { margin-top: 6px; font-size: 12px; color: rgba(220, 255, 30, .7); }
+.c-holiday-mix .hm-press-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.c-holiday-mix .hm-btn { min-height: 44px; padding: 8px 12px; background: #1d1d20; font-size: 12px; text-align: left; box-shadow: 0 0 0 1px #000, inset 0 1px 0 rgba(255, 255, 255, .1); transition: color .15s, transform .08s; }
+.c-holiday-mix .hm-btn:hover { color: var(--acid); }
+.c-holiday-mix .hm-btn:active { transform: translateY(1px); }
+.c-holiday-mix .hm-shared { min-height: 20px; margin-top: 8px; font-size: 12px; color: var(--acid); overflow-wrap: anywhere; }
+
+/* The crate */
+.c-holiday-mix .hm-crate { position: relative; background: var(--black); border-top: 2px solid #000; scroll-margin-top: 0; }
+.c-holiday-mix .hm-ticker { overflow: hidden; background: var(--coral); color: #000; font-family: var(--display); font-size: 22px; text-transform: uppercase; letter-spacing: .03em; white-space: nowrap; padding: 3px 0; }
+.c-holiday-mix .hm-ticker > div { display: inline-block; animation: hm-ticker 34s linear infinite; }
+.c-holiday-mix .hm-ticker span { padding-right: .4em; }
+@keyframes hm-ticker { to { transform: translateX(-50%); } }
+.c-holiday-mix .hm-crate-top { display: flex; flex-wrap: wrap; align-items: flex-end; justify-content: space-between; gap: 8px 32px; padding: 34px clamp(16px, 3vw, 44px) 18px; }
+.c-holiday-mix .hm-crate-top h2 { font-family: var(--display); font-weight: 400; font-size: clamp(64px, 11vw, 170px); line-height: 1; color: #fff; text-transform: uppercase; }
+.c-holiday-mix .hm-crate-top p { max-width: 46ch; color: var(--silk); }
+.c-holiday-mix .hm-rows { list-style: none; padding: 0 0 26px; }
+.c-holiday-mix .hm-row {
+  position: relative; width: 100%; text-align: left;
+  display: grid; grid-template-columns: 34px 72px minmax(0, 1.05fr) minmax(0, 1fr) 54px 92px 66px; gap: 14px; align-items: center;
+  padding: 11px clamp(16px, 3vw, 44px);
+  border-top: 1px solid var(--edge);
+  transition: background .12s, color .12s;
+}
+.c-holiday-mix .hm-rows li:last-child .hm-row { border-bottom: 1px solid var(--edge); }
+.c-holiday-mix .hm-row-n { font-size: 12px; color: var(--coral); }
+.c-holiday-mix .hm-row-disc { position: relative; display: block; width: 72px; height: 72px; border-radius: 50%; overflow: hidden; background: repeating-radial-gradient(circle, #1a1a1c 0 1.5px, #09090a 1.5px 3px); transition: transform .5s cubic-bezier(.2, 1.3, .4, 1); }
+.c-holiday-mix .hm-row-disc img { position: absolute; inset: 21%; width: 58%; height: 58%; object-fit: cover; border-radius: 50%; box-shadow: 0 0 0 1px #000; }
+.c-holiday-mix .hm-row-name { font-family: var(--display); font-size: clamp(32px, 4.2vw, 60px); line-height: 1.1; color: #fff; text-transform: uppercase; letter-spacing: .01em; transition: transform .25s cubic-bezier(.2, 1.3, .4, 1); }
+.c-holiday-mix .hm-row-blurb { font-size: 13px; color: var(--silk); }
+.c-holiday-mix .hm-row-time { font-size: 13px; color: var(--acid); }
+.c-holiday-mix .hm-row-price { font-size: 14px; font-weight: 700; color: var(--coral); white-space: nowrap; }
+.c-holiday-mix .hm-row-load { display: inline-flex; align-items: center; justify-content: center; min-height: 40px; font-size: 11px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: #1d1d20; box-shadow: 0 0 0 1px #000; transition: background .12s, color .12s; }
+.c-holiday-mix .hm-row:hover, .c-holiday-mix .hm-row:focus-visible { background: #141416; }
+.c-holiday-mix .hm-row:hover .hm-row-disc { transform: rotate(160deg) scale(1.08); }
+.c-holiday-mix .hm-row:hover .hm-row-name { transform: translateX(8px); color: var(--acid); }
+.c-holiday-mix .hm-row:hover .hm-row-load { background: var(--acid); color: #000; }
+
+/* The request line */
+.c-holiday-mix .hm-requests { padding: 42px clamp(16px, 3vw, 44px) 76px; background: var(--panel) var(--matte); border-top: 2px solid #000; scroll-margin-top: 0; }
+.c-holiday-mix .hm-requests h2 { font-family: var(--display); font-weight: 400; font-size: clamp(44px, 8.5vw, 130px); line-height: 1.04; color: var(--acid); text-transform: uppercase; }
+.c-holiday-mix .hm-requests > p { max-width: 58ch; margin-top: 10px; color: var(--silk); }
+.c-holiday-mix .hm-requests ul { display: flex; flex-wrap: wrap; gap: 8px 36px; margin-top: 20px; list-style: none; padding: 0; }
+.c-holiday-mix .hm-requests li a { display: inline-flex; flex-direction: column; justify-content: center; min-height: 44px; font-size: 16px; font-weight: 700; color: #fff; overflow-wrap: anywhere; transition: color .15s; }
+.c-holiday-mix .hm-requests li a span { font-size: 10px; font-weight: 400; letter-spacing: .14em; text-transform: uppercase; color: var(--dim); }
+.c-holiday-mix .hm-requests li a:hover { color: var(--coral); }
+.c-holiday-mix .hm-requests .hm-small { margin-top: 24px; font-size: 12px; color: var(--dim); }
+
+/* Narrower desks lose the jog wheels first */
+@media (max-width: 1080px) {
+  .c-holiday-mix .hm-console { grid-template-columns: minmax(0, 1fr); padding-left: 16px; padding-right: 16px; }
+  .c-holiday-mix .hm-jogbox { display: none; }
+}
+@media (max-width: 860px) {
+  .c-holiday-mix .hm-sleeve { grid-template-columns: minmax(0, 1fr); }
+  .c-holiday-mix .hm-press { position: static; }
+  .c-holiday-mix .hm-row { grid-template-columns: 54px minmax(0, 1fr) auto; grid-template-areas: "disc name load" "disc blurb load" "disc meta meta"; gap: 0 12px; padding-top: 12px; padding-bottom: 12px; }
+  .c-holiday-mix .hm-row-n { display: none; }
+  .c-holiday-mix .hm-row-disc { grid-area: disc; width: 54px; height: 54px; align-self: start; }
+  .c-holiday-mix .hm-row-name { grid-area: name; font-size: 34px; }
+  .c-holiday-mix .hm-row-blurb { grid-area: blurb; font-size: 12px; line-height: 1.35; }
+  .c-holiday-mix .hm-row-load { grid-area: load; min-width: 56px; }
+  .c-holiday-mix .hm-row-time { grid-area: meta; margin-top: 4px; }
+  .c-holiday-mix .hm-row-price { grid-area: meta; margin-top: 4px; margin-left: 50px; }
+}
+/* Phones: faders across the full width, the master section folds into the row with the crossfader */
+@media (max-width: 720px) {
+  .c-holiday-mix .hm-brand-model, .c-holiday-mix .hm-links .hm-tel { display: none; }
+  .c-holiday-mix .hm-top { padding: 0 8px 0 16px; }
+  .c-holiday-mix .hm-links a { padding: 0 8px; }
+  .c-holiday-mix .hm-stage { min-height: 240px; }
+  .c-holiday-mix .hm-over { padding: 12px 16px 8px; gap: 8px; }
+  /* The first screen has to reach Drop the track, clear of the gallery's pill */
+  .c-holiday-mix .hm-intro p { display: none; }
+  .c-holiday-mix .hm-name { font-size: clamp(48px, 14.5vw, 96px); }
+  .c-holiday-mix .hm-wave-screen { height: 66px; }
+  .c-holiday-mix .hm-lcd { display: block; min-height: 46px; padding: 5px 16px; font-size: 11px; }
+  .c-holiday-mix .hm-lcd span { display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; white-space: normal; }
+  .c-holiday-mix .hm-console { padding: 10px 10px 62px; }
+  .c-holiday-mix .hm-screw { display: none; }
+  .c-holiday-mix .hm-mixer { grid-template-columns: minmax(0, 1fr); grid-template-areas: "ch" "xf" "act"; gap: 6px; }
+  .c-holiday-mix .hm-master { display: none; }
+  .c-holiday-mix .hm-strip { height: 136px; gap: 5px; }
+  .c-holiday-mix .hm-meter { flex-basis: 7px; width: 7px; }
+  .c-holiday-mix .hm-fader { flex: 0 1 44px; }
+  .c-holiday-mix .hm-rider { left: 5px; right: 5px; }
+  .c-holiday-mix .hm-ch-label { font-size: 9px; letter-spacing: .02em; }
+  .c-holiday-mix .hm-drop-text { font-size: 24px; }
+  .c-holiday-mix .hm-requests { padding-bottom: 84px; }
+  .c-holiday-mix .hm-tracklist p { font-size: 12.5px; }
+  .c-holiday-mix .hm-tl-head small { display: block; margin-left: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-holiday-mix *, .c-holiday-mix *::before, .c-holiday-mix *::after { animation-duration: .01ms !important; animation-delay: 0s !important; transition-duration: .01ms !important; }
+  .c-holiday-mix .hm-ticker > div { animation: none; }
+  .c-holiday-mix .hm-chip-led { animation: none; }
+}

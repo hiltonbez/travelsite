@@ -1,0 +1,300 @@
+/* scratch-the-world: a loud retro lottery ticket crossed with a modern poster */
+.c-scratch-the-world {
+  --red: #ce2029;
+  --red-deep: #9e141c;
+  --cobalt: #0047ab;
+  --cobalt-deep: #00266b;
+  --cream: #f6ebd0;
+  --cream-deep: #e9d8ad;
+  --ink: #1a1408;
+  --gold: #e8c25b;
+  --mono: "Rubik Mono One", "Arial Black", sans-serif;
+  --cond: "Barlow Condensed", "Arial Narrow", sans-serif;
+  min-height: 100vh;
+  overflow-x: clip;
+  background: var(--cobalt-deep);
+  color: var(--ink);
+  font-family: var(--cond);
+  font-size: 19px;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.c-scratch-the-world * { box-sizing: border-box; }
+.c-scratch-the-world button { font: inherit; cursor: pointer; }
+.c-scratch-the-world a { color: inherit; }
+.c-scratch-the-world :focus-visible { outline: 3px solid #fff; outline-offset: 2px; box-shadow: 0 0 0 6px var(--cobalt); }
+
+.c-scratch-the-world .stw-flecks { position: fixed; inset: 0; width: 100vw; height: 100vh; z-index: 60; pointer-events: none; }
+
+/* ---------- buttons: printed, with a hard offset, pressed flat when touched ---------- */
+.c-scratch-the-world .stw-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 46px; padding: 8px 18px;
+  border: 3px solid var(--ink); border-radius: 0;
+  font-family: var(--mono); font-size: 14px; letter-spacing: .01em; line-height: 1.1; text-transform: uppercase;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform .09s ease-out, box-shadow .09s ease-out, background-color .15s;
+}
+.c-scratch-the-world .stw-btn:hover { transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--ink); }
+.c-scratch-the-world .stw-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 var(--ink); }
+.c-scratch-the-world .stw-btn-red { background: var(--red); color: #fff7e2; }
+.c-scratch-the-world .stw-btn-paper { background: var(--cream); color: var(--red); }
+.c-scratch-the-world .stw-btn-line { background: transparent; color: var(--ink); }
+.c-scratch-the-world .stw-btn-small { min-height: 42px; padding: 6px 12px; font-size: 12px; border-width: 2px; box-shadow: 3px 3px 0 var(--ink); }
+.c-scratch-the-world .stw-small { font-size: 15px; opacity: .78; }
+.c-scratch-the-world .stw-kicker { font-weight: 700; font-size: 16px; letter-spacing: .12em; text-transform: uppercase; color: var(--red); }
+.c-scratch-the-world .stw-kicker span { color: var(--cobalt); }
+.c-scratch-the-world .stw-kicker-light { color: var(--gold); }
+
+/* ---------- foil ---------- */
+.c-scratch-the-world .stw-foil {
+  position: absolute; inset: 0; width: 100%; height: 100%; display: block;
+  touch-action: pan-y; user-select: none; -webkit-user-select: none;
+  /* A coin for a cursor. */
+  cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='40' height='40'%3E%3Ccircle cx='20' cy='20' r='17' fill='%23e8c25b' stroke='%235f430c' stroke-width='2'/%3E%3Ccircle cx='20' cy='20' r='13' fill='none' stroke='%235f430c' stroke-dasharray='2 2'/%3E%3Ctext x='20' y='26' text-anchor='middle' font-family='Arial' font-weight='900' font-size='17' fill='%235f430c'%3ER%3C/text%3E%3C/svg%3E") 20 20, crosshair;
+}
+.c-scratch-the-world .stw-foil-hero { touch-action: none; z-index: 3; }
+
+/* ---------- hero ---------- */
+.c-scratch-the-world .stw-hero {
+  position: relative; height: 100vh; height: 100svh; min-height: 520px; overflow: hidden; user-select: none; -webkit-user-select: none;
+  background: linear-gradient(120deg, #a8772a, #f4d67e 30%, #fff3c2 44%, #d8a93f 60%, #c9ced2 74%, #f7e39a);
+}
+.c-scratch-the-world .stw-hero-under { position: absolute; inset: 0; z-index: 1; }
+.c-scratch-the-world .stw-hero-under:not(:empty) { background: var(--cobalt-deep); }
+.c-scratch-the-world .stw-hero-clip { position: absolute; inset: 0; width: 100%; height: 100%; animation: stw-drift 22s ease-in-out infinite alternate; }
+@keyframes stw-drift { from { transform: scale(1.02); } to { transform: scale(1.12) translateY(-1.5%); } }
+.c-scratch-the-world .stw-hero-shade { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,20,60,.3), rgba(0,20,60,0) 34%, rgba(0,10,40,.42)); }
+.c-scratch-the-world .stw-land {
+  position: absolute; left: 0; right: 0; top: 13%;
+  display: flex; justify-content: center; white-space: nowrap;
+  font-family: var(--mono); line-height: 1; color: #fff7e2;
+  font-size: min(calc((100vw - 28px) / var(--n) / .86), 19vh);
+  text-shadow: .03em .03em 0 var(--red), .06em .06em 0 var(--cobalt);
+}
+.c-scratch-the-world .stw-land span { display: block; }
+.c-scratch-the-world .is-clear .stw-land span { animation: stw-hop .7s cubic-bezier(.2, 1.5, .4, 1) calc(var(--i) * 45ms + .15s) both; }
+@keyframes stw-hop { 0% { transform: translateY(0); } 40% { transform: translateY(-.32em) rotate(-5deg); } 100% { transform: translateY(0); } }
+
+/* Shown until the canvas paints, then kept only for screen readers. */
+.c-scratch-the-world .stw-hero-print {
+  position: absolute; inset: 0; z-index: 2; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 16px; text-align: center; color: var(--red); pointer-events: none;
+}
+.c-scratch-the-world .stw-hero-print h1 { font-family: var(--mono); font-size: clamp(40px, 11vw, 150px); line-height: 1; font-weight: 400; text-transform: uppercase; text-shadow: 3px 3px 0 var(--cobalt); }
+.c-scratch-the-world .stw-hero-print p { margin-top: 14px; color: var(--cobalt-deep); font-weight: 700; }
+.c-scratch-the-world .stw-hero.is-ready .stw-hero-print {
+  width: 1px; height: 1px; inset: auto; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap;
+}
+
+.c-scratch-the-world .stw-mast {
+  position: absolute; z-index: 6; top: 0; left: 0; right: 0; display: flex; justify-content: space-between; align-items: flex-start; gap: 8px;
+  padding: 12px 14px; pointer-events: none;
+}
+.c-scratch-the-world .stw-brand {
+  background: var(--cream); color: var(--red); padding: 6px 12px; border: 2px solid var(--ink); transform: rotate(-1.2deg);
+  font-family: var(--mono); font-size: 15px; line-height: 1.1;
+}
+.c-scratch-the-world .stw-brand b { font-weight: 400; }
+.c-scratch-the-world .stw-brand span { display: block; font-family: var(--cond); font-weight: 700; font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--cobalt); }
+.c-scratch-the-world .stw-mast-right { display: flex; gap: 6px; pointer-events: auto; }
+.c-scratch-the-world .stw-chip {
+  display: inline-flex; align-items: center; min-height: 40px; padding: 4px 11px; background: var(--cobalt); color: var(--cream);
+  border: 2px solid var(--ink); font-weight: 700; font-size: 15px; text-decoration: none; white-space: nowrap;
+}
+.c-scratch-the-world .stw-chip[aria-pressed="true"] { background: var(--red); }
+
+/* Keyboard route only: the pointer passes through, Tab lands on them. */
+.c-scratch-the-world .stw-zones { position: absolute; inset: 0; z-index: 4; display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr); pointer-events: none; }
+.c-scratch-the-world .stw-zones button { background: transparent; border: 0; color: transparent; font-family: var(--mono); font-size: 40px; }
+.c-scratch-the-world .stw-zones button:focus-visible { color: var(--cobalt); background: rgba(246, 235, 208, .75); outline-offset: -6px; box-shadow: none; outline-color: var(--red); }
+@media (orientation: portrait) {
+  .c-scratch-the-world .stw-zones { grid-template-columns: repeat(2, 1fr); grid-template-rows: repeat(3, 1fr); }
+}
+
+.c-scratch-the-world .stw-hero-actions { position: absolute; z-index: 5; right: 16px; bottom: 16px; display: flex; flex-direction: row; gap: 12px; align-items: flex-end; }
+
+.c-scratch-the-world .stw-result {
+  position: absolute; z-index: 5; right: clamp(14px, 4vw, 56px); bottom: clamp(14px, 6vh, 56px); width: min(440px, calc(100vw - 28px));
+  padding: 26px 20px 18px; background: var(--cream); color: var(--ink); overflow: hidden;
+  border: 3px solid var(--ink); box-shadow: 8px 8px 0 var(--cobalt);
+  animation: stw-slap .55s cubic-bezier(.2, 1.4, .4, 1) .5s both;
+}
+@keyframes stw-slap { from { transform: translateY(90%) rotate(5deg); opacity: 0; } to { transform: rotate(-.8deg); opacity: 1; } }
+.c-scratch-the-world .stw-result-band { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 22px; color: var(--red); opacity: .6; }
+.c-scratch-the-world .stw-result h2 { font-family: var(--mono); font-weight: 400; font-size: clamp(22px, 3.4vw, 30px); line-height: 1.04; color: var(--red); margin: 2px 80px 4px 0; }
+.c-scratch-the-world .stw-result-line { font-size: 19px; font-weight: 600; margin-right: 70px; }
+.c-scratch-the-world .stw-facts { display: flex; flex-wrap: wrap; gap: 4px 20px; margin-top: 10px; padding-top: 8px; border-top: 2px dashed var(--ink); }
+.c-scratch-the-world .stw-facts dt { font-size: 13px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--cobalt); }
+.c-scratch-the-world .stw-facts dd { font-weight: 700; font-size: 20px; line-height: 1.1; }
+.c-scratch-the-world .stw-facts-price dd { font-family: var(--mono); font-weight: 400; color: var(--red); }
+.c-scratch-the-world .stw-result-actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
+.c-scratch-the-world .stw-result-actions .stw-btn { font-size: 12px; padding: 6px 12px; min-height: 44px; }
+.c-scratch-the-world .stw-stamp { color: var(--red); }
+.c-scratch-the-world .stw-stamp-arc { font-family: var(--cond); font-weight: 700; font-size: 17px; letter-spacing: .1em; fill: currentColor; }
+.c-scratch-the-world .stw-stamp-mid { font-family: var(--mono); font-size: 28px; fill: currentColor; }
+.c-scratch-the-world .stw-result-stamp { position: absolute; right: 10px; top: 24px; width: 82px; height: 82px; opacity: .85; animation: stw-thump .4s cubic-bezier(.3, 1.6, .5, 1) 1.05s both; }
+@keyframes stw-thump { from { transform: scale(2.6) rotate(-30deg); opacity: 0; } to { transform: scale(1) rotate(-12deg); opacity: .85; } }
+
+/* ---------- marquee ---------- */
+.c-scratch-the-world .stw-marquee { overflow: hidden; background: var(--red); color: var(--cream); border-block: 3px solid var(--ink); }
+.c-scratch-the-world .stw-marquee-run { display: flex; width: max-content; animation: stw-roll 46s linear infinite; }
+.c-scratch-the-world .stw-marquee span { display: block; white-space: pre; font-family: var(--mono); font-size: 15px; padding: 9px 0; }
+@keyframes stw-roll { to { transform: translateX(-50%); } }
+
+/* ---------- the strip of six ---------- */
+.c-scratch-the-world .stw-strip { padding: clamp(36px, 6vw, 80px) clamp(16px, 3vw, 44px) clamp(40px, 6vw, 84px); background: var(--cobalt); color: var(--cream); scroll-margin-top: 0; }
+.c-scratch-the-world .stw-strip-head { display: grid; grid-template-columns: 1.5fr 1fr; gap: 20px 40px; align-items: end; max-width: 1560px; margin: 0 auto 28px; }
+.c-scratch-the-world .stw-strip-head h2 { font-family: var(--mono); font-weight: 400; font-size: clamp(30px, 6.2vw, 92px); line-height: .98; color: var(--cream); text-shadow: .04em .04em 0 var(--red); }
+.c-scratch-the-world .stw-strip-head h2 span { display: block; }
+.c-scratch-the-world .stw-strip-side { display: flex; flex-direction: column; gap: 14px; align-items: flex-start; }
+.c-scratch-the-world .stw-strip-all { font-weight: 700; color: var(--gold); }
+
+.c-scratch-the-world .stw-stubs {
+  --punch: radial-gradient(circle at 0 50%, transparent 0 9px, #000 9.5px);
+  list-style: none; margin: 0 auto; padding: 0; max-width: 1560px;
+  display: grid; grid-template-columns: repeat(6, 1fr);
+  background: var(--cream); color: var(--ink); border: 3px solid var(--ink); box-shadow: 10px 10px 0 var(--cobalt-deep);
+}
+.c-scratch-the-world .stw-stub { position: relative; display: flex; flex-direction: column; padding: 10px; border-left: 2px dashed var(--ink); min-width: 0; transition: background-color .25s; }
+.c-scratch-the-world .stw-stub:first-child { border-left: 0; }
+.c-scratch-the-world .stw-stub.is-chosen { background: #fbdcc4; }
+.c-scratch-the-world .stw-stub-serial { display: flex; justify-content: space-between; font-weight: 700; font-size: 14px; letter-spacing: .06em; color: var(--red); margin-bottom: 6px; }
+.c-scratch-the-world .stw-stub-serial span:last-child { color: var(--cobalt); }
+.c-scratch-the-world .stw-window { position: relative; aspect-ratio: 3 / 4; overflow: hidden; background: var(--cobalt-deep); border: 2px solid var(--ink); }
+.c-scratch-the-world .stw-window-media { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.c-scratch-the-world .stw-window-price { position: absolute; left: 0; right: 0; bottom: 0; padding: 18px 8px 8px; color: #fff7e2; background: linear-gradient(transparent, rgba(0, 16, 50, .86)); }
+.c-scratch-the-world .stw-window-price b { display: block; font-family: var(--mono); font-weight: 400; font-size: clamp(15px, 1.5vw, 22px); line-height: 1.1; }
+.c-scratch-the-world .stw-window-price span { display: block; font-size: 14px; font-weight: 600; line-height: 1.1; }
+.c-scratch-the-world .stw-stub h3 { font-family: var(--mono); font-weight: 400; font-size: 14px; line-height: 1.12; margin-top: 10px; color: var(--ink); }
+.c-scratch-the-world .stw-stub-line { font-size: 17px; line-height: 1.15; margin-top: 4px; flex: 1; }
+.c-scratch-the-world .stw-stub-meta { font-size: 15px; font-weight: 700; color: var(--cobalt); margin: 6px 0 10px; line-height: 1.1; }
+.c-scratch-the-world .stw-stub .stw-btn { width: 100%; }
+.c-scratch-the-world .stw-stub.is-chosen.is-done .stw-btn { background: var(--cobalt); }
+
+/* ---------- the ticket ---------- */
+.c-scratch-the-world .stw-claim { position: relative; padding: clamp(40px, 6vw, 90px) clamp(16px, 3vw, 44px) clamp(40px, 6vw, 90px); overflow: hidden; background: var(--cobalt-deep); scroll-margin-top: 0; }
+.c-scratch-the-world .stw-claim-clip { position: absolute; inset: 0; width: 100%; height: 100%; }
+.c-scratch-the-world .stw-claim-shade { position: absolute; inset: 0; background: rgba(0, 20, 70, .36); }
+.c-scratch-the-world .stw-claim-head { position: relative; max-width: 1120px; margin: 0 auto 20px; }
+.c-scratch-the-world .stw-claim-name { font-family: var(--mono); font-weight: 400; font-size: clamp(28px, 6vw, 84px); line-height: 1.02; color: #fff7e2; text-shadow: .035em .035em 0 var(--red), .07em .07em 0 var(--cobalt); display: flex; flex-wrap: wrap; }
+.c-scratch-the-world .stw-claim-name span { display: block; animation: stw-drop .5s cubic-bezier(.2, 1.5, .4, 1) calc(var(--i) * 22ms) both; }
+@keyframes stw-drop { from { transform: translateY(-.7em) rotate(8deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.c-scratch-the-world .stw-swap { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+.c-scratch-the-world .stw-swap button { min-width: 54px; min-height: 42px; background: var(--cream); color: var(--cobalt); border: 2px solid var(--ink); font-weight: 700; font-size: 17px; letter-spacing: .04em; }
+.c-scratch-the-world .stw-swap button:hover { background: #fff; }
+.c-scratch-the-world .stw-swap button[aria-pressed="true"] { background: var(--red); color: var(--cream); }
+
+.c-scratch-the-world .stw-ticket { position: relative; max-width: 1120px; margin: 0 auto; background: var(--cream); color: var(--ink); border: 3px solid var(--ink); box-shadow: 12px 12px 0 rgba(0, 10, 40, .75); }
+.c-scratch-the-world .stw-ticket h3 { font-family: var(--mono); font-weight: 400; font-size: clamp(18px, 2.4vw, 28px); line-height: 1.08; color: var(--red); }
+.c-scratch-the-world .stw-ticket-top { display: flex; justify-content: space-between; gap: 20px; padding: 22px 24px 8px; }
+.c-scratch-the-world .stw-ticket-top p { margin-top: 4px; }
+.c-scratch-the-world .stw-ticket-serial { flex: none; font-weight: 700; font-size: 16px; letter-spacing: .08em; color: var(--cobalt); margin: 0; white-space: nowrap; }
+.c-scratch-the-world .stw-band { display: block; }
+.c-scratch-the-world .stw-ticket-band { width: 100%; height: 26px; color: var(--red); opacity: .55; }
+.c-scratch-the-world .stw-panes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; padding: 12px 24px; }
+.c-scratch-the-world .stw-pane { position: relative; min-height: 210px; border: 3px solid var(--ink); overflow: hidden; }
+.c-scratch-the-world .stw-pane-under { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px; text-align: center; font-weight: 600; font-size: 17px; line-height: 1.15; }
+.c-scratch-the-world .stw-pane-a .stw-pane-under { background: var(--red); color: var(--cream); }
+.c-scratch-the-world .stw-pane-b .stw-pane-under { background: var(--cobalt); color: var(--cream); }
+.c-scratch-the-world .stw-pane-c .stw-pane-under { background: #f3c33b; color: var(--ink); }
+.c-scratch-the-world .stw-pane-code { position: absolute; top: 8px; left: 8px; padding: 1px 7px; border: 2px solid currentColor; border-radius: 99px; font-weight: 700; font-size: 15px; letter-spacing: .06em; }
+.c-scratch-the-world .is-matched .stw-pane-code { animation: stw-ring .5s ease-out both; }
+.c-scratch-the-world .is-matched .stw-pane-b .stw-pane-code { animation-delay: .14s; }
+.c-scratch-the-world .is-matched .stw-pane-c .stw-pane-code { animation-delay: .28s; }
+@keyframes stw-ring { 40% { transform: scale(1.6) rotate(-6deg); } }
+.c-scratch-the-world .stw-pane-big { font-family: var(--mono); font-weight: 400; font-size: 84px; line-height: 1; }
+.c-scratch-the-world .stw-pane-perk { font-family: var(--mono); font-weight: 400; font-size: clamp(17px, 2.1vw, 24px); line-height: 1.12; margin-bottom: 8px; }
+.c-scratch-the-world .stw-pane-price { font-family: var(--mono); font-weight: 400; font-size: clamp(28px, 3.6vw, 42px); line-height: 1.05; color: var(--red); margin-bottom: 6px; }
+.c-scratch-the-world .stw-ticket-status { display: flex; align-items: center; justify-content: space-between; gap: 14px; flex-wrap: wrap; padding: 4px 24px 16px; min-height: 58px; }
+.c-scratch-the-world .stw-ticket-status b { color: var(--red); }
+/* Perforation: a dashed tear line with a bite out of each edge. */
+.c-scratch-the-world .stw-perf { position: relative; height: 0; border-top: 3px dashed var(--ink); }
+.c-scratch-the-world .stw-perf::before, .c-scratch-the-world .stw-perf::after { content: ""; position: absolute; top: -15px; width: 26px; height: 26px; border-radius: 50%; background: var(--cobalt-deep); border: 3px solid var(--ink); }
+.c-scratch-the-world .stw-perf::before { left: -16px; }
+.c-scratch-the-world .stw-perf::after { right: -16px; }
+.c-scratch-the-world .stw-ticket-back { position: relative; display: grid; grid-template-columns: 1.15fr 1fr; gap: 28px; padding: 24px; }
+.c-scratch-the-world .stw-days ol { list-style: none; margin: 10px 0 0; padding: 0; }
+.c-scratch-the-world .stw-days li { display: grid; grid-template-columns: 112px 1fr; gap: 10px; padding: 7px 0; border-top: 1px solid rgba(26, 20, 8, .28); font-size: 17px; line-height: 1.2; animation: stw-print .4s ease-out calc(var(--i) * 70ms) both; }
+@keyframes stw-print { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+.c-scratch-the-world .stw-days b { color: var(--cobalt); font-weight: 700; }
+.c-scratch-the-world .stw-form-lead { margin: 6px 0 10px; }
+.c-scratch-the-world .stw-form { display: flex; flex-direction: column; gap: 10px; }
+.c-scratch-the-world .stw-field { display: block; }
+.c-scratch-the-world .stw-label { display: block; font-size: 14px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: var(--cobalt); }
+.c-scratch-the-world .stw-input { display: block; width: 100%; min-height: 44px; padding: 6px 2px; background: transparent; border: 0; border-bottom: 3px dotted var(--ink); border-radius: 0; font: 600 20px var(--cond); color: var(--ink); }
+.c-scratch-the-world .stw-input:focus { outline: none; background: #fff7e2; border-bottom-style: solid; border-bottom-color: var(--red); box-shadow: none; }
+.c-scratch-the-world .stw-btn-claim { margin-top: 8px; min-height: 54px; font-size: 16px; }
+.c-scratch-the-world .stw-done { padding: 14px; border: 3px solid var(--red); color: var(--red); font-weight: 700; font-size: 21px; transform: rotate(-1deg); animation: stw-thump2 .4s cubic-bezier(.3, 1.6, .5, 1) both; }
+.c-scratch-the-world .stw-done .stw-small { color: var(--ink); font-weight: 600; margin-top: 6px; }
+@keyframes stw-thump2 { from { transform: scale(1.5) rotate(-5deg); opacity: 0; } to { transform: rotate(-1deg); opacity: 1; } }
+.c-scratch-the-world .stw-ticket-stamp { position: absolute; right: 18px; top: -86px; width: 100px; height: 100px; opacity: 0; pointer-events: none; }
+.c-scratch-the-world .is-matched .stw-ticket-status { padding-right: 130px; }
+.c-scratch-the-world .is-matched .stw-ticket-stamp { animation: stw-thump .42s cubic-bezier(.3, 1.6, .5, 1) .4s both; }
+
+/* ---------- conditions ---------- */
+.c-scratch-the-world .stw-foot { background: var(--cream); color: var(--ink); padding-bottom: 72px; }
+.c-scratch-the-world .stw-foot-band { width: 100%; height: 34px; color: var(--cobalt); opacity: .55; }
+.c-scratch-the-world .stw-foot-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px 48px; max-width: 1120px; margin: 0 auto; padding: 30px clamp(16px, 3vw, 44px) 0; }
+.c-scratch-the-world .stw-foot-brand { font-family: var(--mono); font-size: clamp(24px, 3.4vw, 42px); line-height: 1.05; color: var(--red); }
+.c-scratch-the-world .stw-foot-tag { margin-top: 4px; }
+.c-scratch-the-world .stw-reach { list-style: none; margin: 12px 0 0; padding: 0; }
+.c-scratch-the-world .stw-reach a { display: inline-flex; align-items: center; min-height: 40px; font-weight: 700; font-size: 21px; color: var(--cobalt); overflow-wrap: anywhere; }
+.c-scratch-the-world .stw-foot h2 { font-family: var(--mono); font-weight: 400; font-size: 18px; color: var(--ink); }
+.c-scratch-the-world .stw-terms { margin: 10px 0 18px; padding-left: 22px; list-style: decimal; font-size: 17px; line-height: 1.25; }
+.c-scratch-the-world .stw-terms li { margin-bottom: 5px; }
+
+/* ---------- smaller screens ---------- */
+@media (max-width: 1180px) {
+  .c-scratch-the-world .stw-stubs { grid-template-columns: repeat(3, 1fr); }
+  .c-scratch-the-world .stw-stub:nth-child(3n + 1) { border-left: 0; }
+  .c-scratch-the-world .stw-stub:nth-child(n + 4) { border-top: 2px dashed var(--ink); }
+  .c-scratch-the-world .stw-window { aspect-ratio: 4 / 3; }
+  .c-scratch-the-world .stw-window-price b { font-size: 20px; }
+}
+@media (max-width: 760px) {
+  .c-scratch-the-world .stw-strip-head { grid-template-columns: 1fr; }
+  .c-scratch-the-world .stw-stubs { grid-template-columns: repeat(2, 1fr); box-shadow: 5px 5px 0 var(--cobalt-deep); }
+  .c-scratch-the-world .stw-stub { padding: 8px; border-left: 2px dashed var(--ink) !important; }
+  .c-scratch-the-world .stw-stub:nth-child(2n + 1) { border-left: 0 !important; }
+  .c-scratch-the-world .stw-stub:nth-child(n + 3) { border-top: 2px dashed var(--ink); }
+  .c-scratch-the-world .stw-window { aspect-ratio: 1 / 1; }
+  .c-scratch-the-world .stw-window-price b { font-size: 16px; }
+  .c-scratch-the-world .stw-window-price span { font-size: 13px; }
+  .c-scratch-the-world .stw-stub h3 { font-size: 13px; }
+  .c-scratch-the-world .stw-stub-line { font-size: 16px; }
+  .c-scratch-the-world .stw-stub-meta { font-size: 14px; }
+  .c-scratch-the-world .stw-stub .stw-btn { padding: 6px 4px; font-size: 11px; }
+  .c-scratch-the-world .stw-panes { grid-template-columns: 1fr; padding: 10px 14px; }
+  .c-scratch-the-world .stw-pane { min-height: 132px; }
+  .c-scratch-the-world .stw-pane-big { font-size: 58px; }
+  .c-scratch-the-world .stw-pane-perk { font-size: 19px; margin-bottom: 4px; }
+  .c-scratch-the-world .stw-pane-price { font-size: 32px; }
+  .c-scratch-the-world .stw-ticket { box-shadow: 5px 5px 0 rgba(0, 10, 40, .75); }
+  .c-scratch-the-world .stw-ticket-top { flex-direction: column; gap: 6px; padding: 16px 14px 6px; }
+  .c-scratch-the-world .stw-ticket-status { padding: 2px 14px 14px; }
+  .c-scratch-the-world .stw-ticket-back { grid-template-columns: 1fr; padding: 18px 14px; }
+  .c-scratch-the-world .stw-days li { grid-template-columns: 92px 1fr; }
+  .c-scratch-the-world .stw-ticket-stamp { width: 74px; height: 74px; right: 8px; top: -74px; }
+  .c-scratch-the-world .is-matched .stw-ticket-status { padding-right: 90px; }
+  .c-scratch-the-world .stw-foot-grid { grid-template-columns: 1fr; }
+  .c-scratch-the-world .stw-brand { font-size: 13px; }
+  .c-scratch-the-world .stw-chip { font-size: 14px; padding: 4px 8px; }
+  /* Above the gallery's pill, which sits at the bottom left. */
+  .c-scratch-the-world .stw-hero-actions { right: 10px; bottom: 58px; flex-direction: column; align-items: stretch; }
+  .c-scratch-the-world .stw-hero-actions .stw-btn { font-size: 13px; padding: 6px 12px; }
+  .c-scratch-the-world .stw-result { bottom: 58px; left: 14px; right: 14px; width: auto; padding: 22px 14px 14px; box-shadow: 5px 5px 0 var(--cobalt); }
+  .c-scratch-the-world .stw-result-stamp { width: 64px; height: 64px; right: 8px; top: 18px; }
+  .c-scratch-the-world .stw-result h2 { margin-right: 66px; }
+  .c-scratch-the-world .stw-result-line { font-size: 17px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-scratch-the-world .stw-hero-clip,
+  .c-scratch-the-world .stw-marquee-run,
+  .c-scratch-the-world .is-clear .stw-land span,
+  .c-scratch-the-world .stw-claim-name span,
+  .c-scratch-the-world .stw-days li,
+  .c-scratch-the-world .stw-result { animation: none; }
+  .c-scratch-the-world .stw-btn { transition: none; }
+}

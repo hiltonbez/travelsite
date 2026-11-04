@@ -1,0 +1,390 @@
+/* Chase the Sun. The page is one sky; engine.ts rewrites these variables as the hour changes. */
+.c-chase-the-sun {
+  --ink: #fff1cc;
+  --glow: rgb(255 241 204 / 0.42);
+  --shade: rgb(45 58 150 / 0.62);
+  --light: #ffb050;
+  --ground: #231230;
+  --grade: none;
+  --mul: #ffc898;
+  --soft: #ff9850;
+  --lights: 0;
+  --serif: "Fraunces", "Iowan Old Style", Georgia, serif;
+  --mono: "DM Mono", ui-monospace, "Cascadia Mono", Consolas, monospace;
+  position: relative;
+  isolation: isolate;
+  min-height: 100vh;
+  min-height: 100svh;
+  overflow-x: clip;
+  background: linear-gradient(#1b2c7c, #38399c, #7646a4, #c2528e, #f4706a, #fda648, #ffd65a) fixed;
+  color: var(--ink);
+  font-family: var(--serif);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+}
+.c-chase-the-sun *, .c-chase-the-sun *::before, .c-chase-the-sun *::after { box-sizing: border-box; }
+.c-chase-the-sun button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+.c-chase-the-sun a { color: inherit; }
+.c-chase-the-sun em, .c-chase-the-sun i { font-style: normal; }
+.c-chase-the-sun :focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 4px; }
+.c-chase-the-sun .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+
+/* ---------- The sky, fixed behind everything ---------- */
+.c-chase-the-sun .sky { position: fixed; inset: 0; z-index: 0; height: 100vh; height: 100lvh; pointer-events: none; }
+.c-chase-the-sun .sky-canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; }
+.c-chase-the-sun[data-ready] .sky-canvas { opacity: 1; }
+.c-chase-the-sun .sky-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; }
+.c-chase-the-sun .arc { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0.34; transition: opacity 0.5s; }
+.c-chase-the-sun .arc path { fill: none; stroke: var(--ink); stroke-width: 1; stroke-dasharray: 1 9; stroke-linecap: round; }
+.c-chase-the-sun.is-trip .arc { opacity: 0; }
+/* In the trip view words sit on the sky itself, so its bright horizon slides below the fold and the sun steps back. */
+.c-chase-the-sun .sky-canvas { transform-origin: 50% 0; transition: opacity 0.7s, transform 1.2s cubic-bezier(0.3, 0.1, 0.2, 1); }
+.c-chase-the-sun.is-trip .sky-canvas { transform: scaleY(1.9); }
+.c-chase-the-sun.is-trip .sun-disc { opacity: 0.5; transform: scale(0.72); }
+.c-chase-the-sun.is-trip .sun-halo { opacity: 0.55; }
+
+.c-chase-the-sun .bodies { position: fixed; inset: 0; z-index: 0; height: 100vh; height: 100lvh; pointer-events: none; overflow: hidden; }
+.c-chase-the-sun .sun, .c-chase-the-sun .moon { position: absolute; left: 0; top: 0; width: 0; height: 0; will-change: transform; transform: translate3d(72vw, 44vh, 0); }
+.c-chase-the-sun .sun:focus-visible { outline: none; }
+.c-chase-the-sun .sun:focus-visible .sun-disc { outline: 2px solid var(--ink); outline-offset: 6px; }
+.c-chase-the-sun .sun i, .c-chase-the-sun .moon i { position: absolute; display: block; border-radius: 50%; }
+.c-chase-the-sun .sun-disc {
+  --s: clamp(92px, 12vw, 176px);
+  width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2);
+  background: radial-gradient(circle at 42% 38%, #fffef6 0 26%, var(--light) 92%);
+  box-shadow: 0 0 34px 6px var(--light);
+  transition: transform 0.28s cubic-bezier(0.3, 1.6, 0.5, 1);
+}
+.c-chase-the-sun .sun-halo {
+  --s: clamp(420px, 62vw, 980px);
+  width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2);
+  background: radial-gradient(circle, color-mix(in srgb, var(--light) 58%, transparent) 0, color-mix(in srgb, var(--light) 18%, transparent) 30%, transparent 68%);
+}
+.c-chase-the-sun .sun-ring {
+  --s: clamp(92px, 12vw, 176px);
+  width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2);
+  border: 1px solid var(--ink);
+  animation: cts-ring 2.6s ease-out infinite;
+}
+.c-chase-the-sun[data-held] .sun-disc { transform: scale(1.09); }
+.c-chase-the-sun[data-held], .c-chase-the-sun[data-held] * { cursor: grabbing !important; }
+.c-chase-the-sun .moon { opacity: 0; }
+.c-chase-the-sun .moon-disc {
+  --s: clamp(62px, 8.5vw, 124px);
+  width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2);
+  background:
+    radial-gradient(circle at 34% 34%, rgb(150 165 205 / 0.34) 0 10%, transparent 11%),
+    radial-gradient(circle at 62% 48%, rgb(150 165 205 / 0.28) 0 15%, transparent 16%),
+    radial-gradient(circle at 44% 70%, rgb(150 165 205 / 0.24) 0 8%, transparent 9%),
+    radial-gradient(circle at 44% 40%, #fbfcff, #d5ddf6);
+  box-shadow: 0 0 40px 8px rgb(205 218 255 / 0.5);
+}
+.c-chase-the-sun .moon-halo {
+  --s: clamp(260px, 34vw, 520px);
+  width: var(--s); height: var(--s); left: calc(var(--s) / -2); top: calc(var(--s) / -2);
+  background: radial-gradient(circle, rgb(190 205 255 / 0.28), transparent 66%);
+}
+.c-chase-the-sun .fly { position: fixed; left: -9px; top: -9px; width: 18px; height: 18px; border-radius: 50%; z-index: 50; pointer-events: none; }
+
+.c-chase-the-sun .page { position: relative; z-index: 1; }
+
+/* ---------- First screen ---------- */
+.c-chase-the-sun .hero {
+  position: relative;
+  min-height: 100vh; min-height: 100svh;
+  display: flex; flex-direction: column;
+  touch-action: pan-y;
+  user-select: none; -webkit-user-select: none;
+  cursor: grab;
+}
+
+/* Footage rises out of the horizon and dissolves upward into the sky */
+.c-chase-the-sun .foot {
+  position: absolute; left: 0; right: 0; top: 0; bottom: var(--ground-h, 150px);
+  overflow: hidden; pointer-events: none; isolation: isolate;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 30%, rgb(0 0 0 / 0.3) 48%, rgb(0 0 0 / 0.86) 66%, #000 76%);
+  mask-image: linear-gradient(to bottom, transparent 30%, rgb(0 0 0 / 0.3) 48%, rgb(0 0 0 / 0.86) 66%, #000 76%);
+}
+.c-chase-the-sun .foot-grade { position: absolute; inset: 0; filter: var(--grade); }
+.c-chase-the-sun .foot-clip { position: absolute; inset: 0; }
+.c-chase-the-sun .foot-in { animation: cts-fade 0.9s ease both; }
+.c-chase-the-sun .foot-video { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.c-chase-the-sun .foot-mul { position: absolute; inset: 0; background: var(--mul); mix-blend-mode: multiply; }
+.c-chase-the-sun .foot-soft { position: absolute; inset: 0; background: var(--soft); mix-blend-mode: soft-light; opacity: 0.65; }
+
+.c-chase-the-sun .top {
+  position: relative; z-index: 3;
+  display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 12px;
+  padding: clamp(12px, 2.2vh, 24px) clamp(16px, 3vw, 44px);
+  font-family: var(--mono); font-weight: 300; font-size: 12px; letter-spacing: 0.04em;
+}
+.c-chase-the-sun .brand { font-family: var(--serif); font-style: italic; font-size: clamp(16px, 1.5vw, 20px); letter-spacing: 0; white-space: nowrap; }
+.c-chase-the-sun .clock { font-family: var(--mono); font-size: clamp(15px, 1.5vw, 20px); letter-spacing: 0.1em; font-variant-numeric: tabular-nums; }
+.c-chase-the-sun .top-link { justify-self: end; display: inline-flex; align-items: center; min-height: 40px; text-decoration: none; opacity: 0.86; white-space: nowrap; }
+.c-chase-the-sun .top-link:hover { opacity: 1; text-decoration: underline; text-underline-offset: 4px; }
+
+.c-chase-the-sun .say {
+  position: relative; z-index: 3;
+  flex: 1 1 auto;
+  padding: clamp(36px, 11vh, 118px) clamp(16px, 5vw, 76px) 16px;
+  display: flex; flex-direction: column; justify-content: flex-start;
+  pointer-events: none;
+}
+.c-chase-the-sun .say button { pointer-events: auto; }
+.c-chase-the-sun .kicker {
+  margin: 0 0 clamp(8px, 1.6vh, 16px);
+  font-weight: 300; font-size: clamp(15px, 1.5vw, 21px); line-height: 1.3;
+  text-shadow: 0 0 3px var(--shade), 0 0 14px var(--shade);
+}
+.c-chase-the-sun .kicker em { font-style: italic; }
+.c-chase-the-sun .say-line { min-height: calc(3.2 * 1.06 * var(--big)); --big: clamp(35px, min(5.5vw, 10vh), 96px); }
+.c-chase-the-sun .big {
+  margin: 0; max-width: min(15.5em, 73vw);
+  font-size: clamp(35px, min(5.5vw, 10vh), 96px);
+  font-weight: 200; line-height: 1.06; letter-spacing: -0.022em;
+  font-variation-settings: "opsz" 144;
+  text-shadow: 0 0 3px var(--shade), 0 0 16px var(--shade), 0 0 54px var(--glow);
+  color: var(--ink);
+}
+.c-chase-the-sun .w { display: inline-block; white-space: pre; animation: cts-word 0.75s cubic-bezier(0.2, 0.75, 0.2, 1) both; }
+
+.c-chase-the-sun .say-do { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; margin-top: clamp(10px, 2.2vh, 26px); }
+.c-chase-the-sun .want {
+  display: inline-flex; align-items: center; gap: 12px; min-height: 48px; padding: 4px 12px 4px 0;
+  font-style: italic; font-size: clamp(21px, 2.2vw, 31px); font-weight: 300;
+  text-shadow: 0 0 6px rgb(0 0 0 / 0.55), 0 0 18px rgb(0 0 0 / 0.35);
+  transition: transform 0.2s;
+}
+.c-chase-the-sun .want-sun {
+  width: 26px; height: 26px; border-radius: 50%; flex: none;
+  border: 1.5px solid var(--light); box-shadow: 0 0 14px -2px var(--light);
+  background: transparent;
+  transition: background 0.25s, transform 0.35s cubic-bezier(0.3, 1.8, 0.5, 1);
+}
+.c-chase-the-sun .want:hover .want-sun { background: color-mix(in srgb, var(--light) 45%, transparent); transform: scale(1.14); }
+.c-chase-the-sun .want:active { transform: scale(0.97); }
+.c-chase-the-sun .want-on .want-sun, .c-chase-the-sun .want-on:hover .want-sun { background: var(--light); box-shadow: 0 0 22px 2px var(--light); }
+.c-chase-the-sun .hint {
+  margin: 0; font-family: var(--mono); font-weight: 300; font-size: 12px; line-height: 1.5; opacity: 0.86;
+  text-shadow: 0 0 5px rgb(0 0 0 / 0.75), 0 0 14px rgb(0 0 0 / 0.45);
+  animation: cts-fade 0.7s ease both;
+}
+
+/* The horizon: six places cut from the ground */
+.c-chase-the-sun .horizon { position: relative; z-index: 2; color: var(--ground); margin-top: auto; }
+.c-chase-the-sun .hills { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 24px; display: block; }
+.c-chase-the-sun .horizon::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--light) 18%, var(--light) 82%, transparent);
+  opacity: 0.4;
+}
+.c-chase-the-sun .places {
+  position: relative; list-style: none; margin: 0; padding: 0 clamp(4px, 2vw, 40px);
+  display: grid; grid-template-columns: repeat(6, 1fr);
+}
+.c-chase-the-sun .place {
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: flex-end;
+  width: 100%; padding: 0; min-height: 52px;
+  transform-origin: 50% 100%; transition: transform 0.45s cubic-bezier(0.25, 1.5, 0.45, 1);
+}
+.c-chase-the-sun .place:hover { transform: translateY(-3px) scale(1.04); }
+.c-chase-the-sun .place-on, .c-chase-the-sun .place-on:hover { transform: scale(1.14); }
+.c-chase-the-sun .place-sil { display: block; width: 100%; height: auto; aspect-ratio: 160 / 100; max-height: clamp(46px, 15vh, 130px); color: var(--ground); overflow: visible; stroke: color-mix(in srgb, var(--ink) calc(var(--lights) * 42%), transparent); stroke-width: 0.8; }
+.c-chase-the-sun .place-on .place-sil { filter: drop-shadow(0 -1px 0 var(--light)) drop-shadow(0 0 9px color-mix(in srgb, var(--light) 60%, transparent)); }
+.c-chase-the-sun .h-lamp { fill: #ffd98a; stroke: none; opacity: var(--lights); }
+.c-chase-the-sun .h-plume { opacity: 0.62; animation: cts-plume 5s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+/* The name lives on the ground, under its silhouette */
+.c-chase-the-sun .place-name {
+  position: absolute; top: 100%; left: 0; right: 0; padding-top: 5px;
+  font-family: var(--mono); font-size: clamp(10px, 1vw, 12px); font-weight: 300; text-align: center; white-space: nowrap;
+  color: #f4f1ea; opacity: 0.62; transform-origin: 50% 0;
+  transition: opacity 0.3s;
+}
+.c-chase-the-sun .place-on .place-name { opacity: 1; color: var(--light); transform: scale(0.88); }
+.c-chase-the-sun .place-dots { position: absolute; bottom: 84%; left: 0; right: 0; display: flex; justify-content: center; gap: 3px; pointer-events: none; }
+.c-chase-the-sun .place-dots i { display: block; width: 7px; height: 7px; border-radius: 50%; background: var(--light); box-shadow: 0 0 9px 1px var(--light); animation: cts-pop 0.5s cubic-bezier(0.3, 1.8, 0.5, 1) both; }
+
+.c-chase-the-sun .ground {
+  position: relative; z-index: 1;
+  background: var(--ground); color: #f6f3ec;
+  padding: 27px 0 0;
+}
+.c-chase-the-sun .line {
+  list-style: none; margin: 0; padding: 6px clamp(8px, 2vw, 40px);
+  display: flex; gap: 4px; overflow-x: auto; scrollbar-width: none; touch-action: pan-x; position: relative;
+}
+.c-chase-the-sun .line::-webkit-scrollbar { display: none; }
+.c-chase-the-sun .line-col { flex: 1 0 56px; min-width: 0; position: relative; transition: flex-grow 0.4s; }
+.c-chase-the-sun .line-col.has-pin { flex: 2.2 0 122px; }
+.c-chase-the-sun .slot {
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+  width: 100%; height: 48px; padding: 0;
+  font-family: var(--mono); font-weight: 300; font-size: clamp(10px, 1vw, 12px); color: #f6f3ec; opacity: 0.68;
+  transition: opacity 0.25s, color 0.25s;
+}
+.c-chase-the-sun .slot:hover { opacity: 1; }
+.c-chase-the-sun .slot-dot { display: block; width: 5px; height: 5px; border-radius: 50%; background: currentColor; transition: transform 0.3s cubic-bezier(0.3, 1.8, 0.5, 1); }
+.c-chase-the-sun .slot-on { opacity: 1; color: var(--light); }
+.c-chase-the-sun .slot-on .slot-dot { transform: scale(2); box-shadow: 0 0 10px var(--light); }
+.c-chase-the-sun .chip {
+  display: flex; flex-direction: column; justify-content: center; gap: 1px; text-align: left;
+  width: 100%; height: 48px; padding: 2px 13px; overflow: hidden;
+  border-radius: 999px;
+  color: #231208;
+  animation: cts-pop 0.55s cubic-bezier(0.3, 1.7, 0.5, 1) both;
+}
+.c-chase-the-sun button.chip { color: #231208; }
+.c-chase-the-sun .chip-time { font-family: var(--mono); font-size: 10px; font-weight: 400; opacity: 0.78; }
+.c-chase-the-sun .chip-name { font-size: 12.5px; font-weight: 400; line-height: 1.08; }
+
+.c-chase-the-sun .ground-end {
+  min-height: 56px; padding: 4px clamp(10px, 2vw, 40px) 12px 212px;
+  display: flex; align-items: center; justify-content: flex-end;
+}
+.c-chase-the-sun .ground-note { margin: 0; font-family: var(--mono); font-weight: 300; font-size: 11px; line-height: 1.35; opacity: 0.66; text-align: right; }
+.c-chase-the-sun button.real {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 22px;
+  border-radius: 999px;
+  font-style: italic; font-size: clamp(16px, 1.6vw, 21px); font-weight: 400; white-space: nowrap;
+  color: #231208; background: radial-gradient(120% 200% at 20% 0%, #fff9, transparent 60%), var(--light);
+  box-shadow: 0 0 34px -2px var(--light);
+  animation: cts-pop 0.6s cubic-bezier(0.3, 1.7, 0.5, 1) both;
+  transition: transform 0.2s, box-shadow 0.3s;
+}
+.c-chase-the-sun button.real:hover { transform: scale(1.04); box-shadow: 0 0 52px 2px var(--light); }
+
+/* ---------- The trip ---------- */
+.c-chase-the-sun .open { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; --ground-h: 0px; }
+.c-chase-the-sun .open .foot {
+  bottom: 0;
+  -webkit-mask-image: linear-gradient(to bottom, transparent 40%, rgb(0 0 0 / 0.5) 62%, #000 84%);
+  mask-image: linear-gradient(to bottom, transparent 40%, rgb(0 0 0 / 0.5) 62%, #000 84%);
+}
+.c-chase-the-sun .top-back { font: inherit; }
+.c-chase-the-sun .top-back:hover { text-decoration: underline; text-underline-offset: 4px; }
+.c-chase-the-sun .open-in { position: relative; z-index: 2; padding: clamp(14px, 4vh, 44px) clamp(16px, 5vw, 76px) 72px; }
+.c-chase-the-sun .huge {
+  margin: 0; max-width: min(13em, 74vw);
+  font-size: clamp(44px, min(8.2vw, 14vh), 150px);
+  font-weight: 100; line-height: 0.98; letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 144;
+  text-shadow: 0 0 60px var(--glow), 0 2px 30px var(--shade);
+}
+.c-chase-the-sun .open .kicker { max-width: 40em; }
+.c-chase-the-sun .facts { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 26px; margin: clamp(12px, 2.4vh, 26px) 0 0; font-size: clamp(22px, 2.6vw, 38px); font-weight: 200; text-shadow: 0 1px 18px var(--shade); }
+.c-chase-the-sun .facts b { font-weight: 300; }
+.c-chase-the-sun .facts small { flex-basis: 100%; font-family: var(--mono); font-weight: 300; font-size: 11.5px; line-height: 1.5; opacity: 0.92; }
+.c-chase-the-sun .fav { margin-top: clamp(16px, 3vh, 34px); max-width: 38em; animation: cts-word 0.8s ease both; text-shadow: 0 1px 18px var(--shade); }
+.c-chase-the-sun .fav-time { font-family: var(--mono); font-weight: 300; font-size: 12px; letter-spacing: 0.08em; }
+.c-chase-the-sun .fav p { margin: 2px 0 0; font-style: italic; font-weight: 200; font-size: clamp(21px, 2.3vw, 33px); line-height: 1.2; }
+.c-chase-the-sun .chips { list-style: none; margin: 14px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.c-chase-the-sun .chip-flat { width: auto; height: auto; min-height: 48px; opacity: 0.8; transition: opacity 0.3s, transform 0.3s; }
+.c-chase-the-sun .chip-flat:hover { opacity: 1; }
+.c-chase-the-sun .chip-now { opacity: 1; transform: translateY(-2px); outline: 1.5px solid #fff; outline-offset: 2px; }
+.c-chase-the-sun .left { margin: 12px 0 0; font-family: var(--mono); font-size: 11.5px; font-weight: 300; line-height: 1.5; text-shadow: 0 1px 10px rgb(0 0 0 / 0.6); }
+
+.c-chase-the-sun .days { position: relative; padding: clamp(40px, 8vh, 90px) clamp(16px, 5vw, 76px) 12vh; }
+.c-chase-the-sun .dusk-note { margin: 0 0 clamp(40px, 8vh, 90px); font-family: var(--mono); font-weight: 300; font-size: 12px; text-shadow: 0 1px 12px var(--shade); }
+.c-chase-the-sun .trip { margin-bottom: 14vh; }
+.c-chase-the-sun .trip-sil { display: block; width: clamp(150px, 20vw, 260px); color: var(--ink); opacity: 0.92; overflow: visible; margin-bottom: 12px; --lights: 0; }
+.c-chase-the-sun .trip-tag { margin: 0; max-width: 14em; font-size: clamp(36px, 5.6vw, 92px); font-weight: 200; line-height: 1.04; letter-spacing: -0.02em; font-variation-settings: "opsz" 144; text-shadow: 0 0 40px var(--glow), 0 2px 24px var(--shade); }
+.c-chase-the-sun .trip-intro { margin: 18px 0 0; max-width: 36em; font-size: clamp(17px, 1.5vw, 21px); font-weight: 300; line-height: 1.45; text-shadow: 0 1px 14px var(--shade); }
+.c-chase-the-sun .trip-data { margin: 12px 0 0; font-family: var(--mono); font-size: 11.5px; font-weight: 300; line-height: 1.6; text-shadow: 0 1px 12px var(--shade); }
+.c-chase-the-sun .day-list { list-style: none; margin: clamp(30px, 6vh, 60px) 0 0; padding: 0; max-width: 980px; }
+.c-chase-the-sun .day {
+  display: grid; grid-template-columns: 2.6em minmax(7em, 15em) 1fr; align-items: baseline; gap: 4px 16px;
+  padding: clamp(14px, 2.6vh, 26px) 0;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 26%, transparent);
+  text-shadow: 0 1px 14px var(--shade);
+}
+.c-chase-the-sun .day-n { font-family: var(--mono); font-weight: 300; font-size: 12px; }
+.c-chase-the-sun .day h3 { margin: 0; font-size: clamp(26px, 3vw, 44px); font-weight: 200; line-height: 1.08; letter-spacing: -0.012em; }
+.c-chase-the-sun .day p { margin: 0; font-size: clamp(16px, 1.3vw, 19px); font-weight: 300; line-height: 1.42; }
+.c-chase-the-sun .band {
+  height: clamp(190px, 40vh, 430px); margin: 0 calc(-1 * clamp(16px, 5vw, 76px)) 36px; overflow: hidden; filter: var(--grade);
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 18%, #000 82%, transparent);
+}
+.c-chase-the-sun .band-video { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+.c-chase-the-sun .night { position: relative; min-height: 100vh; min-height: 100svh; display: flex; flex-direction: column; color: var(--ink); }
+.c-chase-the-sun .night-in { flex: 1; padding: clamp(40px, 12vh, 130px) clamp(16px, 5vw, 76px) 40px; }
+.c-chase-the-sun .night-head { max-width: 11em; }
+.c-chase-the-sun .night-sum { margin: 20px 0 0; font-size: clamp(19px, 1.8vw, 26px); font-weight: 200; line-height: 1.3; }
+.c-chase-the-sun .night-sum small { font-family: var(--mono); font-size: 11.5px; font-weight: 300; }
+.c-chase-the-sun .form { margin-top: clamp(26px, 5vh, 54px); max-width: 560px; display: flex; flex-direction: column; gap: 22px; align-items: flex-start; }
+.c-chase-the-sun .field { display: block; width: 100%; }
+.c-chase-the-sun .field-label { display: block; font-family: var(--mono); font-size: 12px; font-weight: 300; }
+.c-chase-the-sun .field-input {
+  display: block; width: 100%; min-height: 48px; padding: 6px 0;
+  font-family: var(--serif); font-size: clamp(22px, 2.2vw, 30px); font-weight: 200; color: var(--ink);
+  background: transparent; border: 0; border-bottom: 1px solid color-mix(in srgb, var(--ink) 55%, transparent); border-radius: 0;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.c-chase-the-sun .field-input:focus { outline: none; border-bottom-color: var(--ink); box-shadow: 0 8px 18px -12px var(--ink); }
+.c-chase-the-sun button.form-go { background: radial-gradient(circle at 40% 30%, #fff, #d9e1fa); color: #0a1238; box-shadow: 0 0 44px 0 rgb(205 218 255 / 0.6); }
+.c-chase-the-sun .done { margin-top: clamp(26px, 5vh, 54px); max-width: min(760px, 74vw); animation: cts-word 0.9s ease both; }
+.c-chase-the-sun .done p:first-child { margin: 0; font-size: clamp(25px, 3vw, 44px); font-weight: 200; line-height: 1.16; }
+.c-chase-the-sun .done-note { margin: 16px 0 0; font-family: var(--mono); font-size: 12px; font-weight: 300; }
+.c-chase-the-sun .night-land { display: flex; justify-content: center; align-items: flex-end; gap: 4vw; color: var(--ground); padding: 0 16px; margin-bottom: -1px; }
+.c-chase-the-sun .night-sil { display: block; width: min(60vw, 520px); overflow: visible; }
+
+/* ---------- Under the horizon ---------- */
+.c-chase-the-sun .below { position: relative; background: var(--ground); color: #f6f3ec; padding: clamp(50px, 10vh, 110px) clamp(16px, 5vw, 76px) 96px; }
+.c-chase-the-sun .below-title { margin: 0; max-width: 17em; font-size: clamp(32px, 4.6vw, 76px); font-weight: 200; line-height: 1.06; letter-spacing: -0.02em; font-variation-settings: "opsz" 144; }
+.c-chase-the-sun .below-title span { font-family: var(--mono); font-weight: 300; font-size: 0.76em; letter-spacing: -0.03em; color: var(--light); }
+.c-chase-the-sun .below-note { margin: 14px 0 0; font-family: var(--mono); font-weight: 300; font-size: 12px; opacity: 0.8; }
+.c-chase-the-sun .rows { list-style: none; margin: clamp(30px, 6vh, 60px) 0 0; padding: 0; }
+.c-chase-the-sun .row {
+  display: grid; grid-template-columns: clamp(96px, 16vw, 230px) minmax(9em, 1.1fr) 1.6fr auto; gap: 10px clamp(14px, 2.2vw, 34px); align-items: center;
+  width: 100%; padding: 14px 0; text-align: left;
+  border-top: 1px solid rgb(255 255 255 / 0.15);
+  transition: padding-left 0.35s cubic-bezier(0.25, 1.4, 0.45, 1), color 0.3s;
+}
+.c-chase-the-sun .row:hover { padding-left: 14px; color: var(--light); }
+.c-chase-the-sun .row-pic { display: block; aspect-ratio: 16 / 7; overflow: hidden; filter: var(--grade); border-radius: 999px; }
+.c-chase-the-sun .row-pic img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s; }
+.c-chase-the-sun .row:hover .row-pic img { transform: scale(1.08); }
+.c-chase-the-sun .row-name { font-size: clamp(24px, 2.8vw, 42px); font-weight: 200; line-height: 1.04; letter-spacing: -0.012em; }
+.c-chase-the-sun .row-line { font-style: italic; font-weight: 300; font-size: clamp(15px, 1.3vw, 19px); line-height: 1.3; animation: cts-fade 0.7s ease both; }
+.c-chase-the-sun .row-data { font-family: var(--mono); font-weight: 300; font-size: 12px; white-space: nowrap; }
+.c-chase-the-sun .foot-er { margin-top: clamp(50px, 10vh, 110px); }
+.c-chase-the-sun .foot-name { margin: 0; font-size: clamp(38px, 7vw, 120px); font-weight: 100; line-height: 1; letter-spacing: -0.03em; font-variation-settings: "opsz" 144; }
+.c-chase-the-sun .foot-say { margin: 12px 0 0; font-style: italic; font-size: clamp(18px, 1.7vw, 24px); font-weight: 300; }
+.c-chase-the-sun .foot-links { margin: 14px 0 0; display: flex; flex-wrap: wrap; gap: 0 26px; font-family: var(--mono); font-weight: 300; font-size: 13px; }
+.c-chase-the-sun .foot-links a { display: inline-flex; align-items: center; min-height: 44px; color: var(--light); text-underline-offset: 4px; }
+
+@keyframes cts-word { from { opacity: 0; transform: translate3d(0, 0.42em, 0) rotate(1.2deg); } to { opacity: 1; transform: none; } }
+@keyframes cts-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes cts-pop { from { opacity: 0; transform: scale(0.6); } to { opacity: 1; transform: none; } }
+@keyframes cts-ring { 0% { transform: scale(1); opacity: 0.7; } 100% { transform: scale(1.75); opacity: 0; } }
+@keyframes cts-plume { from { transform: translateY(2px) scale(0.97); } to { transform: translateY(-4px) scale(1.04); } }
+
+/* ---------- Phones ---------- */
+@media (max-width: 760px) {
+  .c-chase-the-sun .top { grid-template-columns: 1fr auto; }
+  .c-chase-the-sun .top .top-link:not(.top-back) { display: none; }
+  .c-chase-the-sun .top-back { grid-column: 1 / -1; justify-self: start; min-height: 40px; margin-top: -8px; }
+  .c-chase-the-sun .say { padding-top: clamp(56px, 13vh, 130px); }
+  .c-chase-the-sun .place-sil { width: 124%; margin: 0 -12%; max-height: none; }
+  .c-chase-the-sun .say-line { min-height: calc(4.2 * 1.06 * var(--big)); --big: 35px; }
+  .c-chase-the-sun .big { font-weight: 250; font-size: 35px; max-width: none; }
+  .c-chase-the-sun .huge, .c-chase-the-sun .done { max-width: none; }
+  .c-chase-the-sun .ground-end { padding-left: 206px; padding-right: 10px; }
+  .c-chase-the-sun button.real { padding: 6px 14px; font-size: 15px; }
+  .c-chase-the-sun .ground { padding-top: 24px; }
+  .c-chase-the-sun .huge { font-weight: 200; }
+  .c-chase-the-sun .day { grid-template-columns: 2.4em 1fr; }
+  .c-chase-the-sun .day p { grid-column: 2; }
+  .c-chase-the-sun .row { grid-template-columns: 92px 1fr; align-items: start; }
+  .c-chase-the-sun .row-pic { grid-row: span 2; align-self: start; aspect-ratio: 1; }
+  .c-chase-the-sun .row-line { grid-column: 2; }
+  .c-chase-the-sun .row-data { grid-column: 2; white-space: normal; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .c-chase-the-sun .w, .c-chase-the-sun .hint, .c-chase-the-sun .foot-in, .c-chase-the-sun .fav, .c-chase-the-sun .done, .c-chase-the-sun .row-line { animation: cts-fade 0.2s ease both; animation-delay: 0ms !important; }
+  .c-chase-the-sun .sun-ring, .c-chase-the-sun .h-plume { animation: none; }
+  .c-chase-the-sun .sun-ring { display: none; }
+  .c-chase-the-sun .chip, .c-chase-the-sun button.real, .c-chase-the-sun .place-dots i { animation: none; }
+}
