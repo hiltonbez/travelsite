@@ -13,6 +13,10 @@ export const TRIBETRAVEL_URL = (env["VITE_TRIBETRAVEL_URL"] || "https://tribetra
 export const AGENCY_SLUG = env["VITE_AGENCY_SLUG"] || "sunset-travel";
 /** The client login on the agency's TribeTravel address (<slug>.tribetravel.io/my-trips): sign in, register, account. */
 export const ACCOUNT_URL = `https://${AGENCY_SLUG}.${new URL(TRIBETRAVEL_URL).host}/my-trips`;
+/** Where "Sign in" goes. On the demo agency's site it opens TribeTravel's read-only demo account (CLIENT_LOGIN_DEMO,
+ *  signed in as a sample client), so agencies trying the sample see a full account without a password. */
+export const SIGN_IN_URL = (env["VITE_DEMO_ACCOUNT"] ? env["VITE_DEMO_ACCOUNT"] === "true" : AGENCY_SLUG === "sunset-travel")
+  ? `${ACCOUNT_URL}/demo` : `${ACCOUNT_URL}/login`;
 
 /** The agency's name on the page (header, footer, page title). */
 export const BRAND = { name: "Sun-Set Travel", short: "SUN-SET", tagline: "Travel & Tours" };

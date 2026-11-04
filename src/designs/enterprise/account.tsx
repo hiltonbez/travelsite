@@ -1,7 +1,7 @@
 // Stop 6: the client's own account. Sign in and register are TribeTravel's pages on the agency's address
 // (<slug>.tribetravel.io/my-trips), so passwords and passports never pass through this site.
 import { ArrowRight, CreditCard, FileText, MessageCircle, ReceiptText, ShieldCheck, UserRound } from "lucide-react";
-import { ACCOUNT_URL } from "@/lib/site-content";
+import { ACCOUNT_URL, SIGN_IN_URL } from "@/lib/site-content";
 import { StopLabel } from "@/designs/enterprise/parts";
 import { btn, ghost, gutter, h2, label, mono, orange, panel, soft } from "@/designs/enterprise/theme";
 
@@ -23,7 +23,7 @@ export function YourAccount() {
           Create your account with your name, email and mobile. We email you a link to set your password, and from then on everything for your trip is here.
         </p>
         <div className="flex flex-wrap gap-3">
-          <a href={`${ACCOUNT_URL}/login`} className={`${btn} min-h-14 px-8`}>Sign in <ArrowRight className="h-4 w-4" /></a>
+          <a href={SIGN_IN_URL} className={`${btn} min-h-14 px-8`}>Sign in <ArrowRight className="h-4 w-4" /></a>
           <a href={`${ACCOUNT_URL}/register`} className={`${ghost} min-h-14 px-8`}>Create my account</a>
         </div>
         <p className={`text-sm ${soft}`}>Already travelled with us? Use the email we have for you and your trips show straight away.</p>

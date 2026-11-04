@@ -3,7 +3,7 @@
 // one is its own prerendered page (scripts/snapshot.mjs).
 import { useEffect, useState, type ReactNode } from "react";
 import { Menu, UserRound, X } from "lucide-react";
-import { ACCOUNT_URL } from "@/lib/site-content";
+import { ACCOUNT_URL, SIGN_IN_URL } from "@/lib/site-content";
 import { useEnquiry } from "@/lib/enquiry";
 import { BRAND, BotTrap, WhatsAppIcon, contact, mailto, tel } from "@/designs/shared";
 import { ConciergeLauncher } from "@/designs/enterprise/concierge";
@@ -60,7 +60,7 @@ function Header({ current }: { current: string }) {
         ))}
       </nav>
       <div className="flex items-center gap-2">
-        <a href={`${ACCOUNT_URL}/login`} aria-label="Sign in to your account"
+        <a href={SIGN_IN_URL} aria-label="Sign in to your account"
           className="flex min-h-11 items-center gap-2 rounded-full border border-[#EDE6D8]/25 px-4 text-sm font-semibold hover:border-[#FF6A2E]">
           <UserRound className="h-4 w-4" /><span className="whitespace-nowrap">Sign in</span>
         </a>
@@ -87,7 +87,7 @@ function Header({ current }: { current: string }) {
             ))}
           </nav>
           <div className="mt-8 flex flex-wrap gap-3">
-            <a href={`${ACCOUNT_URL}/login`} className={`${btn} min-h-12 px-6`}>Sign in</a>
+            <a href={SIGN_IN_URL} className={`${btn} min-h-12 px-6`}>Sign in</a>
             <a href={`${ACCOUNT_URL}/register`} className="flex min-h-12 items-center rounded-full border border-[#EDE6D8]/40 px-6 font-bold">Create my account</a>
           </div>
           <p className={`mt-auto ${mono} text-sm ${soft}`}>{contact.phoneDisplay} · {contact.email}</p>
