@@ -8,11 +8,13 @@
     "build": "vite build",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
+    "preview:static": "node scripts/preview-static.mjs",
     "lint": "eslint .",
     "format": "prettier --write .",
     "test": "vitest run",
     "test:watch": "vitest",
-    "build:static": "vite build && node scripts/snapshot.mjs"
+    "build:static": "vite build && node scripts/snapshot.mjs",
+    "audit:studio": "node scripts/audit-studio.mjs"
   },
   "overrides": {
     "rolldown": "1.2.1"
@@ -80,6 +82,7 @@
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
     "@vitejs/plugin-react": "^5.2.0",
+    "axe-core": "^4.14.0",
     "eslint": "^9.32.0",
     "eslint-config-prettier": "^10.1.1",
     "eslint-plugin-prettier": "^5.2.6",

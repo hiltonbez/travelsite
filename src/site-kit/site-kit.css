@@ -1,0 +1,315 @@
+/* The Tribe Site kit: what the Design Studio designs share on their other pages. Fonts, background and text colour
+   come from the design's own `concept-page theme-<id>` styling in studio.css; these rules use currentColor and the
+   design's palette (--tk-a, --tk-b, --tk-c, set on the page by SiteFrame), so they follow whichever design is shown. */
+
+.tk-site {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.tk-site > #site-main {
+  flex: 1;
+}
+
+/* Header and footer */
+.tk-header,
+.tk-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 28px;
+  padding: 22px 5vw;
+}
+.tk-header {
+  border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+.tk-footer {
+  padding-block: 32px;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  font-size: 15px;
+}
+.tk-footer small {
+  margin-left: auto;
+  opacity: 0.7;
+}
+.tk-footer > a:last-child {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.tk-wordmark {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 8px;
+  font-size: 24px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+}
+.tk-wordmark span {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  opacity: 0.7;
+}
+.tk-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 22px;
+  margin-inline: auto;
+}
+.tk-nav a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 2px solid transparent;
+}
+.tk-nav a:hover,
+.tk-nav a[aria-current="page"] {
+  border-bottom-color: currentColor;
+}
+.tk-chat-launcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 18px;
+  border: 1.5px solid currentColor;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+}
+.tk-chat-launcher:hover {
+  background: color-mix(in srgb, currentColor 10%, transparent);
+}
+/* The booking dialog's own buttons need the room, as on the other designs. */
+html.tt-dialog-open .tk-chat-launcher {
+  visibility: hidden;
+}
+/* and the cookie notice, which would sit over the dialog on a phone */
+html.tt-dialog-open .tk-consent {
+  display: none;
+}
+
+/* On a homepage the page links sit in a slim bar above the film */
+.concept-page > .tk-nav {
+  justify-content: center;
+  margin: 0;
+  padding: 0 5vw;
+  gap: 0 22px;
+  font-size: 14px;
+  border-bottom: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+
+/* Page banner: the design's film under a scrim so the words stay readable */
+.tk-banner {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: flex-end;
+  min-height: clamp(280px, 36vw, 440px);
+  overflow: hidden;
+  background: var(--tk-a);
+  color: #fff;
+}
+.tk-banner .x-film {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+.tk-banner::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, rgb(0 0 0 / 0.2), rgb(0 0 0 / 0.65));
+}
+.tk-banner-text {
+  max-width: 900px;
+  padding: clamp(32px, 5vw, 64px) 5vw;
+}
+.tk-banner h1 {
+  margin: 0 0 12px;
+  font-size: clamp(40px, 7vw, 92px);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.tk-banner p {
+  margin: 0;
+  max-width: 60ch;
+  font-size: clamp(16px, 1.6vw, 20px);
+}
+
+/* Destinations */
+.tk-places {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+  gap: 32px 28px;
+  padding: clamp(40px, 6vw, 80px) 5vw;
+}
+.tk-place img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+}
+.tk-place h2 {
+  margin: 14px 0 2px;
+  font-size: 28px;
+  line-height: 1.1;
+}
+.tk-place p {
+  margin: 0 0 8px;
+}
+.tk-place .tk-region {
+  font-size: 14px;
+  opacity: 0.7;
+}
+.tk-place a {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+
+/* About, Privacy and Contact */
+.tk-prose,
+.tk-contact {
+  display: grid;
+  gap: 18px;
+  max-width: 860px;
+  padding: clamp(40px, 6vw, 80px) 5vw;
+}
+.tk-contact {
+  padding-bottom: 0;
+  gap: 10px;
+}
+.tk-prose h2,
+.tk-contact h2 {
+  margin: 12px 0 0;
+  font-size: clamp(22px, 2.4vw, 30px);
+}
+.tk-prose p {
+  margin: 0;
+  font-size: 18px;
+  line-height: 1.6;
+}
+.tk-prose a,
+.tk-contact a {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.tk-note {
+  padding: 14px 16px;
+  border: 2px dashed currentColor;
+  font-size: 15px;
+  opacity: 0.8;
+}
+.tk-contact ul {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Newsletter */
+.tk-news {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  align-items: start;
+  gap: 28px 6vw;
+  padding: clamp(40px, 5vw, 72px) 5vw;
+  border-top: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+}
+.tk-news h2 {
+  margin: 0 0 8px;
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.1;
+}
+.tk-news p {
+  margin: 0;
+}
+.tk-news form {
+  display: grid;
+  gap: 14px;
+}
+.tk-news label {
+  display: grid;
+  gap: 6px;
+  font-size: 14px;
+}
+.tk-news .plan-consent {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+.tk-news input[type="email"] {
+  min-height: 48px;
+  padding: 0 14px;
+  border: 1.5px solid currentColor;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+}
+.tk-news .concept-cta {
+  justify-self: start;
+}
+
+/* Cookie notice */
+.tk-consent {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 60;
+  display: grid;
+  gap: 12px;
+  max-width: min(420px, calc(100vw - 32px));
+  padding: 16px 18px;
+  border-radius: 12px;
+  background: #121212;
+  color: #f5f5f0;
+  box-shadow: 0 20px 50px -20px rgb(0 0 0 / 0.6);
+  font-size: 14px;
+}
+.tk-consent p {
+  margin: 0;
+}
+.tk-consent a {
+  text-decoration: underline;
+}
+.tk-consent div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.tk-consent button {
+  flex: 1;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 1.5px solid #f5f5f0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+}
+.tk-consent button:first-child {
+  background: #f5f5f0;
+  color: #121212;
+}
+
+/* The shared booking dialog is drawn outside the page, so it brings its own type */
+.tk-booking {
+  font-family: "DM Sans", sans-serif;
+}
+
+@media (max-width: 760px) {
+  .tk-news {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .tk-nav {
+    order: 3;
+    width: 100%;
+    margin-inline: 0;
+  }
+  .tk-footer small {
+    margin-left: 0;
+  }
+}

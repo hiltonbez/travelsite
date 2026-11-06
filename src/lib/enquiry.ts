@@ -15,11 +15,19 @@ export type EnquiryFields = {
 
 export const THANKS = "Thanks! Your enquiry is on its way. We'll be in touch soon.";
 
-/** POST the enquiry; throws when TribeTravel doesn't accept it. */
-export async function sendEnquiry(data: EnquiryFields) {
+export class EnquirySizeError extends Error {
+  constructor() {
+    super(
+      "Your enquiry exceeds 4,000 characters. Shorten your message or simplify the saved planning preferences, then send again.",
+    );
+    this.name = "EnquirySizeError";
+  }
+}
+
+export function enquirySummary(data: EnquiryFields) {
   // TribeTravel stores a name, a contact and a summary, so the trip details
   // go into the summary where the agent will see them.
-  const summary = [
+  return [
     data.destination && `Destination: ${data.destination}`,
     data.travel_dates && `When: ${data.travel_dates}`,
     data.travellers && `Travellers: ${data.travellers}`,
@@ -28,6 +36,14 @@ export async function sendEnquiry(data: EnquiryFields) {
   ]
     .filter(Boolean)
     .join("\n");
+}
+
+/** POST the enquiry; throws when TribeTravel doesn't accept it. */
+export async function sendEnquiry(data: EnquiryFields) {
+  const summary = enquirySummary(data);
+  // The receiving API stores at most 4,000 Unicode characters. Reject before
+  // sending so none of a traveller's planning preferences disappear silently.
+  if ([...summary].length > 4000) throw new EnquirySizeError();
 
   const response = await fetch(contact.enquiryUrl, {
     method: "POST",
@@ -80,10 +96,18 @@ export function useEnquiry(extra?: (fd: FormData) => Partial<EnquiryFields>) {
       console.error("Enquiry form:", err);
       setStatus({
         kind: "error",
-        message: `Sorry, something went wrong sending your enquiry. Please try again, or email ${contact.email}.`,
+        message:
+          err instanceof EnquirySizeError
+            ? err.message
+            : `Sorry, something went wrong sending your enquiry. Please try again, or email ${contact.email}.`,
       });
     }
   }
 
-  return { status, onSubmit, sending: status.kind === "sending", reset: () => setStatus({ kind: "idle" }) };
+  return {
+    status,
+    onSubmit,
+    sending: status.kind === "sending",
+    reset: () => setStatus({ kind: "idle" }),
+  };
 }

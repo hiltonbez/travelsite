@@ -11,12 +11,24 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as PackagesRouteImport } from './routes/packages'
+import { Route as DesignsAltitudeRouteImport } from './routes/designs/altitude'
 import { Route as DesignsAtlasRouteImport } from './routes/designs/atlas'
 import { Route as DesignsEnterpriseRouteImport } from './routes/designs/enterprise'
+import { Route as DesignsLittleBigRouteImport } from './routes/designs/little-big'
 import { Route as DesignsLivingMapRouteImport } from './routes/designs/living-map'
+import { Route as DesignsMaisonRouteImport } from './routes/designs/maison'
+import { Route as DesignsMeridianRouteImport } from './routes/designs/meridian'
+import { Route as DesignsNocturneRouteImport } from './routes/designs/nocturne'
+import { Route as DesignsOffscriptRouteImport } from './routes/designs/offscript'
+import { Route as DesignsPostcardRouteImport } from './routes/designs/postcard'
+import { Route as DesignsSidequestRouteImport } from './routes/designs/sidequest'
+import { Route as DesignsStudioRouteImport } from './routes/designs/studio'
+import { Route as DesignsVectorRouteImport } from './routes/designs/vector'
+import { Route as DesignsWildlingsRouteImport } from './routes/designs/wildlings'
 import { Route as DesignsWindowSeatRouteImport } from './routes/designs/window-seat'
 import { Route as DestinationsSlugRouteImport } from './routes/destinations.$slug'
 import { Route as TripsSlugRouteImport } from './routes/trips.$slug'
+import { Route as DesignsDesignPageRouteImport } from './routes/designs/$design.$page'
 import { Route as DesignsAtlasIndexRouteImport } from './routes/designs/atlas.index'
 import { Route as DesignsAtlasAboutRouteImport } from './routes/designs/atlas.about'
 import { Route as DesignsAtlasAutomationRouteImport } from './routes/designs/atlas.automation'
@@ -63,6 +75,11 @@ const PackagesRoute = PackagesRouteImport.update({
   path: '/packages',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesignsAltitudeRoute = DesignsAltitudeRouteImport.update({
+  id: '/designs/altitude',
+  path: '/designs/altitude',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DesignsAtlasRoute = DesignsAtlasRouteImport.update({
   id: '/designs/atlas',
   path: '/designs/atlas',
@@ -73,9 +90,59 @@ const DesignsEnterpriseRoute = DesignsEnterpriseRouteImport.update({
   path: '/designs/enterprise',
   getParentRoute: () => rootRouteImport,
 } as any)
+const DesignsLittleBigRoute = DesignsLittleBigRouteImport.update({
+  id: '/designs/little-big',
+  path: '/designs/little-big',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const DesignsLivingMapRoute = DesignsLivingMapRouteImport.update({
   id: '/designs/living-map',
   path: '/designs/living-map',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsMaisonRoute = DesignsMaisonRouteImport.update({
+  id: '/designs/maison',
+  path: '/designs/maison',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsMeridianRoute = DesignsMeridianRouteImport.update({
+  id: '/designs/meridian',
+  path: '/designs/meridian',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsNocturneRoute = DesignsNocturneRouteImport.update({
+  id: '/designs/nocturne',
+  path: '/designs/nocturne',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsOffscriptRoute = DesignsOffscriptRouteImport.update({
+  id: '/designs/offscript',
+  path: '/designs/offscript',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsPostcardRoute = DesignsPostcardRouteImport.update({
+  id: '/designs/postcard',
+  path: '/designs/postcard',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsSidequestRoute = DesignsSidequestRouteImport.update({
+  id: '/designs/sidequest',
+  path: '/designs/sidequest',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsStudioRoute = DesignsStudioRouteImport.update({
+  id: '/designs/studio',
+  path: '/designs/studio',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsVectorRoute = DesignsVectorRouteImport.update({
+  id: '/designs/vector',
+  path: '/designs/vector',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsWildlingsRoute = DesignsWildlingsRouteImport.update({
+  id: '/designs/wildlings',
+  path: '/designs/wildlings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsWindowSeatRoute = DesignsWindowSeatRouteImport.update({
@@ -91,6 +158,11 @@ const DestinationsSlugRoute = DestinationsSlugRouteImport.update({
 const TripsSlugRoute = TripsSlugRouteImport.update({
   id: '/trips/$slug',
   path: '/trips/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DesignsDesignPageRoute = DesignsDesignPageRouteImport.update({
+  id: '/designs/$design/$page',
+  path: '/designs/$design/$page',
   getParentRoute: () => rootRouteImport,
 } as any)
 const DesignsAtlasIndexRoute = DesignsAtlasIndexRouteImport.update({
@@ -289,12 +361,24 @@ const DesignsLivingMapDestinationsSlugRoute =
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/packages': typeof PackagesRoute
+  '/designs/altitude': typeof DesignsAltitudeRoute
   '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
+  '/designs/little-big': typeof DesignsLittleBigRoute
   '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
+  '/designs/maison': typeof DesignsMaisonRoute
+  '/designs/meridian': typeof DesignsMeridianRoute
+  '/designs/nocturne': typeof DesignsNocturneRoute
+  '/designs/offscript': typeof DesignsOffscriptRoute
+  '/designs/postcard': typeof DesignsPostcardRoute
+  '/designs/sidequest': typeof DesignsSidequestRoute
+  '/designs/studio': typeof DesignsStudioRoute
+  '/designs/vector': typeof DesignsVectorRoute
+  '/designs/wildlings': typeof DesignsWildlingsRoute
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/destinations/$slug': typeof DestinationsSlugRoute
   '/trips/$slug': typeof TripsSlugRoute
+  '/designs/$design/$page': typeof DesignsDesignPageRoute
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
   '/designs/atlas/book': typeof DesignsAtlasBookRoute
@@ -334,9 +418,21 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/packages': typeof PackagesRoute
+  '/designs/altitude': typeof DesignsAltitudeRoute
+  '/designs/little-big': typeof DesignsLittleBigRoute
+  '/designs/maison': typeof DesignsMaisonRoute
+  '/designs/meridian': typeof DesignsMeridianRoute
+  '/designs/nocturne': typeof DesignsNocturneRoute
+  '/designs/offscript': typeof DesignsOffscriptRoute
+  '/designs/postcard': typeof DesignsPostcardRoute
+  '/designs/sidequest': typeof DesignsSidequestRoute
+  '/designs/studio': typeof DesignsStudioRoute
+  '/designs/vector': typeof DesignsVectorRoute
+  '/designs/wildlings': typeof DesignsWildlingsRoute
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/destinations/$slug': typeof DestinationsSlugRoute
   '/trips/$slug': typeof TripsSlugRoute
+  '/designs/$design/$page': typeof DesignsDesignPageRoute
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
   '/designs/atlas/book': typeof DesignsAtlasBookRoute
@@ -377,12 +473,24 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/packages': typeof PackagesRoute
+  '/designs/altitude': typeof DesignsAltitudeRoute
   '/designs/atlas': typeof DesignsAtlasRouteWithChildren
   '/designs/enterprise': typeof DesignsEnterpriseRouteWithChildren
+  '/designs/little-big': typeof DesignsLittleBigRoute
   '/designs/living-map': typeof DesignsLivingMapRouteWithChildren
+  '/designs/maison': typeof DesignsMaisonRoute
+  '/designs/meridian': typeof DesignsMeridianRoute
+  '/designs/nocturne': typeof DesignsNocturneRoute
+  '/designs/offscript': typeof DesignsOffscriptRoute
+  '/designs/postcard': typeof DesignsPostcardRoute
+  '/designs/sidequest': typeof DesignsSidequestRoute
+  '/designs/studio': typeof DesignsStudioRoute
+  '/designs/vector': typeof DesignsVectorRoute
+  '/designs/wildlings': typeof DesignsWildlingsRoute
   '/designs/window-seat': typeof DesignsWindowSeatRouteWithChildren
   '/destinations/$slug': typeof DestinationsSlugRoute
   '/trips/$slug': typeof TripsSlugRoute
+  '/designs/$design/$page': typeof DesignsDesignPageRoute
   '/designs/atlas/about': typeof DesignsAtlasAboutRoute
   '/designs/atlas/automation': typeof DesignsAtlasAutomationRoute
   '/designs/atlas/book': typeof DesignsAtlasBookRoute
@@ -424,12 +532,24 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/packages'
+    | '/designs/altitude'
     | '/designs/atlas'
     | '/designs/enterprise'
+    | '/designs/little-big'
     | '/designs/living-map'
+    | '/designs/maison'
+    | '/designs/meridian'
+    | '/designs/nocturne'
+    | '/designs/offscript'
+    | '/designs/postcard'
+    | '/designs/sidequest'
+    | '/designs/studio'
+    | '/designs/vector'
+    | '/designs/wildlings'
     | '/designs/window-seat'
     | '/destinations/$slug'
     | '/trips/$slug'
+    | '/designs/$design/$page'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
     | '/designs/atlas/book'
@@ -469,9 +589,21 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/packages'
+    | '/designs/altitude'
+    | '/designs/little-big'
+    | '/designs/maison'
+    | '/designs/meridian'
+    | '/designs/nocturne'
+    | '/designs/offscript'
+    | '/designs/postcard'
+    | '/designs/sidequest'
+    | '/designs/studio'
+    | '/designs/vector'
+    | '/designs/wildlings'
     | '/designs/window-seat'
     | '/destinations/$slug'
     | '/trips/$slug'
+    | '/designs/$design/$page'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
     | '/designs/atlas/book'
@@ -511,12 +643,24 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/packages'
+    | '/designs/altitude'
     | '/designs/atlas'
     | '/designs/enterprise'
+    | '/designs/little-big'
     | '/designs/living-map'
+    | '/designs/maison'
+    | '/designs/meridian'
+    | '/designs/nocturne'
+    | '/designs/offscript'
+    | '/designs/postcard'
+    | '/designs/sidequest'
+    | '/designs/studio'
+    | '/designs/vector'
+    | '/designs/wildlings'
     | '/designs/window-seat'
     | '/destinations/$slug'
     | '/trips/$slug'
+    | '/designs/$design/$page'
     | '/designs/atlas/about'
     | '/designs/atlas/automation'
     | '/designs/atlas/book'
@@ -557,12 +701,24 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   PackagesRoute: typeof PackagesRoute
+  DesignsAltitudeRoute: typeof DesignsAltitudeRoute
   DesignsAtlasRoute: typeof DesignsAtlasRouteWithChildren
   DesignsEnterpriseRoute: typeof DesignsEnterpriseRouteWithChildren
+  DesignsLittleBigRoute: typeof DesignsLittleBigRoute
   DesignsLivingMapRoute: typeof DesignsLivingMapRouteWithChildren
+  DesignsMaisonRoute: typeof DesignsMaisonRoute
+  DesignsMeridianRoute: typeof DesignsMeridianRoute
+  DesignsNocturneRoute: typeof DesignsNocturneRoute
+  DesignsOffscriptRoute: typeof DesignsOffscriptRoute
+  DesignsPostcardRoute: typeof DesignsPostcardRoute
+  DesignsSidequestRoute: typeof DesignsSidequestRoute
+  DesignsStudioRoute: typeof DesignsStudioRoute
+  DesignsVectorRoute: typeof DesignsVectorRoute
+  DesignsWildlingsRoute: typeof DesignsWildlingsRoute
   DesignsWindowSeatRoute: typeof DesignsWindowSeatRouteWithChildren
   DestinationsSlugRoute: typeof DestinationsSlugRoute
   TripsSlugRoute: typeof TripsSlugRoute
+  DesignsDesignPageRoute: typeof DesignsDesignPageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -581,6 +737,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PackagesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/designs/altitude': {
+      id: '/designs/altitude'
+      path: '/designs/altitude'
+      fullPath: '/designs/altitude'
+      preLoaderRoute: typeof DesignsAltitudeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/designs/atlas': {
       id: '/designs/atlas'
       path: '/designs/atlas'
@@ -595,11 +758,81 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof DesignsEnterpriseRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/designs/little-big': {
+      id: '/designs/little-big'
+      path: '/designs/little-big'
+      fullPath: '/designs/little-big'
+      preLoaderRoute: typeof DesignsLittleBigRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/designs/living-map': {
       id: '/designs/living-map'
       path: '/designs/living-map'
       fullPath: '/designs/living-map'
       preLoaderRoute: typeof DesignsLivingMapRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/maison': {
+      id: '/designs/maison'
+      path: '/designs/maison'
+      fullPath: '/designs/maison'
+      preLoaderRoute: typeof DesignsMaisonRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/meridian': {
+      id: '/designs/meridian'
+      path: '/designs/meridian'
+      fullPath: '/designs/meridian'
+      preLoaderRoute: typeof DesignsMeridianRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/nocturne': {
+      id: '/designs/nocturne'
+      path: '/designs/nocturne'
+      fullPath: '/designs/nocturne'
+      preLoaderRoute: typeof DesignsNocturneRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/offscript': {
+      id: '/designs/offscript'
+      path: '/designs/offscript'
+      fullPath: '/designs/offscript'
+      preLoaderRoute: typeof DesignsOffscriptRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/postcard': {
+      id: '/designs/postcard'
+      path: '/designs/postcard'
+      fullPath: '/designs/postcard'
+      preLoaderRoute: typeof DesignsPostcardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/sidequest': {
+      id: '/designs/sidequest'
+      path: '/designs/sidequest'
+      fullPath: '/designs/sidequest'
+      preLoaderRoute: typeof DesignsSidequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/studio': {
+      id: '/designs/studio'
+      path: '/designs/studio'
+      fullPath: '/designs/studio'
+      preLoaderRoute: typeof DesignsStudioRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/vector': {
+      id: '/designs/vector'
+      path: '/designs/vector'
+      fullPath: '/designs/vector'
+      preLoaderRoute: typeof DesignsVectorRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/wildlings': {
+      id: '/designs/wildlings'
+      path: '/designs/wildlings'
+      fullPath: '/designs/wildlings'
+      preLoaderRoute: typeof DesignsWildlingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/designs/window-seat': {
@@ -621,6 +854,13 @@ declare module '@tanstack/react-router' {
       path: '/trips/$slug'
       fullPath: '/trips/$slug'
       preLoaderRoute: typeof TripsSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/designs/$design/$page': {
+      id: '/designs/$design/$page'
+      path: '/designs/$design/$page'
+      fullPath: '/designs/$design/$page'
+      preLoaderRoute: typeof DesignsDesignPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/designs/atlas/': {
@@ -984,12 +1224,24 @@ const DesignsWindowSeatRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   PackagesRoute: PackagesRoute,
+  DesignsAltitudeRoute: DesignsAltitudeRoute,
   DesignsAtlasRoute: DesignsAtlasRouteWithChildren,
   DesignsEnterpriseRoute: DesignsEnterpriseRouteWithChildren,
+  DesignsLittleBigRoute: DesignsLittleBigRoute,
   DesignsLivingMapRoute: DesignsLivingMapRouteWithChildren,
+  DesignsMaisonRoute: DesignsMaisonRoute,
+  DesignsMeridianRoute: DesignsMeridianRoute,
+  DesignsNocturneRoute: DesignsNocturneRoute,
+  DesignsOffscriptRoute: DesignsOffscriptRoute,
+  DesignsPostcardRoute: DesignsPostcardRoute,
+  DesignsSidequestRoute: DesignsSidequestRoute,
+  DesignsStudioRoute: DesignsStudioRoute,
+  DesignsVectorRoute: DesignsVectorRoute,
+  DesignsWildlingsRoute: DesignsWildlingsRoute,
   DesignsWindowSeatRoute: DesignsWindowSeatRouteWithChildren,
   DestinationsSlugRoute: DestinationsSlugRoute,
   TripsSlugRoute: TripsSlugRoute,
+  DesignsDesignPageRoute: DesignsDesignPageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

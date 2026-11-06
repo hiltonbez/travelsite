@@ -12,7 +12,7 @@ export function DesignBar({ current }: { current: string }) {
       aria-label="Website designs"
       className="relative z-50 flex items-center gap-3 overflow-x-auto bg-[#111318] px-4 py-2.5 font-sans text-[13px] text-white/80 md:px-6"
     >
-      <span className="hidden shrink-0 font-semibold text-white sm:inline">Website packages</span>
+      <a href="/designs/studio" className="shrink-0 font-semibold text-white">Explore 10 new designs ↗</a>
       <span className="hidden h-4 w-px shrink-0 bg-white/20 sm:inline" aria-hidden="true" />
       <div className="flex shrink-0 gap-1.5">
         {DESIGNS.map((d) => {
@@ -28,12 +28,11 @@ export function DesignBar({ current }: { current: string }) {
                 (on ? "bg-white text-[#111318]" : "text-white/80 hover:bg-white/10 hover:text-white")
               }
             >
-              {d.pkg}
+              {d.collection ? d.name : d.pkg}
             </a>
           );
         })}
       </div>
-      <span className="ml-auto hidden shrink-0 text-white/50 xl:inline">Each package, shown as its own design</span>
       <a
         href={PRICING}
         aria-current={current === PRICING ? "page" : undefined}

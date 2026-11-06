@@ -11,6 +11,12 @@ as static HTML, and the Docker image serves it with nginx.
 
 ## Design gallery
 
+**New: [The Agency Collection](/designs/studio)** presents ten audience-led homepage concepts, two each for corporate,
+family, luxury, youth and classic travel. Visitors can filter the gallery, explore full responsive previews and save
+five favourites in their browser. The previews use the existing enquiry, AI chat and on-demand package clients;
+supplier access remains subject to the agency's enabled integrations. See `docs/design-collection.md` for research,
+integration boundaries and asset notes. The original package examples below remain available.
+
 The demo also shows one website design for each TribeTravel website package. A bar along the top of each
 page (`src/components/design-bar.tsx`) switches between them, named by package:
 
@@ -40,7 +46,12 @@ npm run dev
 
 ```bash
 npm run build:static
+npm run preview:static
 ```
+
+The production preview is at http://127.0.0.1:8080/designs/studio. It serves built
+files directly, avoiding Vite server-rendering timeouts on the design collection.
+Run `npm run build:static` again after editing to refresh the preview.
 
 This builds the site, then `scripts/snapshot.mjs` starts the built server once
 and saves every page in its `PAGES` list (and the 404 page) as HTML in `.output/public`. Add new pages to
