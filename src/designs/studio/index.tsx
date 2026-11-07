@@ -22,7 +22,7 @@ import { BotTrap, FormStatus } from "@/designs/shared";
 import { ChatPanel } from "@/site-kit/chat-panel";
 import { LivePackages } from "@/site-kit/live-packages";
 import { ConsentNotice } from "@/site-kit/consent";
-import { SitePagesNav } from "@/site-kit/frame";
+import { ChatFloat, SitePagesNav } from "@/site-kit/frame";
 import { Newsletter } from "@/site-kit/newsletter";
 
 const SHORTLIST = "tribe-design-shortlist-v1";
@@ -526,6 +526,7 @@ export function ConceptPage({ id }: { id: string }) {
         </dialog>
       )}
       <ConsentNotice id={id} />
+      <ChatFloat onOpen={() => setChat(true)} />
     </main>
   );
 }

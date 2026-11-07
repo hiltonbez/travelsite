@@ -83,24 +83,32 @@ describe("Chat panel", () => {
 });
 
 describe("Live packages", () => {
-  it("waits for the visitor before asking the feed", () => {
+  it("asks the feed as soon as the section appears and lists the packages with prices", async () => {
+    (fetch as Mock).mockResolvedValue(ok({ packages: [PKG], min_days_ahead: 10 }));
     render(<LivePackages onChoose={() => {}} />);
-    expect(fetch).not.toHaveBeenCalled();
+    expect(await screen.findByRole("button", { name: /Test Hotel/ })).toBeTruthy();
+    expect(fetch).toHaveBeenCalledTimes(1);
+    expect(screen.getByText(/From R\s?30/)).toBeTruthy();
+    expect(screen.queryByRole("button", { name: /Explore live packages/ })).toBeNull();
   });
 
   it("shows the unavailable message and no price when the feed fails", async () => {
     (fetch as Mock).mockResolvedValue({ ok: false, json: async () => ({}) });
     render(<LivePackages onChoose={() => {}} />);
-    fireEvent.click(screen.getByRole("button", { name: /Explore live packages/ }));
     const alert = await screen.findByRole("alert");
     expect(alert.textContent).toContain("Live packages are unavailable");
     expect(document.body.textContent).not.toMatch(/R\s?\d/);
   });
 
+  it("survives a feed that answers without a package list", async () => {
+    (fetch as Mock).mockResolvedValue(ok({ ok: true }));
+    render(<LivePackages onChoose={() => {}} />);
+    expect(await screen.findByText(/No packages are currently available/)).toBeTruthy();
+  });
+
   it("opens the booking dialog for a selected package", async () => {
     (fetch as Mock).mockResolvedValue(ok({ packages: [PKG], min_days_ahead: 10 }));
     render(<LivePackages onChoose={() => {}} />);
-    fireEvent.click(screen.getByRole("button", { name: /Explore live packages/ }));
     fireEvent.click(await screen.findByRole("button", { name: /Test Hotel/ }));
     fireEvent.click(screen.getByRole("button", { name: /Book this package online/ }));
     const dialog = await screen.findByRole("dialog");
@@ -323,6 +331,26 @@ describe("Site frame", () => {
   });
 });
 
+describe("AI Concierge launcher", () => {
+  beforeEach(() => (fetch as Mock).mockResolvedValue(ok({ packages: [], min_days_ahead: 10 })));
+
+  it("floats on every subpage and opens the chat", async () => {
+    render(
+      <SiteFrame id="vector" current="about">
+        <p>Body</p>
+      </SiteFrame>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /^AI Concierge/ }));
+    expect(await screen.findByRole("dialog")).toBeTruthy();
+  });
+
+  it("floats on the homepage too", async () => {
+    render(<ConceptPage id="vector" />);
+    fireEvent.click(screen.getByRole("button", { name: /^AI Concierge/ }));
+    expect(await screen.findByRole("dialog")).toBeTruthy();
+  });
+});
+
 describe("Site pages", () => {
   beforeEach(() => (fetch as Mock).mockResolvedValue(ok({ ok: true })));
 
@@ -338,7 +366,8 @@ describe("Site pages", () => {
     }
   });
 
-  it("lists the six places with a quote link each, and the live packages button", () => {
+  it("lists the six places with a quote link each, and the live Beachcomber packages", async () => {
+    (fetch as Mock).mockResolvedValue(ok({ packages: [PKG], min_days_ahead: 10 }));
     render(<SiteSubpage id="vector" page="destinations" />);
     for (const place of PLACES) {
       expect(screen.getByRole("heading", { name: place.name })).toBeTruthy();
@@ -347,7 +376,15 @@ describe("Site pages", () => {
     expect(
       screen.getByRole("link", { name: "Get a quote for Zanzibar" }).getAttribute("href"),
     ).toBe("/designs/vector/quote?to=Zanzibar");
-    expect(screen.getByRole("button", { name: /Explore live packages/ })).toBeTruthy();
+    expect(await screen.findByRole("button", { name: /Test Hotel/ })).toBeTruthy();
+  });
+
+  it("puts live Beachcomber quotes and booking above the enquiry form on the quote page", async () => {
+    (fetch as Mock).mockResolvedValue(ok({ packages: [PKG], min_days_ahead: 10 }));
+    render(<SiteSubpage id="vector" page="quote" />);
+    const live = await screen.findByRole("button", { name: /Test Hotel/ });
+    const form = screen.getByLabelText(/Where would you like to go/);
+    expect(live.compareDocumentPosition(form) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   });
 
   it("prefills the chosen place on the quote page", () => {

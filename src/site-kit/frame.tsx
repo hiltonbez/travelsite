@@ -25,6 +25,15 @@ export function SitePagesNav({ id, current }: { id: string; current?: SitePage |
   );
 }
 
+/** The AI Concierge button, floating at the corner of every page of the site. */
+export function ChatFloat({ onOpen }: { onOpen: () => void }) {
+  return (
+    <button type="button" className="tk-chat-float" onClick={onOpen}>
+      <Sparkles size={18} aria-hidden="true" /> AI Concierge
+    </button>
+  );
+}
+
 export function SiteFrame({
   id,
   current,
@@ -65,6 +74,7 @@ export function SiteFrame({
         <a href="/designs/studio">Back to the collection</a>
       </footer>
       <ConsentNotice id={id} />
+      <ChatFloat onOpen={() => setChat(true)} />
       {chat && <ChatPanel onClose={() => setChat(false)} formHref={`/designs/${id}/quote`} />}
     </main>
   );

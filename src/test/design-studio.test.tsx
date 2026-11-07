@@ -31,6 +31,10 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+// The live packages load by themselves now; what must not happen is an enquiry leaving before the visitor submits.
+const enquiriesSent = () =>
+  vi.mocked(fetch).mock.calls.filter(([url]) => String(url).includes("/api/enquiry/"));
+
 describe("Agency design collection", () => {
   it("filters ten directions into two designs for a chosen audience", () => {
     render(<DesignStudio />);
@@ -76,7 +80,7 @@ describe("Agency design collection", () => {
   it("sends the visitor’s brief and chosen experience through the existing enquiry API only on submission", async () => {
     vi.mocked(fetch).mockResolvedValue({ ok: true, json: async () => ({ ok: true }) } as Response);
     render(<ConceptPage id="little-big" />);
-    expect(fetch).not.toHaveBeenCalled();
+    expect(enquiriesSent()).toHaveLength(0);
     fireEvent.click(screen.getByRole("button", { name: /Big family gatherings/ }));
     fireEvent.click(screen.getByRole("button", { name: /Let’s plan this family adventure/ }));
     expect(
@@ -100,8 +104,8 @@ describe("Agency design collection", () => {
     });
     fireEvent.click(screen.getByRole("checkbox", { name: /I agree that this request/ }));
     fireEvent.click(screen.getByRole("button", { name: "Request my personal quote" }));
-    await waitFor(() => expect(fetch).toHaveBeenCalledTimes(1));
-    const [url, options] = vi.mocked(fetch).mock.calls[0]!;
+    await waitFor(() => expect(enquiriesSent()).toHaveLength(1));
+    const [url, options] = enquiriesSent()[0]!;
     expect(String(url)).toContain("/api/enquiry/");
     const payload = JSON.parse(String(options?.body));
     expect(payload.message).toContain("Big family gatherings");
@@ -122,7 +126,7 @@ describe("Agency design collection", () => {
     expect(
       screen.getByText(/9 nights \/ 10 calendar days before extra travel connections/),
     ).toBeTruthy();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(enquiriesSent()).toHaveLength(0);
   });
 
   it("preserves cabin and route preferences from the corporate desk", () => {
@@ -137,6 +141,6 @@ describe("Agency design collection", () => {
       "Johannesburg → Singapore",
     );
     expect(screen.getByText(/Premium economy cabin.*Direct flights/)).toBeTruthy();
-    expect(fetch).not.toHaveBeenCalled();
+    expect(enquiriesSent()).toHaveLength(0);
   });
 });

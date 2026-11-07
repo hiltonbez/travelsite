@@ -103,7 +103,18 @@ export function SiteSubpage({ id, page, place }: { id: string; page: SitePage; p
       </section>
       {page === "destinations" && <Destinations id={id} />}
       {page === "about" && <About id={id} />}
-      {page === "quote" && <EnquiryForm id={id} kind="quote" {...(place ? { place } : {})} />}
+      {page === "quote" && (
+        <>
+          <LivePackages
+            onChoose={(destination) => {
+              const field = document.querySelector<HTMLInputElement>('input[name="destination"]');
+              if (field) field.value = destination.slice(0, 200);
+              document.getElementById("plan")?.scrollIntoView({ behavior: "smooth" });
+            }}
+          />
+          <EnquiryForm id={id} kind="quote" {...(place ? { place } : {})} />
+        </>
+      )}
       {page === "contact" && <Contact id={id} />}
       {page === "privacy" && <Privacy />}
     </SiteFrame>

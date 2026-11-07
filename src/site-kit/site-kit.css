@@ -81,8 +81,37 @@
   background: color-mix(in srgb, currentColor 10%, transparent);
 }
 /* The booking dialog's own buttons need the room, as on the other designs. */
-html.tt-dialog-open .tk-chat-launcher {
+html.tt-dialog-open .tk-chat-launcher,
+html.tt-dialog-open .tk-chat-float {
   visibility: hidden;
+}
+/* The AI Concierge, always in reach */
+.tk-chat-float {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 55;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 0 22px;
+  border: 0;
+  border-radius: 999px;
+  background: var(--tk-a, #121212);
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  box-shadow: 0 14px 34px -10px rgb(0 0 0 / 0.55);
+  cursor: pointer;
+}
+.tk-chat-float:hover {
+  filter: brightness(1.12);
+}
+@media (max-width: 760px) {
+  .tk-consent {
+    bottom: 84px;
+  }
 }
 /* and the cookie notice, which would sit over the dialog on a phone */
 html.tt-dialog-open .tk-consent {

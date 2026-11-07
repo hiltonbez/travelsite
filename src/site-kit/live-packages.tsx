@@ -1,7 +1,7 @@
 // Live quotes and bookings for a Tribe Site: the agency's supplier feed (Beachcomber packages), a date check, and
-// online booking through the shared booking dialog. Moved here from the Design Studio homepage. Nothing is fetched
-// until the visitor asks, and no price is ever invented.
-import { useRef, useState, type FormEvent } from "react";
+// online booking through the shared booking dialog. The packages load as soon as the section appears, in the
+// visitor's browser, and no price is ever invented: if the feed is down, the section says so.
+import { useEffect, useRef, useState, type FormEvent } from "react";
 import { ArrowRight, ArrowUpRight, Compass } from "lucide-react";
 import { BookingDialog } from "@/components/packages";
 import { checkDates, listPackages, rand, type Package, type Room } from "@/lib/packages";
@@ -9,7 +9,7 @@ import { checkDates, listPackages, rand, type Package, type Room } from "@/lib/p
 export function LivePackages({ onChoose }: { onChoose: (destination: string) => void }) {
   const [packages, setPackages] = useState<Package[]>([]);
   const [minDays, setMinDays] = useState(10);
-  const [state, setState] = useState("idle");
+  const [state, setState] = useState("loading");
   const [error, setError] = useState("");
   const [selected, setSelected] = useState<Package | null>(null);
   const [booking, setBooking] = useState<Package | null>(null);
@@ -21,7 +21,7 @@ export function LivePackages({ onChoose }: { onChoose: (destination: string) => 
     setError("");
     try {
       const r = await listPackages();
-      setPackages(r.packages);
+      setPackages(Array.isArray(r.packages) ? r.packages : []);
       setMinDays(r.min_days_ahead || 10);
       setState("loaded");
     } catch {
@@ -31,6 +31,9 @@ export function LivePackages({ onChoose }: { onChoose: (destination: string) => 
       setState("error");
     }
   }
+  useEffect(() => {
+    void load();
+  }, []);
   async function check(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
     if (!selected) return;
@@ -73,41 +76,30 @@ export function LivePackages({ onChoose }: { onChoose: (destination: string) => 
   return (
     <section className="concept-live" id="live">
       <div>
-        <p className="concept-eyebrow">CHECK BEFORE YOU DREAM TOO FAR</p>
+        <p className="concept-eyebrow">LIVE BEACHCOMBER PRICING</p>
         <h2>
           A real journey starts
           <br />
           with real possibilities.
         </h2>
         <p>
-          Explore packages from the demo agency’s enabled Beachcomber feed. Prices and availability
-          are fetched when you ask; your agent confirms your final quote.
+          Real Beachcomber packages with today’s prices. Pick one, check your dates for a live room
+          quote, and book it online; your agent confirms the final details.
         </p>
-        <button
-          className="concept-cta"
-          onClick={load}
-          disabled={state === "loading" || state === "checking"}
-        >
-          {state === "loading"
-            ? "Checking packages…"
-            : packages.length
-              ? "Refresh packages"
-              : "Explore live packages"}
-          <ArrowUpRight size={18} />
-        </button>
+        {state === "error" && (
+          <button className="concept-cta" onClick={load}>
+            Try again <ArrowUpRight size={18} />
+          </button>
+        )}
         <p className="supplier-fine">
           Other supplier feeds depend on each agency’s approved accounts and integrations.
         </p>
       </div>
       <div className="live-results" aria-live="polite">
-        {state === "idle" && (
+        {state === "loading" && (
           <div className="live-idle">
             <Compass size={35} />
-            <p>
-              Your dates. Your travellers.
-              <br />
-              Your agent’s available packages.
-            </p>
+            <p>Checking today’s Beachcomber packages…</p>
             <span>No sample prices. No invented availability.</span>
           </div>
         )}
