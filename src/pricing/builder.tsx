@@ -1,7 +1,7 @@
 // The quote builder: pick a package, add components and a care plan, and see the once-off and monthly totals. What a
 // package already includes shows as included; counts (pages, looks, suppliers) add on top of what it has.
 import { Check, Minus, Plus } from "lucide-react";
-import { ADD_ONS, CARE_PLANS, MAILBOX, PACKAGES, rand, type AddOn, type PackageId } from "@/pricing/data";
+import { ADD_ONS, AI_TOKENS, CARE_PLANS, MAILBOX, PACKAGES, rand, type AddOn, type PackageId } from "@/pricing/data";
 import { quoteLines, quoteTotals, type Choice } from "@/pricing/quote";
 import { btn, card, eyebrow, h2, muted, soft, wrap } from "@/pricing/theme";
 
@@ -20,7 +20,7 @@ function Stepper({ value, max, onChange, name }: { value: number; max: number; o
 function AddOnRow({ a, pkg, qty, onChange }: { a: AddOn; pkg: PackageId; qty: number; onChange: (n: number) => void }) {
   const inc = a.included[pkg];
   const price = a.onRequest ? <span className="text-[13px] font-semibold text-[#1E6FE6]">Price on request</span>
-    : <span className="text-[13px] font-semibold text-[#0B1D3A]">{rand(a.once)}{a.unit ? ` per ${a.unit}` : ""}{a.monthly ? <span className={muted}> + {rand(a.monthly)}/month</span> : null}</span>;
+    : <span className="text-[13px] font-semibold text-[#0B1D3A]">{a.once ? <>{rand(a.once)}{a.unit ? ` per ${a.unit}` : ""}</> : null}{a.monthly ? <span className={a.once ? muted : ""}>{a.once ? " + " : ""}{rand(a.monthly)}{!a.once && a.unit ? ` per ${a.unit}` : ""}/month</span> : null}</span>;
   if (a.kind === "toggle") {
     const on = inc > 0 || qty > 0;
     return (
@@ -65,7 +65,7 @@ export function Builder({ choice, setChoice }: { choice: Choice; setChoice: (c: 
         <div className="flex min-w-0 flex-col gap-8">
           <fieldset className="flex flex-col gap-3">
             <legend className="mb-3 text-[15px] font-extrabold text-[#0B1D3A]">1. Your package</legend>
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
               {PACKAGES.map((p) => {
                 const on = choice.pkg === p.id;
                 return (
@@ -76,7 +76,7 @@ export function Builder({ choice, setChoice }: { choice: Choice; setChoice: (c: 
                       {p.popular && <span className="rounded-full bg-[#FF6B6B] px-2 py-0.5 text-[10px] font-extrabold tracking-[0.08em] text-white">POPULAR</span>}
                     </span>
                     <span className="text-[20px] font-extrabold text-[#0B1D3A]">{p.from ? <span className="text-[13px] font-semibold">from </span> : null}{rand(choice.tribe ? p.tribe : p.other)}</span>
-                    <span className={`text-[12px] ${muted}`}>{p.pages} pages{p.monthly ? ` · features ${rand(p.monthly)}/month` : ""}</span>
+                    <span className={`text-[12px] ${muted}`}>{p.pages ? `${p.pages} pages` : "Your existing site"} · AI tokens {rand(AI_TOKENS.monthly)}/month{p.monthly ? ` · features ${rand(p.monthly)}/month` : ""}</span>
                   </label>
                 );
               })}
@@ -148,7 +148,7 @@ export function Builder({ choice, setChoice }: { choice: Choice; setChoice: (c: 
           </div>
           <div className="px-6 pb-6">
             <a href="#request" className={`${btn} w-full`}>Send this for an official quote</a>
-            <p className={`mt-3 text-[11px] leading-snug ${muted}`}>An estimate from our price book. Your official quote confirms it. Supplier API contracts, Meta WhatsApp message fees and your domain are your own costs.</p>
+            <p className={`mt-3 text-[11px] leading-snug ${muted}`}>An estimate from our price book. Your official quote confirms it. The AI Concierge includes 3 million AI tokens a month (about 150 chats); a month that goes over is R100 per extra million. Supplier API contracts, Meta WhatsApp message fees and your domain are your own costs.</p>
           </div>
         </aside>
       </div>

@@ -12,6 +12,8 @@ export function DesignBar({ current }: { current: string }) {
       aria-label="Website designs"
       className="relative z-50 flex items-center gap-3 overflow-x-auto bg-[#111318] px-4 py-2.5 font-sans text-[13px] text-white/80 md:px-6"
     >
+      <a href="/" aria-current={current === "/" ? "page" : undefined} className="shrink-0 font-semibold text-white hover:text-[#32BFD0]">AiFundi websites</a>
+      <span className="hidden h-4 w-px shrink-0 bg-white/20 sm:inline" aria-hidden="true" />
       <a href="/designs/studio" className="shrink-0 font-semibold text-white">Explore 10 new designs ↗</a>
       <span className="hidden h-4 w-px shrink-0 bg-white/20 sm:inline" aria-hidden="true" />
       <div className="flex shrink-0 gap-1.5">

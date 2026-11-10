@@ -29,7 +29,7 @@ export function PricingPage() {
     setChoice({ ...choice, pkg });
     document.getElementById("builder")?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
-  const site = PACKAGES[0]!;
+  const site = PACKAGES.find((p) => p.id === "new")!;
 
   return (
     <div className={`${font} min-h-screen bg-[#F5F8FB] text-[#16233B] [color-scheme:light]`}>
@@ -43,7 +43,7 @@ export function PricingPage() {
             Packages and <span className="bg-[linear-gradient(90deg,#8FE3C3,#00B5C8)] bg-clip-text text-transparent">pricing.</span>
           </h1>
           <p className="max-w-[58ch] text-[17px] leading-relaxed text-[#C9D6EA]">
-            Four website packages, each one shown as its own working design. Compare what's included, build your quote, and send it to us for an official quote.
+            Five website packages, from connecting the site you already have to Tribe, to a full platform. Every one includes the AI Concierge. Compare what's included, build your quote, and send it to us for an official quote.
           </p>
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
             <TribeSwitch tribe={choice.tribe} onChange={(tribe) => setChoice({ ...choice, tribe })} />
@@ -64,8 +64,8 @@ export function PricingPage() {
             </p>
             <p className={`text-[14px] ${muted}`}>
               {choice.tribe
-                ? <>Agencies outside TribeTravel pay more, because TribeTravel's CRM, quotes, supplier connections and AI do much of the work behind each site. Tribe Site, for example, is {rand(site.tribe)} on TribeTravel and {rand(site.other)} without it. Every site also takes a monthly care plan.</>
-                : <>Join TribeTravel and every package costs less: Tribe Site is {rand(site.tribe)} instead of {rand(site.other)}. Every site also takes a monthly care plan.</>}
+                ? <>Agencies outside TribeTravel pay more, because TribeTravel's CRM, quotes, supplier connections and AI do much of the work behind each site. A New Website, for example, is {rand(site.tribe)} on TribeTravel and {rand(site.other)} without it. Every site also takes a monthly care plan, plus R300 a month for the AI Concierge's tokens.</>
+                : <>Join TribeTravel and every package costs less: a New Website is {rand(site.tribe)} instead of {rand(site.other)}. Every site also takes a monthly care plan, plus R300 a month for the AI Concierge's tokens.</>}
             </p>
           </div>
         </div>
@@ -80,7 +80,7 @@ export function PricingPage() {
       <footer className={`${gutter} border-t border-[#E4E9F1] bg-white py-8`}>
         <div className={`${wrap} flex flex-col gap-3 text-[13px] sm:flex-row sm:items-center sm:justify-between ${muted}`}>
           <span>TribeTravel Websites, built and hosted by AiFundi. All prices in rand; once-off prices are 50% to start and 50% at go-live.</span>
-          <a href="/" className={`${ghost} min-h-10 px-5 text-[13px]`}>See the sample designs</a>
+          <a href="/" className={`${ghost} min-h-10 px-5 text-[13px]`}>Back to AiFundi websites</a>
         </div>
       </footer>
     </div>

@@ -17,12 +17,19 @@ five favourites in their browser. The previews use the existing enquiry, AI chat
 supplier access remains subject to the agency's enabled integrations. See `docs/design-collection.md` for research,
 integration boundaries and asset notes. The original package examples below remain available.
 
+The demo agency's home page (`/`) is AiFundi's landing page for these packages (`src/landing/page.tsx`, in aifundi.io's
+colours and logo): a short intro, a picture of each package's sample design (`public/images/landing/`), its price and
+what is included. Window Seat, the old Tribe Site design, still draws `/` for other agencies and inside TribeTravel's
+visual editor; it was taken out of the design bar on 10 Nov 2026. Every package includes the AI Concierge, with AI
+tokens at R300 a month (3 million tokens, then R100 per extra million; see `AI_TOKENS` in `src/pricing/data.ts`).
+
 The demo also shows one website design for each TribeTravel website package. A bar along the top of each
 page (`src/components/design-bar.tsx`) switches between them, named by package:
 
 | Package | Design | Where | Pages |
 | --- | --- | --- | --- |
-| Tribe Site | Window Seat | `/` (the editable home page) and `/designs/window-seat/*` | 6 |
+| Move to Tribe (R7,000) | the agency's own site | no sample: shown with the Design Studio | — |
+| New Website (R8,500) | any of the ten Design Studio designs | `/designs/studio` | 6 |
 | Tribe Site Pro | Living Map | `/designs/living-map/*` | 10 |
 | Business Platform | Atlas | `/designs/atlas/*` | 10 |
 | Enterprise | Enterprise | `/designs/enterprise/*` | 15+ |

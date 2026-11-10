@@ -16,7 +16,7 @@ function Price({ p, tribe, dark }: { p: Package; tribe: boolean; dark?: boolean 
   return (
     <div className="flex flex-col gap-1">
       <span className={`text-[13px] font-semibold ${quiet}`}>{p.from ? "from " : ""}once-off{tribe ? ", on TribeTravel" : ""}</span>
-      <span className={`text-[30px] font-extrabold leading-none tracking-[-0.02em] ${dark ? "text-white" : "text-[#0B1D3A]"}`}>{rand(tribe ? p.tribe : p.other)}</span>
+      <span className={`text-[26px] font-extrabold leading-none tracking-[-0.02em] ${dark ? "text-white" : "text-[#0B1D3A]"}`}>{rand(tribe ? p.tribe : p.other)}</span>
       <span className={`text-[12px] ${quiet}`}>
         {tribe ? <>Not on TribeTravel: <b className={dark ? "text-[#FF6B6B]" : "text-[#E8493F]"}>{rand(p.other)}</b></>
           : <>On TribeTravel: <b className={dark ? "text-[#8FE3C3]" : "text-[#0a7a52]"}>{rand(p.tribe)}</b></>}
@@ -39,7 +39,7 @@ function Head({ p, tribe, onPick }: { p: Package; tribe: boolean; onPick: (id: P
           className={`min-h-11 whitespace-nowrap rounded-full px-4 text-[14px] font-bold transition ${p.popular ? "bg-[#8FE3C3] text-[#0B1D3A] hover:bg-white" : "bg-[#1E6FE6] text-white hover:bg-[#1760cc]"}`}>
           Build my quote
         </button>
-        <a href={p.href} className={`text-center text-[13px] font-semibold underline-offset-4 hover:underline ${p.popular ? "text-[#8FE3C3]" : "text-[#1E6FE6]"}`}>See the {p.design} design</a>
+        <a href={p.href} className={`text-center text-[13px] font-semibold underline-offset-4 hover:underline ${p.popular ? "text-[#8FE3C3]" : "text-[#1E6FE6]"}`}>{p.id === "move" ? "See what we add" : p.id === "new" ? "Choose from 10 designs" : `See the ${p.design} design`}</a>
       </div>
       <p className={`border-t pt-3 text-[12px] ${p.popular ? "border-white/15 text-[#C9D6EA]" : `border-[#E4E9F1] ${muted}`}`}>
         Typical agency price <b className={p.popular ? "text-white" : "text-[#16233B]"}>{p.market}</b>
@@ -77,12 +77,12 @@ export function Matrix({ tribe, onPick }: { tribe: boolean; onPick: (id: Package
       <div className="flex flex-col gap-3">
         <span className={eyebrow}>Compare the packages</span>
         <h2 className={h2}>What's in each package.</h2>
-        <p className={`max-w-[60ch] text-[16px] ${soft}`}>Every package includes everything in the one before it. Each one comes with its own sample design, so you can see it working.</p>
+        <p className={`max-w-[60ch] text-[16px] ${soft}`}>Move to Tribe keeps the website you have; every other package is a new site and includes everything in the one before it. Every package comes with the AI Concierge.</p>
       </div>
 
       {/* Phone and tablet: one package at a time */}
       <div className="flex flex-col gap-4 lg:hidden">
-        <div role="tablist" aria-label="Package" className="sticky top-0 z-20 -mx-1 grid grid-cols-2 gap-2 bg-[#F5F8FB] px-1 py-2 sm:grid-cols-4">
+        <div role="tablist" aria-label="Package" className="sticky top-0 z-20 -mx-1 grid grid-cols-3 gap-2 bg-[#F5F8FB] px-1 py-2 sm:grid-cols-5">
           {PACKAGES.map((p) => (
             <button key={p.id} type="button" role="tab" aria-selected={focus === p.id} onClick={() => setFocus(p.id)}
               className={`min-h-11 rounded-xl px-3 text-[13px] font-bold transition ${focus === p.id ? "bg-[#0B1D3A] text-white" : "bg-[#F5F8FB] text-[#0B1D3A]"}`}>
@@ -108,11 +108,11 @@ export function Matrix({ tribe, onPick }: { tribe: boolean; onPick: (id: Package
       <div className="hidden lg:block">
         <table className="w-full table-fixed border-separate border-spacing-x-2">
           <caption className="sr-only">Features and prices of each website package</caption>
-          <colgroup><col className="w-[30%]" /><col /><col /><col /><col /></colgroup>
+          <colgroup><col className="w-[22%]" /><col /><col /><col /><col /><col /></colgroup>
           <thead>
             <tr ref={heads}>
               <th scope="col" className="align-bottom"><span className="sr-only">Feature</span>
-                <div className="flex flex-col gap-2 pb-2 text-left text-[13px] font-medium text-[#6b7b93]"><Sparkles className="h-5 w-5 text-[#00B5C8]" />Prices are once-off. Monthly costs are in the quote builder below.</div>
+                <div className="flex flex-col gap-2 pb-2 text-left text-[13px] font-medium text-[#6b7b93]"><Sparkles className="h-5 w-5 text-[#00B5C8]" />Prices are once-off. AI tokens are R300 a month on every package; other monthly costs are in the quote builder.</div>
               </th>
               {PACKAGES.map((p) => <th key={p.id} scope="col" className="pt-4 align-top font-normal"><Head p={p} tribe={tribe} onPick={onPick} /></th>)}
             </tr>
@@ -128,7 +128,7 @@ export function Matrix({ tribe, onPick }: { tribe: boolean; onPick: (id: Package
           </thead>
           {MATRIX.map((g) => (
             <tbody key={g.title}>
-              <tr><th colSpan={5} scope="colgroup" className="pt-8 pb-2 text-left text-[12px] font-bold uppercase tracking-[0.12em] text-[#1E6FE6]">{g.title}</th></tr>
+              <tr><th colSpan={6} scope="colgroup" className="pt-8 pb-2 text-left text-[12px] font-bold uppercase tracking-[0.12em] text-[#1E6FE6]">{g.title}</th></tr>
               {g.rows.map((r) => (
                 <tr key={r.label} className="group">
                   <th scope="row" className="border-t border-[#E4E9F1] py-3 pr-4 text-left align-middle font-normal group-hover:bg-[#F5F8FB]">

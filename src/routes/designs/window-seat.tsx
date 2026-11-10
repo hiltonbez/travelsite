@@ -14,7 +14,7 @@ export const Route = createFileRoute("/designs/window-seat")({
   },
   component: () => (
     <>
-      <DesignBar current="/" />
+      <DesignBar current="/designs/window-seat" />
       <Outlet />
     </>
   ),

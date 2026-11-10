@@ -1,5 +1,5 @@
 // The quote builder's sums: what the chosen package, add-ons and care plan come to, once-off and a month.
-import { ADD_ONS, CARE_PLANS, MAILBOX, PACKAGES, type PackageId } from "@/pricing/data";
+import { ADD_ONS, AI_TOKENS, CARE_PLANS, MAILBOX, PACKAGES, type PackageId } from "@/pricing/data";
 
 export type Choice = { tribe: boolean; pkg: PackageId; care: string; extras: Record<string, number>; mailboxes: number };
 
@@ -10,6 +10,7 @@ export const START: Choice = { tribe: true, pkg: "pro", care: "plus", extras: {}
 export function quoteLines(c: Choice): Line[] {
   const p = PACKAGES.find((x) => x.id === c.pkg)!;
   const lines: Line[] = [{ label: `${p.name} package${c.tribe ? "" : " (not on TribeTravel)"}`, qty: 1, once: c.tribe ? p.tribe : p.other, monthly: 0 }];
+  lines.push({ label: `AI Concierge tokens (${AI_TOKENS.included / 1_000_000} million a month)`, qty: 1, once: 0, monthly: AI_TOKENS.monthly });
   if (p.monthly) lines.push({ label: "Running costs of the included features", qty: 1, once: 0, monthly: p.monthly });
   for (const a of ADD_ONS) {
     const qty = c.extras[a.id] ?? 0;
