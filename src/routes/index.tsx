@@ -49,7 +49,6 @@ function Index() {
   if (SHOW_DESIGNS && !preview) {
     return (
       <>
-        <DesignBar current="/" />
         <Landing />
       </>
     );

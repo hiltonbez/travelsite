@@ -1,3 +1,4 @@
+import { AifundiHeader, BROWSE } from "@/landing/header";
 import { useEffect, useRef, useState, type FormEvent } from "react";
 import {
   ArrowUpRight,
@@ -271,7 +272,6 @@ export function DesignStudio() {
 
 export function ConceptPage({ id }: { id: string }) {
   const c = CONCEPTS.find((c) => c.id === id)!;
-  const { ids, toggle, notice } = useShortlist();
   const [chat, setChat] = useState(false);
   const [film, setFilm] = useState(false);
   const [pageMotion, setPageMotion] = useState(true);
@@ -305,23 +305,7 @@ export function ConceptPage({ id }: { id: string }) {
       <a className="skip-to-plan" href="#discover">
         Skip to trip planning
       </a>
-      <nav className="concept-review-bar" aria-label="Design review">
-        <a href="/designs/studio">
-          <ArrowLeft size={15} /> All ten designs
-        </a>
-        <span>
-          {c.number} / {c.name} <i>{c.audience}</i>
-        </span>
-        <button onClick={() => toggle(id)} aria-pressed={ids.includes(id)}>
-          {ids.includes(id) ? <Check size={15} /> : <Plus size={15} />}{" "}
-          {ids.includes(id) ? "In my five" : "Add to my five"}
-        </button>
-      </nav>
-      {notice && (
-        <p className="concept-review-notice" role="status">
-          {notice}
-        </p>
-      )}
+      <AifundiHeader current={BROWSE} />
       <SitePagesNav id={id} current="home" />
       <ConceptHero c={c} onMotionChange={setPageMotion} />
       <div className="page-guide">
@@ -506,8 +490,8 @@ export function ConceptPage({ id }: { id: string }) {
           Ask the AI assistant <Sparkles size={16} />
         </button>
         <small>Illustrative agency identity · TribeTravel design concept {c.number}</small>
-        <a href="/designs/studio">
-          Back to the collection <ArrowUpRight size={15} />
+        <a href={BROWSE}>
+          Back to all designs <ArrowUpRight size={15} />
         </a>
       </footer>
       {chat && <ChatPanel onClose={() => setChat(false)} />}

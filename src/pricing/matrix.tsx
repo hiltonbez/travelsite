@@ -2,7 +2,7 @@
 // a phone or tablet, one package at a time with tabs, so nothing scrolls sideways.
 import { useEffect, useRef, useState } from "react";
 import { Check, Minus, Sparkles } from "lucide-react";
-import { MATRIX, ORDER, PACKAGES, rand, type Package, type PackageId } from "@/pricing/data";
+import { MATRIX, ORDER, PACKAGES, instalment, rand, type Package, type PackageId } from "@/pricing/data";
 import { eyebrow, h2, muted, soft, wrap } from "@/pricing/theme";
 
 function Cell({ v }: { v: boolean | string }) {
@@ -17,6 +17,7 @@ function Price({ p, tribe, dark }: { p: Package; tribe: boolean; dark?: boolean 
     <div className="flex flex-col gap-1">
       <span className={`text-[13px] font-semibold ${quiet}`}>{p.from ? "from " : ""}once-off{tribe ? ", on TribeTravel" : ""}</span>
       <span className={`text-[26px] font-extrabold leading-none tracking-[-0.02em] ${dark ? "text-white" : "text-[#0B1D3A]"}`}>{rand(tribe ? p.tribe : p.other)}</span>
+      <span className={`text-[12px] font-bold ${dark ? "text-[#8FE3C3]" : "text-[#1E6FE6]"}`}>or {rand(instalment(tribe ? p.tribe : p.other))}/month × 12</span>
       <span className={`text-[12px] ${quiet}`}>
         {tribe ? <>Not on TribeTravel: <b className={dark ? "text-[#FF6B6B]" : "text-[#E8493F]"}>{rand(p.other)}</b></>
           : <>On TribeTravel: <b className={dark ? "text-[#8FE3C3]" : "text-[#0a7a52]"}>{rand(p.tribe)}</b></>}

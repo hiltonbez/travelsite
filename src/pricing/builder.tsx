@@ -1,7 +1,7 @@
 // The quote builder: pick a package, add components and a care plan, and see the once-off and monthly totals. What a
 // package already includes shows as included; counts (pages, looks, suppliers) add on top of what it has.
 import { Check, Minus, Plus } from "lucide-react";
-import { ADD_ONS, AI_TOKENS, CARE_PLANS, MAILBOX, PACKAGES, rand, type AddOn, type PackageId } from "@/pricing/data";
+import { ADD_ONS, AI_TOKENS, CARE_PLANS, MAILBOX, PACKAGES, PLAN_MONTHS, instalment, rand, type AddOn, type PackageId } from "@/pricing/data";
 import { quoteLines, quoteTotals, type Choice } from "@/pricing/quote";
 import { btn, card, eyebrow, h2, muted, soft, wrap } from "@/pricing/theme";
 
@@ -76,6 +76,7 @@ export function Builder({ choice, setChoice }: { choice: Choice; setChoice: (c: 
                       {p.popular && <span className="rounded-full bg-[#FF6B6B] px-2 py-0.5 text-[10px] font-extrabold tracking-[0.08em] text-white">POPULAR</span>}
                     </span>
                     <span className="text-[20px] font-extrabold text-[#0B1D3A]">{p.from ? <span className="text-[13px] font-semibold">from </span> : null}{rand(choice.tribe ? p.tribe : p.other)}</span>
+                    <span className="text-[12px] font-semibold text-[#1E6FE6]">or {rand(instalment(choice.tribe ? p.tribe : p.other))}/month × 12</span>
                     <span className={`text-[12px] ${muted}`}>{p.pages ? `${p.pages} pages` : "Your existing site"} · AI tokens {rand(AI_TOKENS.monthly)}/month{p.monthly ? ` · features ${rand(p.monthly)}/month` : ""}</span>
                   </label>
                 );
@@ -144,6 +145,7 @@ export function Builder({ choice, setChoice }: { choice: Choice; setChoice: (c: 
           <div className="mx-6 flex flex-col gap-1.5 border-t border-[#E4E9F1] pt-4 text-[13px]">
             <div className="flex justify-between"><span className={muted}>50% deposit to start</span><b className="tabular-nums">{rand(t.deposit)}</b></div>
             <div className="flex justify-between"><span className={muted}>50% at go-live</span><b className="tabular-nums">{rand(t.once - t.deposit)}</b></div>
+            <div className="flex justify-between"><span className={muted}>Or over {PLAN_MONTHS} months</span><b className="tabular-nums">{rand(instalment(t.once))}/month</b></div>
             <div className="flex justify-between"><span className={muted}>First year, all in</span><b className="tabular-nums">{rand(t.first_year)}</b></div>
           </div>
           <div className="px-6 pb-6">

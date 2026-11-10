@@ -23,6 +23,11 @@ what is included. Window Seat, the old Tribe Site design, still draws `/` for ot
 visual editor; it was taken out of the design bar on 10 Nov 2026. Every package includes the AI Concierge, with AI
 tokens at R300 a month (3 million tokens, then R100 per extra million; see `AI_TOKENS` in `src/pricing/data.ts`).
 
+Every page of the demo site, the sample sites included, starts with AiFundi's header (`src/landing/header.tsx`: logo and
+top menu), which replaced the dark design bar. **Browse designs** (`/designs/studio`, `src/landing/browse.tsx`) shows all
+13 sample sites with a picture, package and price. Once-off prices also show a 12-month plan: the price over 12 months,
+rounded up (`instalment` in `src/pricing/data.ts`).
+
 The demo also shows one website design for each TribeTravel website package. A bar along the top of each
 page (`src/components/design-bar.tsx`) switches between them, named by package:
 

@@ -79,8 +79,8 @@ export function PricingPage() {
 
       <footer className={`${gutter} border-t border-[#E4E9F1] bg-white py-8`}>
         <div className={`${wrap} flex flex-col gap-3 text-[13px] sm:flex-row sm:items-center sm:justify-between ${muted}`}>
-          <span>TribeTravel Websites, built and hosted by AiFundi. All prices in rand; once-off prices are 50% to start and 50% at go-live.</span>
-          <a href="/" className={`${ghost} min-h-10 px-5 text-[13px]`}>Back to AiFundi websites</a>
+          <span>TribeTravel Websites, built and hosted by AiFundi. All prices in rand; once-off prices are 50% to start and 50% at go-live, or 12 monthly payments (the price over 12 months, rounded up).</span>
+          <a href="/designs/studio" className={`${ghost} min-h-10 px-5 text-[13px]`}>Browse all designs</a>
         </div>
       </footer>
     </div>

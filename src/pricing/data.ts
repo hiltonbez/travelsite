@@ -171,6 +171,12 @@ export const QUOTE_TO = "hilton@tribetravel.io";
 /** TribeTravel emails the request to QUOTE_TO (site_api.website_quote); it only accepts this site's address. */
 export const QUOTE_URL = `${TRIBETRAVEL_URL}/api/website-quote`;
 
+/** The 12-month payment plan for a once-off price: the price over 12 months, rounded up to the next rand. */
+export const PLAN_MONTHS = 12;
+export function instalment(n: number) {
+  return Math.ceil(n / PLAN_MONTHS);
+}
+
 export function rand(n: number) {
   return "R" + Math.round(n).toLocaleString("en-ZA").replace(/[\s, ]/g, ",");
 }

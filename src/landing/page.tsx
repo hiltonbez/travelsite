@@ -3,9 +3,10 @@
 // Sans). Each package has a small picture of its sample design, its price and what is included. Prices and words come
 // from the price book (src/pricing/data.ts), so this page and /packages always agree.
 import { ArrowRight, ArrowUpRight, Check, MessageCircle, Sparkles } from "lucide-react";
-import { AI_TOKENS, CARE_PLANS, PACKAGES, rand, type Package } from "@/pricing/data";
+import { AI_TOKENS, CARE_PLANS, PACKAGES, PLAN_MONTHS, instalment, rand, type Package } from "@/pricing/data";
 
-export const LANDING_FONTS = "family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@500;600;700;800";
+export { LANDING_FONTS } from "@/landing/header";
+import { AifundiHeader, BROWSE } from "@/landing/header";
 
 // aifundi.io's colours, written in the classes below: navy #0A3D52, deep navy #062C3C, teal #0F6F8B, cyan #32BFD0,
 // coral #FF6B5C, ink #102E3B, muted #59717C, mist #EFF7F8, line #D9E7E9.
@@ -24,28 +25,6 @@ const ALWAYS = [
   "Live supplier pricing, bookable online",
   "Change your own content in Tribe",
 ];
-
-function Logo({ className = "" }: { className?: string }) {
-  return <img src="/images/landing/aifundi-logo.png" alt="AIFUNDI.io" width={2172} height={724} className={`h-auto ${className}`} />;
-}
-
-function Header() {
-  return (
-    <header className="sticky top-0 z-40 border-b border-[#D9E7E9] bg-white/90 backdrop-blur">
-      <div className={`${wrap} flex h-[72px] items-center justify-between gap-4`}>
-        <a href="/" aria-label="AiFundi websites home"><Logo className="w-[150px] sm:w-[170px]" /></a>
-        <nav aria-label="Main" className={`${head} flex items-center gap-1 text-[14px] font-bold text-[#102E3B]`}>
-          <a href="#packages" className="hidden min-h-11 items-center rounded-full px-4 hover:text-[#0F6F8B] md:inline-flex">Packages</a>
-          <a href="/designs/studio" className="hidden min-h-11 items-center rounded-full px-4 hover:text-[#0F6F8B] md:inline-flex">Designs</a>
-          <a href="#ai-tokens" className="hidden min-h-11 items-center rounded-full px-4 hover:text-[#0F6F8B] lg:inline-flex">AI Concierge</a>
-          <a href="/packages" className={`${btn} min-h-11 bg-[#0A3D52] px-5 text-[14px] text-white hover:bg-[#0F6F8B]`}>
-            Build a quote <ArrowRight className="h-4 w-4" aria-hidden="true" />
-          </a>
-        </nav>
-      </div>
-    </header>
-  );
-}
 
 function Hero() {
   return (
@@ -66,8 +45,8 @@ function Hero() {
             <a href="#packages" className={`${btn} bg-[#FF6B5C] text-white shadow-[0_12px_28px_-12px_rgba(255,107,92,.8)] hover:bg-[#f2564a]`}>
               See the packages <ArrowRight className="h-4 w-4" aria-hidden="true" />
             </a>
-            <a href="/designs/studio" className={`${btn} border border-[#D9E7E9] bg-white text-[#0A3D52] hover:border-[#0F6F8B] hover:text-[#0F6F8B]`}>
-              Browse 10 designs
+            <a href={BROWSE} className={`${btn} border border-[#D9E7E9] bg-white text-[#0A3D52] hover:border-[#0F6F8B] hover:text-[#0F6F8B]`}>
+              Browse all 13 designs
             </a>
           </div>
           <ul className="grid gap-x-6 gap-y-2 pt-2 text-[14px] font-medium text-[#102E3B] sm:grid-cols-2">
@@ -119,6 +98,9 @@ function PackageCard({ p }: { p: Package }) {
           <span className={`${head} text-[32px] font-extrabold leading-none tracking-[-0.03em] text-[#102E3B]`}>{rand(p.tribe)}</span>
           <span className="text-[13px] font-semibold text-[#59717C]">once-off</span>
         </div>
+        <p className="-mt-2 rounded-xl bg-[#EFF7F8] px-3 py-2 text-[13px] font-semibold text-[#0A3D52]">
+          or {p.from ? "from " : ""}{rand(instalment(p.tribe))}/month over {PLAN_MONTHS} months
+        </p>
         <p className="-mt-2 text-[13px] text-[#59717C]">
           + {rand(AI_TOKENS.monthly)}/month AI tokens{p.monthly ? ` · ${rand(p.monthly)}/month features` : ""} · care plan from {rand(CARE_PLANS[0]!.monthly)}/month
         </p>
@@ -152,7 +134,7 @@ function Packages() {
               you a fresh six-page site. <b className="text-[#102E3B]">Pro</b>, <b className="text-[#102E3B]">Business Platform</b> and
               {" "}<b className="text-[#102E3B]">Enterprise</b> add bookings, automation and, at the top, online payments and a client login.
             </p>
-            <p className="text-[13px]">Prices are for agencies on a paid TribeTravel subscription and are once-off, 50% to start and 50% at go-live.</p>
+            <p className="text-[13px]">Prices are for agencies on a paid TribeTravel subscription and are once-off: pay 50% to start and 50% at go-live, or spread it over 12 monthly payments.</p>
           </div>
         </div>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -251,7 +233,7 @@ function Footer() {
 export function Landing() {
   return (
     <div className={`${body} min-h-screen bg-white text-[#102E3B] [color-scheme:light]`}>
-      <Header />
+      <AifundiHeader current="/" sticky />
       <main>
         <Hero />
         <Packages />

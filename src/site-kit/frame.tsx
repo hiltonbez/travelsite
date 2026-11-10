@@ -3,6 +3,7 @@
 // `concept-page theme-<id>` styling, so its fonts, colours, forms and dialogs apply without being repeated.
 import { useState, type ReactNode } from "react";
 import { Sparkles } from "lucide-react";
+import { AifundiHeader, BROWSE } from "@/landing/header";
 import { ChatPanel } from "@/site-kit/chat-panel";
 import { ConsentNotice } from "@/site-kit/consent";
 import { Newsletter } from "@/site-kit/newsletter";
@@ -52,6 +53,7 @@ export function SiteFrame({
       <a className="skip-to-plan" href="#site-main">
         Skip to content
       </a>
+      <AifundiHeader current={BROWSE} />
       <header className="tk-header">
         <a className="tk-wordmark" href={`/designs/${id}`}>
           {concept.name}
@@ -71,7 +73,7 @@ export function SiteFrame({
         </a>
         <SitePagesNav id={id} current={current} />
         <small>Illustrative agency identity · TribeTravel Tribe Site demo</small>
-        <a href="/designs/studio">Back to the collection</a>
+        <a href={BROWSE}>Back to all designs</a>
       </footer>
       <ConsentNotice id={id} />
       <ChatFloat onOpen={() => setChat(true)} />
