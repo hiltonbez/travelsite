@@ -26,7 +26,7 @@ export function AifundiHeader({ current, sticky = false }: { current?: string; s
       <header className={`${sticky ? "sticky top-0" : "relative"} z-[60] border-b border-[#D9E7E9] bg-white/95 text-[#102E3B] backdrop-blur [color-scheme:light]`}>
         <div className="mx-auto flex h-[68px] w-full max-w-[1240px] items-center justify-between gap-3 px-4 sm:px-6 lg:px-10">
           <a href="/" aria-label="AiFundi websites home" className="shrink-0">
-            <img src="/images/landing/aifundi-logo.png" alt="AIFUNDI.io" width={2172} height={724} className="h-auto w-[132px] sm:w-[160px]" />
+            <img src="/images/landing/aifundi-logo-v2.png" alt="AIFUNDI.io" width={2172} height={724} className="h-auto w-[132px] sm:w-[160px]" />
           </a>
           <nav aria-label="AiFundi" className={`${head} flex items-center gap-0.5 text-[14px] font-bold`}>
             {MENU.map((m) => (
