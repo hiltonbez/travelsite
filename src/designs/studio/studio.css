@@ -1935,10 +1935,29 @@
   color: #fff;
   padding: 10px 15px;
 }
+/* The chat dialog is a column: heading on top, the conversation scrolling in the middle, message box and link always in
+   view at the bottom (before, the whole dialog scrolled and the newest replies sat out of sight). */
+.studio-dialog:has(.studio-messages)[open] {
+  display: flex;
+  flex-direction: column;
+  max-height: 90dvh;
+  overflow: hidden;
+}
+.studio-dialog:has(.studio-messages)[open] > *:not(.studio-messages) {
+  flex-shrink: 0;
+}
 .studio-messages {
   display: grid;
+  align-content: start;
   gap: 10px;
   margin: 20px 0;
+}
+.studio-dialog .studio-messages {
+  flex: 1 1 auto;
+  flex-shrink: 1;
+  min-height: 120px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
 }
 .studio-messages > div {
   background: #e4e9dc;

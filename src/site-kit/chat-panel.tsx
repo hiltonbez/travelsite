@@ -19,6 +19,12 @@ export function ChatPanel({
   const [error, setError] = useState("");
   const [done, setDone] = useState(false);
   const panel = useRef<HTMLDialogElement>(null);
+  const list = useRef<HTMLDivElement>(null);
+  // Keep the newest message in view: the conversation scrolls, the message box stays put.
+  useEffect(() => {
+    const el = list.current;
+    if (el) el.scrollTop = el.scrollHeight;
+  }, [messages, busy, error]);
   useEffect(() => {
     // Closing removes the panel, so give focus back to whatever opened it.
     const opener = document.activeElement as HTMLElement | null;
@@ -75,16 +81,16 @@ export function ChatPanel({
           <Sparkles size={17} />
         </button>
       )}
-      <div className="studio-messages" aria-live="polite">
+      <div className="studio-messages" aria-live="polite" ref={list}>
         {messages.map((m, i) => (
           <div key={i} data-who={m.who}>
             <small>{m.who}</small>
-            <p>{m.text}</p>
+            <p>{m.text.replace(/\*\*/g, "")}</p>
           </div>
         ))}
+        {busy && token && <p role="status">Thinking…</p>}
+        {error && <p role="alert">{error}</p>}
       </div>
-      {busy && token && <p role="status">Thinking…</p>}
-      {error && <p role="alert">{error}</p>}
       {token && !done && (
         <form onSubmit={say}>
           <label htmlFor="assistant-message">Your message</label>
