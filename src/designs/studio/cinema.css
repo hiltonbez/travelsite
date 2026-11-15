@@ -307,12 +307,10 @@
 .cinema-luxury .cin-media {
   inset: 8% 2% 12%;
 }
+/* The huge see-through word over the photo looked smeared and blurry (thin italic letters overlapping and drifting with
+   the mouse), so Maison no longer shows it. */
 .cinema-luxury .cin-landmark {
-  font-family: "Bodoni Moda", serif;
-  font-style: italic;
-  font-size: 22cqw;
-  bottom: 0;
-  color: #ffffff20;
+  display: none;
 }
 .cinema-luxury .cin-bottom {
   bottom: 3%;
